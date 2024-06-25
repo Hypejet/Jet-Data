@@ -1,3 +1,5 @@
+import org.gradle.jvm.tasks.Jar
+
 subprojects {
     apply<JavaPlugin>()
 
@@ -12,5 +14,11 @@ subprojects {
         withJavadocJar()
         withSourcesJar()
         toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    }
+
+    tasks.withType<Jar> {
+        manifest {
+            attributes("Automatic-Module-Name" to "net.hypejet.jet.data")
+        }
     }
 }
