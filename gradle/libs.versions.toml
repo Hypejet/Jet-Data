@@ -7,6 +7,8 @@ checkerFrameworkGradle = "0.6.40"
 adventure = "4.17.0"
 javaPoet = "1.13.0"
 
+minecraftVersion = "1.21"
+
 [libraries]
 checkerFrameworkQual = { module = "org.checkerframework:checker-qual", version.ref = "checkerFramework" }
 checkerFrameworkChecker = { module = "org.checkerframework:checker", version.ref = "checkerFramework" }
