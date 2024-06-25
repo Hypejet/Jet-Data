@@ -2,7 +2,7 @@ package net.hypejet.jet.data.block;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Represents a Minecraft built-in block.
@@ -20,5 +20,5 @@ public sealed interface VanillaBlock extends Keyed permits VanillaBlockImpl {
      * @see Key
      */
     @Override
-    @NotNull Key key();
+    @NonNull Key key();
 }

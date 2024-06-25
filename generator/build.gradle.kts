@@ -2,12 +2,11 @@ import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
 
 plugins {
     application
-    alias(libs.plugins.shadow)
     alias(libs.plugins.vanillaGradle)
 }
 
 dependencies {
-    implementation(project(":model"))
+    implementation(project(":jet-data-model"))
     implementation(libs.checkerFrameworkQual)
     implementation(libs.adventureApi)
     implementation(libs.javaPoet)
