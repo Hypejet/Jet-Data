@@ -5,13 +5,13 @@ import net.kyori.adventure.key.Keyed;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Represents a Minecraft built-in block.
+ * Represents a Minecraft block.
  *
  * @since 1.0
  * @author Codestech
  * @see Keyed
  */
-public sealed interface VanillaBlock extends Keyed permits VanillaBlockImpl {
+public sealed interface Block extends Keyed permits BlockImpl {
     /**
      * Gets an identifier of the block.
      *
@@ -21,4 +21,12 @@ public sealed interface VanillaBlock extends Keyed permits VanillaBlockImpl {
      */
     @Override
     @NonNull Key key();
+
+    /**
+     * Gets a state identifier of the block.
+     *
+     * @return the state identifier
+     * @since 1.0
+     */
+    int stateId();
 }

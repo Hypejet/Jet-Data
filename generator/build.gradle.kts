@@ -17,7 +17,7 @@ java {
 }
 
 application {
-    mainClass.set("net.hypejet.jet.data.generator.DataGenerator")
+    mainClass.set("net.hypejet.jet.data.generator.GeneratorEntrypoint")
 }
 
 minecraft {

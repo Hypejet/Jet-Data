@@ -5,7 +5,8 @@ plugins {
 
 dependencies {
     compileOnly(libs.adventureApi)
-    checkerFramework(libs.checkerFrameworkQual)
+    compileOnly(libs.checkerFrameworkQual)
+    checkerFramework(libs.checkerFrameworkChecker)
 }
 
 checkerFramework {
