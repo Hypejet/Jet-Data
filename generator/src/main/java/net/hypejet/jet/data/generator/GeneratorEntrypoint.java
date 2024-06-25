@@ -2,6 +2,7 @@ package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.JavaFile;
+import net.hypejet.jet.data.generator.generators.VanillaEntityTypeGenerator;
 import net.hypejet.jet.data.generator.generators.VanillaBlockGenerator;
 import net.minecraft.SharedConstants;
 import net.minecraft.server.Bootstrap;
@@ -13,7 +14,9 @@ import java.util.Set;
 
 public final class GeneratorEntrypoint {
 
-    private static final Collection<Generator> GENERATORS = Set.of(new VanillaBlockGenerator());
+    private static final Collection<Generator> GENERATORS = Set.of(
+            new VanillaBlockGenerator(), new VanillaEntityTypeGenerator()
+    );
 
     public static void main(String[] args) {
         SharedConstants.tryDetectVersion();
