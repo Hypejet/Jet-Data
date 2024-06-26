@@ -50,6 +50,18 @@ public final class CodeBlocks {
     /**
      * Creates a code block containing a constructor call.
      *
+     * @param clazz a class of the instance that the constructor constructs
+     * @param blocks code blocks defining arguments of the constructor call
+     * @return the code block
+     * @since 1.0
+     */
+    public static @NonNull CodeBlock constructor(@NonNull Class<?> clazz, @NonNull Object @NonNull ... blocks) {
+        return constructor(ClassName.get(clazz), blocks);
+    }
+
+    /**
+     * Creates a code block containing a constructor call.
+     *
      * @param name a name of the class of the instance that the constructor constructs
      * @param blocks code blocks defining arguments of the constructor call
      * @return the code block
@@ -88,6 +100,18 @@ public final class CodeBlocks {
     }
 
     /**
+     * Creates a code block referencing a static field.
+     *
+     * @param className a name of the class, which contains the method
+     * @param fieldName a name of the field
+     * @return the code block
+     * @since 1.0
+     */
+    public static @NonNull CodeBlock staticFieldReference(@NonNull ClassName className, @NonNull String fieldName) {
+        return CodeBlock.of(TYPE_SPEC + "." + fieldName, className);
+    }
+
+    /**
      * Creates a code block returning something.
      *
      * @param block a code block defining a value to return
@@ -109,6 +133,7 @@ public final class CodeBlocks {
         StringJoiner formatJoiner = new StringJoiner(", ");
         for (int i = 0; i < blocks.length; i++)
             formatJoiner.add(LITERAL_SPEC);
+        CodeBlock.of("");
         return CodeBlock.of(formatJoiner.toString(), blocks);
     }
 
@@ -121,5 +146,16 @@ public final class CodeBlocks {
      */
     public static @NonNull CodeBlock string(@NonNull String string) {
         return CodeBlock.of(STRING_SPEC, string);
+    }
+
+    /**
+     * Creates a code block defining a float.
+     *
+     * @param value the float
+     * @return the code block
+     * @since 1.0
+     */
+    public static @NonNull CodeBlock floatValue(float value) {
+        return CodeBlock.of(LITERAL_SPEC, value + "f");
     }
 }

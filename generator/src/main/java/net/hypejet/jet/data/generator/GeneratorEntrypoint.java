@@ -2,6 +2,7 @@ package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.JavaFile;
+import net.hypejet.jet.data.generator.generators.VanillaEntityCategoryGenerator;
 import net.hypejet.jet.data.generator.generators.VanillaEntityTypeGenerator;
 import net.hypejet.jet.data.generator.generators.VanillaBlockGenerator;
 import net.minecraft.SharedConstants;
@@ -12,12 +13,26 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * Represents a class running all {@linkplain Generator vanilla data generators}.
+ *
+ * @since 1.0
+ * @author Codestech
+ * @see Generator
+ */
 public final class GeneratorEntrypoint {
 
-    private static final Collection<Generator> GENERATORS = Set.of(
-            new VanillaBlockGenerator(), new VanillaEntityTypeGenerator()
-    );
+    private static final Collection<Generator> GENERATORS = Set.of(new VanillaBlockGenerator(),
+            new VanillaEntityTypeGenerator(), new VanillaEntityCategoryGenerator());
 
+    private GeneratorEntrypoint() {}
+
+    /**
+     * Runs all registered {@linkplain Generator vanilla data generators}.
+     *
+     * @param args arguments of the application execution
+     * @since 1.0
+     */
     public static void main(String[] args) {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();

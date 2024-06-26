@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.entity.type;
 
+import net.hypejet.jet.data.entity.category.EntityCategory;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -11,4 +12,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @since 1.0
  * @author Codestech
  */
-record EntityTypeImpl(@NonNull Key key, int identifier) implements EntityType {}
+record EntityTypeImpl(@NonNull Key key, int identifier, boolean canSerialize, boolean canSummon, boolean isFireImmune,
+                      boolean canSpawnFarFromPlayer, int clientTrackingRange, int updateInterval,
+                      float spawnDimensionsScale, @NonNull EntityDimensions dimensions,
+                      @NonNull EntityCategory category) implements EntityType {}
