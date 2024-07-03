@@ -2,9 +2,11 @@ package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.JavaFile;
-import net.hypejet.jet.data.generator.generators.VanillaEntityCategoryGenerator;
-import net.hypejet.jet.data.generator.generators.VanillaEntityTypeGenerator;
-import net.hypejet.jet.data.generator.generators.VanillaBlockGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInEntityAttachmentTypeGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInEntityCategoryGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInEntityTypeGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInBlockGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInFeatureFlagsGenerator;
 import net.minecraft.SharedConstants;
 import net.minecraft.server.Bootstrap;
 import org.slf4j.Logger;
@@ -22,8 +24,9 @@ import java.util.Set;
  */
 public final class GeneratorEntrypoint {
 
-    private static final Collection<Generator> GENERATORS = Set.of(new VanillaBlockGenerator(),
-            new VanillaEntityTypeGenerator(), new VanillaEntityCategoryGenerator());
+    private static final Collection<Generator> GENERATORS = Set.of(new BuiltInBlockGenerator(),
+            new BuiltInEntityTypeGenerator(), new BuiltInEntityCategoryGenerator(),
+            new BuiltInFeatureFlagsGenerator(), new BuiltInEntityAttachmentTypeGenerator());
 
     private GeneratorEntrypoint() {}
 

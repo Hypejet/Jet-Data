@@ -29,21 +29,21 @@ import java.util.List;
  * @see BuiltInRegistries#BLOCK
  * @see ConstantGenerator
  */
-public final class VanillaBlockGenerator extends ConstantGenerator {
+public final class BuiltInBlockGenerator extends ConstantGenerator {
 
     private static final String PACKAGE = "net.hypejet.jet.data.block";
-    private static final String CLASS = "VanillaBlocks";
+    private static final String CLASS = "BuiltInBlocks";
 
     static final ClassName CLASS_NAME = ClassName.get(PACKAGE, CLASS);
 
     private static final Class<?> BLOCK_CLASS = net.hypejet.jet.data.block.Block.class;
 
     /**
-     * Constructs the {@linkplain VanillaBlockGenerator vanilla block generator}.
+     * Constructs the {@linkplain BuiltInBlockGenerator vanilla block generator}.
      *
      * @since 1.0
      */
-    public VanillaBlockGenerator() {
+    public BuiltInBlockGenerator() {
         super(PACKAGE, CLASS_NAME, BLOCK_CLASS,
                 JavaDocBuilder.builder()
                         .line("Represents a holder of built-in Minecraft blocks.")
@@ -70,7 +70,7 @@ public final class VanillaBlockGenerator extends ConstantGenerator {
 
         for (Block block : registry) {
             ResourceLocation location = ResourceLocationUtil.getOrThrow(registry, block);
-            blockFieldSpecs.add(FieldSpec.builder(BLOCK_CLASS, location.getPath().toUpperCase())
+            blockFieldSpecs.add(FieldSpec.builder(BLOCK_CLASS, constantName(block))
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                     .initializer(CodeBlocks.constructor(blockImplClassName,
                             CodeBlocks.keyCreator(location),
@@ -79,5 +79,11 @@ public final class VanillaBlockGenerator extends ConstantGenerator {
         }
 
         return List.copyOf(blockFieldSpecs);
+    }
+
+    static @NonNull String constantName(@NonNull Block block) {
+        return ResourceLocationUtil.getOrThrow(BuiltInRegistries.BLOCK, block)
+                .getPath()
+                .toUpperCase();
     }
 }

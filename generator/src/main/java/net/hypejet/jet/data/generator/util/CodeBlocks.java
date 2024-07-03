@@ -6,6 +6,8 @@ import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -45,6 +47,18 @@ public final class CodeBlocks {
      */
     public static @NonNull CodeBlock setCreator(@NonNull Object @NonNull ... blocks) {
         return staticMethodInvocation(Set.class, "of", blocks);
+    }
+
+    public static @NonNull CodeBlock list(@NonNull Object @NonNull ... objects) {
+        return staticMethodInvocation(List.class, "of", objects);
+    }
+
+    public static @NonNull CodeBlock map(@NonNull Object @NonNull ... entries) {
+        return staticMethodInvocation(Map.class, "ofEntries", entries);
+    }
+
+    public static @NonNull CodeBlock mapEntry(@NonNull Object key, @NonNull Object value) {
+        return staticMethodInvocation(Map.class, "entry", key, value);
     }
 
     /**
