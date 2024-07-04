@@ -1,6 +1,6 @@
 package net.hypejet.jet.data.block;
 
-import net.hypejet.jet.data.RegistryEntry;
+import net.hypejet.jet.data.NumberIdentifiedRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @author Codestech
  * @see Keyed
  */
-public sealed interface Block extends RegistryEntry permits BlockImpl {
+public sealed interface Block extends NumberIdentifiedRegistryEntry permits BlockImpl {
     /**
      * Gets a {@linkplain Key key} of the block.
      *

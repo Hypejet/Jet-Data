@@ -5,9 +5,12 @@ import com.squareup.javapoet.CodeBlock;
 import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -171,5 +174,10 @@ public final class CodeBlocks {
      */
     public static @NonNull CodeBlock floatValue(float value) {
         return CodeBlock.of(LITERAL_SPEC, value + "f");
+    }
+
+    public static @NonNull CodeBlock optionalInt(@Nullable Integer integer) {
+        if (integer == null) return staticMethodInvocation(OptionalInt.class, "empty");
+        return staticMethodInvocation(OptionalInt.class, "of", integer);
     }
 }

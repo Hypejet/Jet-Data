@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.entity.type;
 
+import net.hypejet.jet.data.NumberIdentifiedRegistryEntry;
 import net.hypejet.jet.data.block.Block;
 import net.hypejet.jet.data.entity.attachment.handler.EntityAttachmentHandler;
 import net.hypejet.jet.data.entity.category.EntityCategory;
@@ -16,25 +17,7 @@ import java.util.Collection;
  * @author Codestech
  * @see Keyed
  */
-public sealed interface EntityType extends Keyed permits EntityTypeImpl {
-    /**
-     * Gets a {@linkplain Key key} of the entity type.
-     *
-     * @return the key
-     * @since 1.0
-     * @see Key
-     */
-    @Override
-    @NonNull Key key();
-
-    /**
-     * Gets a numeric identifier of the entity type.
-     *
-     * @return the numericId
-     * @since 1.0
-     */
-    int numericId();
-
+public sealed interface EntityType extends NumberIdentifiedRegistryEntry permits EntityTypeImpl {
     /**
      * Gets whether entities with this type can be serialized.
      *

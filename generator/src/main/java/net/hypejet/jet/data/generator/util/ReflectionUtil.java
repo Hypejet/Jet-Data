@@ -3,6 +3,7 @@ package net.hypejet.jet.data.generator.util;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Method;
 
 /**
  * Represents a utility with helpers for java reflection.
@@ -13,6 +14,11 @@ import java.lang.reflect.AccessibleObject;
 public final class ReflectionUtil {
 
     private ReflectionUtil() {}
+
+    public static @NonNull Object invoke(@NonNull Method method, @NonNull Object object,
+                                         @NonNull Object @NonNull ... args) {
+        return access(method, object, (m, o) -> m.invoke(o, args));
+    }
 
     /**
      * Accesses a value from an object by granting access to it and then taking it.
