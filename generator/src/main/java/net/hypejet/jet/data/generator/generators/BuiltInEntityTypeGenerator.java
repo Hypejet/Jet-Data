@@ -3,6 +3,7 @@ package net.hypejet.jet.data.generator.generators;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
+import net.hypejet.jet.coordinate.Vector;
 import net.hypejet.jet.data.entity.attachment.handler.EntityAttachmentHandler;
 import net.hypejet.jet.data.entity.attachment.value.EntityAttachmentValue;
 import net.hypejet.jet.data.generator.ConstantGenerator;
@@ -112,8 +113,8 @@ public final class BuiltInEntityTypeGenerator extends ConstantGenerator {
 
                 for (Object object : (List<?>) entry.getValue()) {
                     Vec3 vec3 = (Vec3) object;
-                    vectorCodeBlocks.add(CodeBlocks.constructor(EntityAttachmentValue.Vec.class,
-                            vec3.x, vec3.y, vec3.z));
+                    vectorCodeBlocks.add(CodeBlocks.staticMethodInvocation(Vector.class, "vector", vec3.x, vec3.y,
+                            vec3.z));
                 }
 
                 CodeBlock attachmentTypeReference = CodeBlocks.staticFieldReference(

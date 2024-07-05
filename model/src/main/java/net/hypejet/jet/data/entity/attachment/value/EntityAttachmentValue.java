@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.entity.attachment.value;
 
+import net.hypejet.jet.coordinate.Vector;
 import net.hypejet.jet.data.entity.attachment.type.EntityAttachmentType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -14,9 +15,9 @@ import java.util.List;
  * @since 1.0
  * @author Codestech
  * @see EntityAttachmentType
- * @see Vec
+ * @see Vector
  */
-public record EntityAttachmentValue(@NonNull EntityAttachmentType type, @NonNull List<Vec> attachments) {
+public record EntityAttachmentValue(@NonNull EntityAttachmentType type, @NonNull List<Vector> attachments) {
     /**
      * Constructs the {@linkplain EntityAttachmentValue entity attachment value}.
      *
@@ -35,18 +36,7 @@ public record EntityAttachmentValue(@NonNull EntityAttachmentType type, @NonNull
      * @return the entity attachment
      * @since 1.0
      */
-    public @Nullable Vec get(int index) {
+    public @Nullable Vector get(int index) {
         return this.attachments.get(index);
     }
-
-    /**
-     * Represents a XYZ coordinate.
-     *
-     * @param x the X value
-     * @param y the Y value
-     * @param z the Z value
-     * @since 1.0
-     * @author Codestech
-     */
-    public record Vec(double x, double y, double z) {}
 }
