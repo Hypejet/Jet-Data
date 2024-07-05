@@ -7,6 +7,7 @@ import net.hypejet.jet.data.generator.generators.BuiltInEntityAttachmentTypeGene
 import net.hypejet.jet.data.generator.generators.BuiltInEntityCategoryGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInEntityTypeGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInFeatureFlagsGenerator;
+import net.hypejet.jet.data.generator.generators.BuiltInSoundEventGenerator;
 import net.hypejet.jet.data.generator.generators.biome.BuiltInBiomeGenerator;
 import net.hypejet.jet.data.generator.generators.biome.BuiltInGrassColorModifierGenerator;
 import net.hypejet.jet.data.generator.generators.biome.BuiltInTemperatureModifierGenerator;
@@ -46,7 +47,7 @@ public final class GeneratorEntrypoint {
         Set<Generator> generators = Set.of(new BuiltInBlockGenerator(), new BuiltInEntityTypeGenerator(),
                 new BuiltInEntityCategoryGenerator(), new BuiltInFeatureFlagsGenerator(),
                 new BuiltInEntityAttachmentTypeGenerator(), new BuiltInGrassColorModifierGenerator(),
-                new BuiltInTemperatureModifierGenerator(),
+                new BuiltInTemperatureModifierGenerator(), new BuiltInSoundEventGenerator(),
                 new BuiltInBiomeGenerator(lookupProvider.lookupOrThrow(Registries.BIOME)));
 
         Logger logger = LogUtils.getLogger();
