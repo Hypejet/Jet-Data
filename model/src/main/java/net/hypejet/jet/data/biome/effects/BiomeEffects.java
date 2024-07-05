@@ -1,9 +1,9 @@
 package net.hypejet.jet.data.biome.effects;
 
+import net.hypejet.jet.color.Color;
 import net.hypejet.jet.data.biome.grass.GrassColorModifier;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.OptionalInt;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Represents effects of a {@linkplain net.hypejet.jet.data.biome.Biome biome}.
@@ -12,13 +12,13 @@ import java.util.OptionalInt;
  * @param waterColor a water color of the biome
  * @param waterFogColor a water fog color of the biome
  * @param skyColor a sky color of the biome
- * @param foliageColorOverride a foliage color of the biome, optional
- * @param grassColorOverride a grass color of the biome, optional
+ * @param foliageColorOverride a foliage color of the biome, {@code null} if not set
+ * @param grassColorOverride a grass color of the biome, {@code null} if not set
  * @param grassColorModifier a modifier of grass color of the biome
  * @since 1.0
  * @author Codestech
  * @see net.hypejet.jet.data.biome.Biome
  */
-public record BiomeEffects(int fogColor, int waterColor, int waterFogColor, int skyColor,
-                           @NonNull OptionalInt foliageColorOverride, @NonNull OptionalInt grassColorOverride,
-                           @NonNull GrassColorModifier grassColorModifier) {}
+public record BiomeEffects(@NonNull Color fogColor, @NonNull Color waterColor, @NonNull Color waterFogColor,
+                           @NonNull Color skyColor, @Nullable Color foliageColorOverride,
+                           @Nullable Color grassColorOverride, @NonNull GrassColorModifier grassColorModifier) {}

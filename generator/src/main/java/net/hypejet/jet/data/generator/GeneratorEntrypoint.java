@@ -2,10 +2,10 @@ package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.JavaFile;
+import net.hypejet.jet.data.generator.generators.BuiltInBlockGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInEntityAttachmentTypeGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInEntityCategoryGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInEntityTypeGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInBlockGenerator;
 import net.hypejet.jet.data.generator.generators.BuiltInFeatureFlagsGenerator;
 import net.hypejet.jet.data.generator.generators.biome.BuiltInBiomeGenerator;
 import net.hypejet.jet.data.generator.generators.biome.BuiltInGrassColorModifierGenerator;

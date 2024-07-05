@@ -2,6 +2,7 @@ package net.hypejet.jet.data.generator.util;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
+import net.hypejet.jet.color.Color;
 import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -9,10 +10,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Function;
 
 /**
  * Represents a utility for creating {@linkplain CodeBlock code blocks}.
@@ -26,6 +26,8 @@ public final class CodeBlocks {
     static final String TYPE_SPEC = "$T";
     static final String LITERAL_SPEC = "$L";
     static final String STRING_SPEC = "$S";
+
+    private static final CodeBlock NULL_CODE_BLOCK = CodeBlock.of("null");
 
     private CodeBlocks() {}
 
@@ -42,24 +44,46 @@ public final class CodeBlocks {
     }
 
     /**
-     * Creates a code block creating a {@linkplain Set set} using {@linkplain Set#of(Object[])}.
+     * Creates a code block creating a {@linkplain Set set} using {@link Set#of(Object[])}.
      *
      * @param blocks the code blocks defining contents of the set
-     * @return the code blocks
+     * @return the code block
      * @since 1.0
      */
     public static @NonNull CodeBlock setCreator(@NonNull Object @NonNull ... blocks) {
         return staticMethodInvocation(Set.class, "of", blocks);
     }
 
+    /**
+     * Creates a code block creating a {@linkplain List list} using {@link List#of(Object[])}.
+     * 
+     * @param objects the code blocks defining contents of the list
+     * @return the code block
+     * @implSpec 1.0
+     */
     public static @NonNull CodeBlock list(@NonNull Object @NonNull ... objects) {
         return staticMethodInvocation(List.class, "of", objects);
     }
 
+    /**
+     * Creates a code block creating a {@linkplain Map map} using {@link Map#ofEntries(Map.Entry[])}.
+     *
+     * @param entries a code blocks defining entries of the map
+     * @return the code block
+     * @since 1.0
+     */
     public static @NonNull CodeBlock map(@NonNull Object @NonNull ... entries) {
         return staticMethodInvocation(Map.class, "ofEntries", entries);
     }
 
+    /**
+     * Creates a code block creating a {@linkplain Map.Entry map entry} using {@link Map#entry(Object, Object)}.
+     *
+     * @param key a key of the entry
+     * @param value a value of the entry
+     * @return the code block
+     * @since 1.0
+     */
     public static @NonNull CodeBlock mapEntry(@NonNull Object key, @NonNull Object value) {
         return staticMethodInvocation(Map.class, "entry", key, value);
     }
@@ -176,8 +200,28 @@ public final class CodeBlocks {
         return CodeBlock.of(LITERAL_SPEC, value + "f");
     }
 
-    public static @NonNull CodeBlock optionalInt(@Nullable Integer integer) {
-        if (integer == null) return staticMethodInvocation(OptionalInt.class, "empty");
-        return staticMethodInvocation(OptionalInt.class, "of", integer);
+    /**
+     * Creates a code block using value provided, or using {@code null} when it is null.
+     *
+     * @param object the value
+     * @param blockSupplier a function creating a code block when the value provided is not {@code null}
+     * @return the code block
+     * @param <T> a type of the value
+     * @since 1.0
+     */
+    public static <T> @NonNull CodeBlock nullable(@Nullable T object, @NonNull Function<T, CodeBlock> blockSupplier) {
+        if (object == null) return NULL_CODE_BLOCK;
+        return blockSupplier.apply(object);
+    }
+
+    /**
+     * Creates a code block creating a {@linkplain Color color}, using {@link Color#color(int)}.
+     *
+     * @param value an RGB value of the color
+     * @return the code block
+     * @since 1.0
+     */
+    public static @NonNull CodeBlock color(int value) {
+        return CodeBlocks.staticMethodInvocation(Color.class, "color", value);
     }
 }

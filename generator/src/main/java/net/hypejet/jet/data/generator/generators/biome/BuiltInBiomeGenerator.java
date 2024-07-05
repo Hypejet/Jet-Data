@@ -44,13 +44,22 @@ public final class BuiltInBiomeGenerator extends ConstantGenerator {
     private static final Class<?> CLIMATE_SETTINGS_CLASS;
     private static final Field CLIMATE_SETTINGS_FIELD;
 
+    private static final Method HAS_PRECIPITATION_METHOD;
+    private static final Method TEMPERATURE_METHOD;
+    private static final Method TEMPERATURE_MODIFIER_METHOD;
+    private static final Method DOWNFALL_METHOD;
+
     private final HolderLookup.RegistryLookup<Biome> registryLookup;
 
     static {
         try {
             CLIMATE_SETTINGS_CLASS = Class.forName("net.minecraft.world.level.biome.Biome$ClimateSettings");
             CLIMATE_SETTINGS_FIELD = Biome.class.getDeclaredField("climateSettings");
-        } catch (NoSuchFieldException | ClassNotFoundException exception) {
+            HAS_PRECIPITATION_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("hasPrecipitation");
+            TEMPERATURE_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("temperature");
+            TEMPERATURE_MODIFIER_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("temperatureModifier");
+            DOWNFALL_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("downfall");
+        } catch (NoSuchFieldException | ClassNotFoundException | NoSuchMethodException exception) {
             throw new RuntimeException(exception);
         }
     }
@@ -89,8 +98,8 @@ public final class BuiltInBiomeGenerator extends ConstantGenerator {
                     return FieldSpec.builder(BIOME_CLASS, constantName(location))
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(CodeBlocks.staticMethodInvocation(BIOME_CLASS, "biome",
-                                    CodeBlocks.keyCreator(location), climateSettingsCreator(biome),
-                                    biomeEffectsCreator(biome.getSpecialEffects())))
+                                    CodeBlocks.keyCreator(location), climateSettings(biome),
+                                    biomeEffects(biome.getSpecialEffects())))
                             .build();
                 })
                 .toList();
@@ -107,31 +116,17 @@ public final class BuiltInBiomeGenerator extends ConstantGenerator {
         return location.getPath().toUpperCase();
     }
 
-    private static @NonNull CodeBlock climateSettingsCreator(@NonNull Biome biome) {
+    private static @NonNull CodeBlock climateSettings(@NonNull Biome biome) {
         Object climateSettings = ReflectionUtil.access(CLIMATE_SETTINGS_FIELD, biome, Field::get);
 
-        Method hasPrecipitationMethod;
-        Method temperatureMethod;
-        Method temperatureModifierMethod;
-        Method downfallMethod;
-
-        try {
-            hasPrecipitationMethod = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("hasPrecipitation");
-            temperatureMethod = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("temperature");
-            temperatureModifierMethod = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("temperatureModifier");
-            downfallMethod = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("downfall");
-        } catch (NoSuchMethodException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        boolean hasPrecipitation = (boolean) ReflectionUtil.invoke(hasPrecipitationMethod, climateSettings);
-        float temperature = (float) ReflectionUtil.invoke(temperatureMethod, climateSettings);
+        boolean hasPrecipitation = (boolean) ReflectionUtil.invoke(HAS_PRECIPITATION_METHOD, climateSettings);
+        float temperature = (float) ReflectionUtil.invoke(TEMPERATURE_METHOD, climateSettings);
 
         TemperatureModifier temperatureModifier = (TemperatureModifier) ReflectionUtil.invoke(
-                temperatureModifierMethod, climateSettings
+                TEMPERATURE_MODIFIER_METHOD, climateSettings
         );
 
-        float downfall = (float) ReflectionUtil.access(downfallMethod, climateSettings, Method::invoke);
+        float downfall = (float) ReflectionUtil.invoke(DOWNFALL_METHOD, climateSettings);
 
         return CodeBlocks.constructor(ClimateSettings.class,
                 hasPrecipitation,
@@ -142,11 +137,12 @@ public final class BuiltInBiomeGenerator extends ConstantGenerator {
         );
     }
 
-    private static @NonNull CodeBlock biomeEffectsCreator(@NonNull BiomeSpecialEffects effects) {
-        return CodeBlocks.constructor(BiomeEffects.class, effects.getFogColor(), effects.getWaterColor(),
-                effects.getWaterFogColor(), effects.getSkyColor(),
-                CodeBlocks.optionalInt(effects.getFoliageColorOverride().orElse(null)),
-                CodeBlocks.optionalInt(effects.getGrassColorOverride().orElse(null)),
+    private static @NonNull CodeBlock biomeEffects(@NonNull BiomeSpecialEffects effects) {
+        return CodeBlocks.constructor(BiomeEffects.class, CodeBlocks.color(effects.getFogColor()),
+                CodeBlocks.color(effects.getWaterColor()), CodeBlocks.color(effects.getWaterFogColor()),
+                CodeBlocks.color(effects.getWaterFogColor()),
+                CodeBlocks.nullable(effects.getFoliageColorOverride().orElse(null), CodeBlocks::color),
+                CodeBlocks.nullable(effects.getGrassColorOverride().orElse(null), CodeBlocks::color),
                 CodeBlocks.staticFieldReference(BuiltInGrassColorModifierGenerator.CLASS_NAME,
                         BuiltInGrassColorModifierGenerator.constantName(effects.getGrassColorModifier()))
         );
