@@ -1,24 +1,19 @@
 package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
-import com.squareup.javapoet.JavaFile;
-import net.hypejet.jet.data.generator.generators.BuiltInBlockGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInEntityAttachmentTypeGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInEntityCategoryGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInEntityTypeGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInFeatureFlagsGenerator;
-import net.hypejet.jet.data.generator.generators.BuiltInSoundEventGenerator;
-import net.hypejet.jet.data.generator.generators.biome.BuiltInBiomeGenerator;
-import net.hypejet.jet.data.generator.generators.biome.BuiltInGrassColorModifierGenerator;
-import net.hypejet.jet.data.generator.generators.biome.BuiltInTemperatureModifierGenerator;
+import net.hypejet.jet.data.generator.generators.VanillaBiomeGenerator;
+import net.hypejet.jet.data.json.JetDataJson;
+import net.hypejet.jet.registry.RegistryEntry;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.server.Bootstrap;
 import org.slf4j.Logger;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -29,6 +24,8 @@ import java.util.Set;
  * @see Generator
  */
 public final class GeneratorEntrypoint {
+
+    private static final String JSON_FILE_SUFFIX = ".json";
 
     private GeneratorEntrypoint() {}
 
@@ -43,32 +40,34 @@ public final class GeneratorEntrypoint {
         Bootstrap.bootStrap();
 
         HolderLookup.Provider lookupProvider = VanillaRegistries.createLookup();
-
-        Set<Generator> generators = Set.of(new BuiltInBlockGenerator(), new BuiltInEntityTypeGenerator(),
-                new BuiltInEntityCategoryGenerator(), new BuiltInFeatureFlagsGenerator(),
-                new BuiltInEntityAttachmentTypeGenerator(), new BuiltInGrassColorModifierGenerator(),
-                new BuiltInTemperatureModifierGenerator(), new BuiltInSoundEventGenerator(),
-                new BuiltInBiomeGenerator(lookupProvider.lookupOrThrow(Registries.BIOME)));
+        Set<Generator<?>> generators = Set.of(new VanillaBiomeGenerator(lookupProvider));
 
         Logger logger = LogUtils.getLogger();
-        Path rootGenerationPath = Path.of(args[0]);
+        Path resourcesPath = Path.of(args[0]);
 
         logger.info("Starting generation...");
 
-        for (Generator generator : generators) {
+        for (Generator<?> generator : generators) {
             String generatorName = generator.getClass().getSimpleName();
 
-            logger.info("Generating a java file using \"{}\"...", generatorName);
-            JavaFile file = generator.generate(logger);
-
             try {
-                logger.info("Writing the java file...");
-                file.writeTo(rootGenerationPath);
+                logger.info("Generating registry entries using \"{}\"...", generatorName);
+                Collection<? extends RegistryEntry<?>> entries = generator.generate(logger);
+
+                logger.info("Converting the generated registry entries to a string...");
+                String json = JetDataJson.serialize(entries);
+
+                logger.info("Writing the resource file...");
+                Files.createDirectories(resourcesPath);
+
+                Path resourceFilePath = resourcesPath.resolve(generator.resourceFileName() + JSON_FILE_SUFFIX);
+                Files.deleteIfExists(resourceFilePath);
+
+                Files.writeString(resourceFilePath, json, StandardOpenOption.CREATE);
+                logger.info("Generation using \"{}\" has completed successfully!", generatorName);
             } catch (Throwable throwable) {
                 logger.error("An error occurred during generation using: {}", generatorName, throwable);
             }
-
-            logger.info("Generation using \"{}\" has completed successfully!", generatorName);
         }
 
         logger.info("Generation complete!");

@@ -2,19 +2,24 @@
 vanillaGradle = "0.2.1-SNAPSHOT"
 
 checkerFramework = "3.44.0"
-checkerFrameworkGradle = "0.6.40"
+
+javaPoet = "1.13.0"
+gson = "2.11.0"
 
 adventure = "4.17.0"
-javaPoet = "1.13.0"
-
 minecraftVersion = "1.21"
 
 [libraries]
 checkerFrameworkQual = { module = "org.checkerframework:checker-qual", version.ref = "checkerFramework" }
-checkerFrameworkChecker = { module = "org.checkerframework:checker", version.ref = "checkerFramework" }
-adventureApi = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 javaPoet = { module = "com.squareup:javapoet", version.ref = "javaPoet" }
+
+adventureApi = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+adventureNbt = { module = "net.kyori:adventure-nbt", version.ref = "adventure" }
+
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[bundles]
+adventure = ["adventureApi", "adventureNbt"]
 
 [plugins]
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "vanillaGradle" }
-checkerFrameworkGradle = { id = "org.checkerframework", version.ref = "checkerFrameworkGradle" }

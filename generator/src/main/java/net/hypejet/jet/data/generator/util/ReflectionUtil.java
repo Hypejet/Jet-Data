@@ -15,6 +15,15 @@ public final class ReflectionUtil {
 
     private ReflectionUtil() {}
 
+    /**
+     * Invokes a {@linkplain Method method}.
+     *
+     * @param method the method
+     * @param object an object to invoke the method on
+     * @param args arguments of the method invocation
+     * @return a value returned by the method
+     * @since 1.0
+     */
     public static @NonNull Object invoke(@NonNull Method method, @NonNull Object object,
                                          @NonNull Object @NonNull ... args) {
         return access(method, object, (m, o) -> m.invoke(o, args));
