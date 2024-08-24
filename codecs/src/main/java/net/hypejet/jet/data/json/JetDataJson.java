@@ -5,19 +5,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.hypejet.jet.color.Color;
-import net.hypejet.jet.data.json.biome.BiomeJsonCodec;
-import net.hypejet.jet.data.json.biome.binary.BinaryTagJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.BiomeEffectSettingsJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.modifier.GrassColorModifierJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.music.BiomeMusicJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.particle.BiomeParticleSettingsJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.sound.BiomeAdditionalSoundJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.sound.BiomeMoodSoundJsonCodec;
-import net.hypejet.jet.data.json.biome.effects.sound.BiomeSoundEventJsonCodec;
-import net.hypejet.jet.data.json.biome.modifier.BiomeTemperatureModifierJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.BiomeJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.binary.BinaryTagJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.BiomeEffectSettingsJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.modifier.GrassColorModifierJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.music.BiomeMusicJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.particle.BiomeParticleSettingsJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeAdditionalSoundJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeMoodSoundJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeSoundEventJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.biome.modifier.BiomeTemperatureModifierJsonCodec;
 import net.hypejet.jet.data.json.color.ColorJsonCodec;
 import net.hypejet.jet.data.json.datapack.DataPackJsonCodec;
-import net.hypejet.jet.data.json.entry.RegistryEntryJsonCodec;
+import net.hypejet.jet.data.json.registry.RegistryEntryJsonCodec;
 import net.hypejet.jet.data.json.key.KeyJsonCodec;
 import net.hypejet.jet.pack.DataPack;
 import net.hypejet.jet.registry.RegistryEntry;
@@ -73,14 +73,16 @@ public final class JetDataJson {
     /**
      * Deserializes {@linkplain RegistryEntry registry entries} from a {@linkplain String string}.
      *
+     * <p>The deserialized registry entries keep their order, which they were serialized with.</p>
+     *
      * @param serialized the string
      * @param entryClass a class of type of the registry entries
      * @return the deserialized registry entries
      * @param <E> a type of the registry entries
      * @since 1.0
      */
-    public static <E extends RegistryEntry<?>> @NonNull Collection<E> deserialize(@NonNull String serialized,
-                                                                                  @NonNull Class<E> entryClass) {
+    public static <E extends RegistryEntry<?>> @NonNull List<E> deserialize(@NonNull String serialized,
+                                                                            @NonNull Class<E> entryClass) {
         JsonArray array = GSON.fromJson(serialized, JsonArray.class);
         List<E> entries = new ArrayList<>();
         for (JsonElement element : array)

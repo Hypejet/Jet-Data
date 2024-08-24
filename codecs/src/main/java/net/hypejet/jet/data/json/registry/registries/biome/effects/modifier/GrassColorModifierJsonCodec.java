@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.json.biome.effects.modifier;
+package net.hypejet.jet.data.json.registry.registries.biome.effects.modifier;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;

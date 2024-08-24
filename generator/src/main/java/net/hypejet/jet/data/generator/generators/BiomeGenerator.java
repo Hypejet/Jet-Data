@@ -6,6 +6,7 @@ import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.BinaryTagAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
+import net.hypejet.jet.pack.DataPack;
 import net.hypejet.jet.registry.registries.biome.Biome;
 import net.hypejet.jet.registry.registries.biome.BiomeRegistryEntry;
 import net.hypejet.jet.registry.registries.biome.effects.BiomeEffectSettings;
@@ -19,7 +20,9 @@ import net.hypejet.jet.registry.registries.biome.temperature.BiomeTemperatureMod
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrationInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,7 +30,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.AmbientAdditionsSettings;
@@ -41,24 +46,23 @@ import org.slf4j.Logger;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * Represents a {@linkplain Generator generator}, which generates vanilla {@linkplain Biome biomes} using data
- * defined in a {@linkplain HolderLookup.Provider holder lookup provider}.
+ * Represents a {@linkplain Generator generator}, which generates all {@linkplain Biome biomes} using data defined
+ * in a {@linkplain Registry registry}.
  *
  * @since 1.0
  * @author Codestech
  * @see Biome
- * @see HolderLookup.Provider
+ * @see Registry
  * @see Generator
  */
-public final class VanillaBiomeGenerator extends Generator<Biome> {
+public final class BiomeGenerator extends Generator<Biome> {
 
     private static final Class<?> CLIMATE_SETTINGS_CLASS;
-    private static final Class<?> BIOME_CLASS = net.minecraft.world.level.biome.Biome.class;
-
     private static final Field CLIMATE_SETTINGS_FIELD;
 
     private static final Method TEMPERATURE_MODIFIER_METHOD;
@@ -67,12 +71,13 @@ public final class VanillaBiomeGenerator extends Generator<Biome> {
     private static final Field PARTICLE_SETTINGS_PROBABILITY_FIELD;
     private static final Method SOUND_EVENT_FIXED_RANGE_METHOD;
 
-    private final HolderLookup.Provider lookupProvider;
+    private final RegistryAccess.Frozen registryAccess;
 
     static {
         try {
-            CLIMATE_SETTINGS_CLASS = Class.forName(BIOME_CLASS.getName() + "$ClimateSettings");
-            CLIMATE_SETTINGS_FIELD = BIOME_CLASS.getDeclaredField("climateSettings");
+            Class<?> biomeClass = net.minecraft.world.level.biome.Biome.class;
+            CLIMATE_SETTINGS_CLASS = Class.forName(biomeClass.getName() + "$ClimateSettings");
+            CLIMATE_SETTINGS_FIELD = biomeClass.getDeclaredField("climateSettings");
             TEMPERATURE_MODIFIER_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("temperatureModifier");
             DOWNFALL_METHOD = CLIMATE_SETTINGS_CLASS.getDeclaredMethod("downfall");
             PARTICLE_SETTINGS_PROBABILITY_FIELD = AmbientParticleSettings.class.getDeclaredField("probability");
@@ -83,36 +88,47 @@ public final class VanillaBiomeGenerator extends Generator<Biome> {
     }
 
     /**
-     * Constructs a {@linkplain VanillaBiomeGenerator vanilla biome generator}.
+     * Constructs a {@linkplain BiomeGenerator biome generator}.
      *
-     * @param lookup a lookup to the biome registry
+     * @param registryAccess access to all Minecraft registries
      * @since 1.0
      */
-    public VanillaBiomeGenerator(HolderLookup.@NonNull Provider lookup) {
-        super("vanilla-biomes");
-        this.lookupProvider = lookup;
+    public BiomeGenerator(RegistryAccess.@NonNull Frozen registryAccess) {
+        super("biomes");
+        this.registryAccess = registryAccess;
     }
 
     @Override
-    public @NonNull Collection<BiomeRegistryEntry> generate(@NonNull Logger logger) {
-        return this.lookupProvider.lookupOrThrow(Registries.BIOME)
-                .listElements()
-                .map(reference -> {
-                    net.minecraft.world.level.biome.Biome biome = reference.value();
-                    Object climateSettings = ReflectionUtil.access(CLIMATE_SETTINGS_FIELD, biome, Field::get);
+    public @NonNull List<BiomeRegistryEntry> generate(@NonNull Logger logger) {
+        List<BiomeRegistryEntry> entries = new ArrayList<>();
+        Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess.registryOrThrow(Registries.BIOME);
 
-                    Key key = IdentifierAdapter.convert(reference.key().location());
-                    Biome convertedBiome = Biome.builder()
-                            .hasPrecipitation(biome.hasPrecipitation())
-                            .temperature(biome.getBaseTemperature())
-                            .temperatureModifier(temperatureModifier(climateSettings))
-                            .downfall((float) ReflectionUtil.invoke(DOWNFALL_METHOD, climateSettings))
-                            .effectSettings(biomeEffects(biome.getSpecialEffects()))
-                            .build();
+        registry.forEach(biome -> {
+            ResourceLocation location = registry.getKey(biome);
+            if (location == null)
+                throw new IllegalArgumentException("A key of a registered biome is null");
 
-                    return new BiomeRegistryEntry(key, convertedBiome);
-                })
-                .toList();
+            KnownPack knownPack = registry.registrationInfo(ResourceKey.create(registry.key(), location))
+                    .flatMap(RegistrationInfo::knownPackInfo)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Could not find a known pack for a registered biome")
+                    );
+
+            Object climateSettings = ReflectionUtil.access(CLIMATE_SETTINGS_FIELD, biome, Field::get);
+            Biome convertedBiome = Biome.builder()
+                    .hasPrecipitation(biome.hasPrecipitation())
+                    .temperature(biome.getBaseTemperature())
+                    .temperatureModifier(temperatureModifier(climateSettings))
+                    .downfall((float) ReflectionUtil.invoke(DOWNFALL_METHOD, climateSettings))
+                    .effectSettings(biomeEffects(biome.getSpecialEffects()))
+                    .build();
+
+            entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(location),
+                    new DataPack(Key.key(knownPack.namespace(), knownPack.id()), knownPack.version()),
+                    convertedBiome));
+        });
+
+        return List.copyOf(entries);
     }
 
     private @NonNull BiomeEffectSettings biomeEffects(@NonNull BiomeSpecialEffects effects) {
@@ -139,16 +155,16 @@ public final class VanillaBiomeGenerator extends Generator<Biome> {
                         .orElse(null))
                 .ambientSound(effects.getAmbientLoopSoundEvent()
                         .map(Holder::value)
-                        .map(VanillaBiomeGenerator::soundEvent)
+                        .map(BiomeGenerator::soundEvent)
                         .orElse(null))
                 .moodSound(effects.getAmbientMoodSettings()
-                        .map(VanillaBiomeGenerator::moodSound)
+                        .map(BiomeGenerator::moodSound)
                         .orElse(null))
                 .additionalSound(effects.getAmbientAdditionsSettings()
-                        .map(VanillaBiomeGenerator::additionalSound)
+                        .map(BiomeGenerator::additionalSound)
                         .orElse(null))
                 .biomeMusic(effects.getBackgroundMusic()
-                        .map(VanillaBiomeGenerator::music)
+                        .map(BiomeGenerator::music)
                         .orElse(null))
                 .build();
     }
@@ -161,7 +177,7 @@ public final class VanillaBiomeGenerator extends Generator<Biome> {
 
         DataResult<Tag> result = type.codec()
                 .codec()
-                .encodeStart(this.lookupProvider.createSerializationContext(NbtOps.INSTANCE), options);
+                .encodeStart(this.registryAccess.createSerializationContext(NbtOps.INSTANCE), options);
 
         Tag tag = result.getOrThrow();
         float probability = ReflectionUtil.access(PARTICLE_SETTINGS_PROBABILITY_FIELD, settings, Field::getFloat);

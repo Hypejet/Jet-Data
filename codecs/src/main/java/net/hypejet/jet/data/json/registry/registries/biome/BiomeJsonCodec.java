@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.json.biome;
+package net.hypejet.jet.data.json.registry.registries.biome;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
