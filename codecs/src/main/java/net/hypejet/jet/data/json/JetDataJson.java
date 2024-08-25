@@ -19,6 +19,10 @@ import net.hypejet.jet.data.json.color.ColorJsonCodec;
 import net.hypejet.jet.data.json.datapack.DataPackJsonCodec;
 import net.hypejet.jet.data.json.registry.RegistryEntryJsonCodec;
 import net.hypejet.jet.data.json.key.KeyJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.dimension.DimensionTypeJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.dimension.number.IntegerProviderJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.dimension.number.WeightedListEntryJsonCodec;
+import net.hypejet.jet.number.IntegerProvider;
 import net.hypejet.jet.pack.DataPack;
 import net.hypejet.jet.registry.RegistryEntry;
 import net.hypejet.jet.registry.registries.biome.Biome;
@@ -31,6 +35,8 @@ import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeAdditionalSo
 import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeSoundEvent;
 import net.hypejet.jet.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.registry.registries.dimension.DimensionTypeRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -66,6 +72,12 @@ public final class JetDataJson {
             .registerTypeAdapter(BiomeTemperatureModifier.class, new BiomeTemperatureModifierJsonCodec())
             .registerTypeAdapter(BiomeRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(Biome.class, BiomeRegistryEntry::new))
+            // Dimension types
+            .registerTypeAdapter(IntegerProvider.WeightedList.Entry.class, new WeightedListEntryJsonCodec())
+            .registerTypeAdapter(IntegerProvider.class, new IntegerProviderJsonCodec())
+            .registerTypeAdapter(DimensionType.class, new DimensionTypeJsonCodec())
+            .registerTypeAdapter(DimensionTypeRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(DimensionType.class, DimensionTypeRegistryEntry::new))
             .create();
 
     private JetDataJson() {}

@@ -2,6 +2,7 @@ package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
 import net.hypejet.jet.data.generator.generators.BiomeGenerator;
+import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
 import net.hypejet.jet.data.json.JetDataJson;
 import net.hypejet.jet.registry.RegistryEntry;
 import net.minecraft.SharedConstants;
@@ -71,7 +72,8 @@ public final class GeneratorEntrypoint {
         );
 
         RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
-        Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess));
+        Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess),
+                new DimensionTypeGenerator(frozenAccess));
 
         Logger logger = LogUtils.getLogger();
         Path resourcesPath = Path.of(args[0]);

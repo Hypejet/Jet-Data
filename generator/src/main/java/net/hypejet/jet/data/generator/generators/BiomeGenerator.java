@@ -101,18 +101,16 @@ public final class BiomeGenerator extends Generator<Biome> {
     @Override
     public @NonNull List<BiomeRegistryEntry> generate(@NonNull Logger logger) {
         List<BiomeRegistryEntry> entries = new ArrayList<>();
-        Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess.registryOrThrow(Registries.BIOME);
+
+        Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess
+                .registryOrThrow(Registries.BIOME);
 
         registry.forEach(biome -> {
-            ResourceLocation location = registry.getKey(biome);
-            if (location == null)
-                throw new IllegalArgumentException("A key of a registered biome is null");
+            ResourceKey<net.minecraft.world.level.biome.Biome> key = registry.getResourceKey(biome).orElseThrow();
 
-            KnownPack knownPack = registry.registrationInfo(ResourceKey.create(registry.key(), location))
+            KnownPack knownPack = registry.registrationInfo(key)
                     .flatMap(RegistrationInfo::knownPackInfo)
-                    .orElseThrow(() ->
-                            new IllegalArgumentException("Could not find a known pack for a registered biome")
-                    );
+                    .orElseThrow();
 
             Object climateSettings = ReflectionUtil.access(CLIMATE_SETTINGS_FIELD, biome, Field::get);
             Biome convertedBiome = Biome.builder()
@@ -123,7 +121,7 @@ public final class BiomeGenerator extends Generator<Biome> {
                     .effectSettings(biomeEffects(biome.getSpecialEffects()))
                     .build();
 
-            entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(location),
+            entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(key.location()),
                     new DataPack(Key.key(knownPack.namespace(), knownPack.id()), knownPack.version()),
                     convertedBiome));
         });
@@ -193,7 +191,7 @@ public final class BiomeGenerator extends Generator<Biome> {
             convertedTag = BinaryTagAdapter.convert(tag);
         }
 
-        return new BiomeParticleSettings(location.toString(), convertedTag, probability);
+        return new BiomeParticleSettings(IdentifierAdapter.convert(location), convertedTag, probability);
     }
 
     private static @NonNull BiomeMoodSound moodSound(@NonNull AmbientMoodSettings settings) {
