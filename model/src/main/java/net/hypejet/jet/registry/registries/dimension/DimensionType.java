@@ -1,6 +1,6 @@
 package net.hypejet.jet.registry.registries.dimension;
 
-import net.hypejet.jet.registry.registries.dimension.number.IntegerProvider;
+import net.hypejet.jet.number.IntegerProvider;
 import net.hypejet.jet.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param height a maximum block height of dimensions using this type, should be a multiplication of {@code 16}
  * @param localHeight a maximum block height of dimensions using this type, within which chorus plants and nether
  *                    portals can bring players, should be a multiplication of {@code 16}
- * @param infiniburn a tag, which makes blocks using it burn forever in dimensions using this type
+ * @param infiniburn an un-hashed tag, which makes blocks using it burn forever in dimensions using this type
  * @param effects an identifier of special effects of dimensions using this type, such as cloud level and sky type
  * @param ambientLight a light level of dimensions using this type, used as an interpolation factor during calculation
  *                     of brightness generated from the skylight
@@ -39,7 +39,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public record DimensionType(@NonNull Long fixedTime, boolean hasSkylight, boolean hasCeiling, boolean ultrawarm,
                             boolean natural, double coordinateScale, boolean bedWorks, boolean respawnAnchorWorks,
-                            int minY, int height, int localHeight, @NonNull String infiniburn, @NonNull Key effects,
+                            int minY, int height, int localHeight, @NonNull Key infiniburn, @NonNull Key effects,
                             float ambientLight, boolean piglinSafe, boolean hasRaids,
                             @NonNull IntegerProvider monsterSpawnLightLevel, int monsterSpawnBlockLightLimit) {
     /**
@@ -77,7 +77,7 @@ public record DimensionType(@NonNull Long fixedTime, boolean hasSkylight, boolea
         private int height;
         private int localHeight;
 
-        private String infiniburn;
+        private Key infiniburn;
         private Key effects;
 
         private float ambientLight;
@@ -232,13 +232,13 @@ public record DimensionType(@NonNull Long fixedTime, boolean hasSkylight, boolea
         }
 
         /**
-         * Sets a tag, which makes blocks using it burn forever in dimensions using this type.
+         * Sets an un-hashed tag, which makes blocks using it burn forever in dimensions using this type.
          *
          * @param infiniburn the tag
          * @return this builder
          * @since 1.0
          */
-        public @NonNull Builder infiniburn(@NonNull String infiniburn) {
+        public @NonNull Builder infiniburn(@NonNull Key infiniburn) {
             this.infiniburn = NullabilityUtil.requireNonNull(infiniburn, "infiniburn");
             return this;
         }

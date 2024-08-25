@@ -1,4 +1,4 @@
-package net.hypejet.jet.registry.registries.dimension.number;
+package net.hypejet.jet.number;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -20,7 +20,7 @@ public sealed interface IntegerProvider {
      * @author Codestech
      * @see IntegerProvider
      */
-    record ConstantIntegerProvider(int value) implements IntegerProvider {}
+    record ConstantInteger(int value) implements IntegerProvider {}
 
     /**
      * Represents an {@linkplain IntegerProvider integer provider}, which provides a random integer in range
@@ -72,7 +72,7 @@ public sealed interface IntegerProvider {
      * @author Codestech
      * @see IntegerProvider
      */
-    record ClampedNormal(int mean, int deviation, int minimum, int maximum) implements IntegerProvider {}
+    record ClampedNormal(float mean, float deviation, int minimum, int maximum) implements IntegerProvider {}
 
     /**
      * Represents an {@linkplain IntegerProvider integer provider}, which provides an integer provided from
