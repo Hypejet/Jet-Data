@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.json.JsonCodec;
 import net.hypejet.jet.data.json.util.JsonUtil;
 import net.hypejet.jet.registry.registries.biome.effects.particle.BiomeParticleSettings;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 
 import java.lang.reflect.Type;
@@ -22,7 +23,7 @@ import java.lang.reflect.Type;
  */
 public final class BiomeParticleSettingsJsonCodec implements JsonCodec<BiomeParticleSettings> {
 
-    private static final String NAME = "name";
+    private static final String KEY = "key";
     private static final String DATA = "data";
     private static final String PROBABILITY = "probability";
 
@@ -30,7 +31,7 @@ public final class BiomeParticleSettingsJsonCodec implements JsonCodec<BiomePart
     public BiomeParticleSettings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element is not a json object");
-        return new BiomeParticleSettings(JsonUtil.read(NAME, String.class, object, context),
+        return new BiomeParticleSettings(JsonUtil.read(KEY, Key.class, object, context),
                 JsonUtil.readOptional(DATA, BinaryTag.class, object, context),
                 JsonUtil.read(PROBABILITY, float.class, object, context));
     }
@@ -39,7 +40,7 @@ public final class BiomeParticleSettingsJsonCodec implements JsonCodec<BiomePart
     public JsonElement serialize(BiomeParticleSettings src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
 
-        object.addProperty(NAME, src.name());
+        JsonUtil.write(KEY, src.key(), Key.class, object, context);
         JsonUtil.writeOptional(DATA, src.data(), BinaryTag.class, object, context);
         object.addProperty(PROBABILITY, src.probability());
 

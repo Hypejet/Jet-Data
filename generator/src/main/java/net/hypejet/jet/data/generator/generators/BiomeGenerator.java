@@ -191,7 +191,7 @@ public final class BiomeGenerator extends Generator<Biome> {
             convertedTag = BinaryTagAdapter.convert(tag);
         }
 
-        return new BiomeParticleSettings(location.toString(), convertedTag, probability);
+        return new BiomeParticleSettings(IdentifierAdapter.convert(location), convertedTag, probability);
     }
 
     private static @NonNull BiomeMoodSound moodSound(@NonNull AmbientMoodSettings settings) {
