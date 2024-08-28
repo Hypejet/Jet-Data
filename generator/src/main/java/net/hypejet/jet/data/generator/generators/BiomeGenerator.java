@@ -4,6 +4,7 @@ import com.mojang.serialization.DataResult;
 import net.hypejet.jet.color.Color;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.BinaryTagAdapter;
+import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.pack.DataPack;
@@ -94,7 +95,7 @@ public final class BiomeGenerator extends Generator<Biome> {
      * @since 1.0
      */
     public BiomeGenerator(RegistryAccess.@NonNull Frozen registryAccess) {
-        super("biomes");
+        super("biomes", "BiomeIdentifiers");
         this.registryAccess = registryAccess;
     }
 
@@ -107,7 +108,6 @@ public final class BiomeGenerator extends Generator<Biome> {
 
         registry.forEach(biome -> {
             ResourceKey<net.minecraft.world.level.biome.Biome> key = registry.getResourceKey(biome).orElseThrow();
-
             KnownPack knownPack = registry.registrationInfo(key)
                     .flatMap(RegistrationInfo::knownPackInfo)
                     .orElseThrow();
@@ -122,8 +122,7 @@ public final class BiomeGenerator extends Generator<Biome> {
                     .build();
 
             entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    new DataPack(Key.key(knownPack.namespace(), knownPack.id()), knownPack.version()),
-                    convertedBiome));
+                    DataPackAdapter.dataPack(knownPack), convertedBiome));
         });
 
         return List.copyOf(entries);
