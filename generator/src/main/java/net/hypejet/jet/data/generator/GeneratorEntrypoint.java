@@ -1,7 +1,6 @@
 package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -31,6 +30,7 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.WorldDataConfiguration;
 import net.minecraft.world.level.validation.DirectoryValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
 import javax.lang.model.element.Modifier;
@@ -51,9 +51,9 @@ import java.util.Set;
 public final class GeneratorEntrypoint {
 
     private static final String JSON_FILE_SUFFIX = ".json";
+    private static final String UNALLOWED_CHARACTER_REPLACEMENT = "_";
 
-    private GeneratorEntrypoint() {
-    }
+    private GeneratorEntrypoint() {}
 
     /**
      * Runs all registered {@linkplain Generator vanilla data generators}.
@@ -115,7 +115,7 @@ public final class GeneratorEntrypoint {
                 List<FieldSpec> specs = new ArrayList<>();
                 for (RegistryEntry<?> entry : entries) {
                     Key key = entry.key();
-                    specs.add(FieldSpec.builder(Key.class, key.value().toUpperCase())
+                    specs.add(FieldSpec.builder(Key.class, createFieldName(key))
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(CodeBlocks.key(entry.key()))
                             .addJavadoc(JavaDocBuilder.builder()
@@ -153,5 +153,28 @@ public final class GeneratorEntrypoint {
         }
 
         logger.info("Generation complete!");
+    }
+
+    private static @NonNull String createFieldName(@NonNull Key key) {
+        String upperCaseKeyValue = key.value().toUpperCase();
+        StringBuilder builder = new StringBuilder();
+
+        for (int index = 0; index < upperCaseKeyValue.length(); index++) {
+            char character = upperCaseKeyValue.charAt(index);
+            boolean javaIdentifierPart = Character.isJavaIdentifierPart(character);
+
+            String string;
+
+            if (index == 0 && !Character.isJavaIdentifierStart(character) && javaIdentifierPart)
+                string = UNALLOWED_CHARACTER_REPLACEMENT + character;
+            else if (!javaIdentifierPart)
+                string = UNALLOWED_CHARACTER_REPLACEMENT;
+            else
+                string = String.valueOf(character);
+
+            builder.append(string);
+        }
+
+        return builder.toString();
     }
 }
