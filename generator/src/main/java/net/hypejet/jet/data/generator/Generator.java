@@ -17,15 +17,18 @@ import java.util.List;
 public abstract class Generator<V> {
 
     private final String resourceFileName;
+    private final String className;
 
     /**
      * Constructs the {@linkplain Generator generator}.
      *
      * @param resourceFileName a name of the resource file
+     * @param className a name of class, which contains identifiers of registry entries generated using the generator
      * @since 1.0
      */
-    public Generator(@NonNull String resourceFileName) {
+    public Generator(@NonNull String resourceFileName, @NonNull String className) {
         this.resourceFileName = resourceFileName;
+        this.className = className;
     }
 
     /**
@@ -36,6 +39,16 @@ public abstract class Generator<V> {
      */
     public @NonNull String resourceFileName() {
         return this.resourceFileName;
+    }
+
+    /**
+     * Gets a name of class, which contains identifiers of registry entries generated using the generator.
+     *
+     * @return the name
+     * @since 1.0
+     */
+    public @NonNull String className() {
+        return this.className;
     }
 
     /**

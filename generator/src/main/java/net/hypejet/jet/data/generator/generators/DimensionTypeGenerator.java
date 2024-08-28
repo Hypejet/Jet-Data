@@ -59,7 +59,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
      * @since 1.0
      */
     public DimensionTypeGenerator(RegistryAccess.@NonNull Frozen registryAccess) {
-        super("dimension-types");
+        super("dimension-types", "DimensionTypeIdentifiers");
         this.registryAccess = registryAccess;
     }
 
