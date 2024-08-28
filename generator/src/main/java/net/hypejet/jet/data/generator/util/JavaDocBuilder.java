@@ -19,18 +19,6 @@ public final class JavaDocBuilder {
     private JavaDocBuilder() {}
 
     /**
-     * Sets a value of a field of the javadoc.
-     *
-     * @param field the field
-     * @param value the value
-     * @return this builder
-     * @since 1.0
-     */
-    public @NonNull JavaDocBuilder field(@NonNull String field, @NonNull String value) {
-        return this.append(String.format("@%s %s", field, value));
-    }
-
-    /**
      * Appends an empty line to the javadoc.
      *
      * @return this builder
