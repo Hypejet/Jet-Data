@@ -2,7 +2,6 @@ package net.hypejet.jet.registry.registries.chat.decoration;
 
 import net.hypejet.jet.registry.registries.chat.ChatType;
 import net.hypejet.jet.utils.NullabilityUtil;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.Style;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -20,7 +19,7 @@ import java.util.List;
  * @author Codestech
  * @see ChatType
  */
-public record ChatDecoration(@NonNull Key translationKey, @Nullable Style style,
+public record ChatDecoration(@NonNull String translationKey, @Nullable Style style,
                              @NonNull List<ChatDecorationParameter> parameters) {
     /**
      * Constructs the {@linkplain ChatDecoration chat decoration}.

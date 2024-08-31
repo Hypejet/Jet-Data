@@ -9,6 +9,15 @@ import net.hypejet.jet.registry.registries.chat.decoration.ChatDecorationParamet
 
 import java.lang.reflect.Type;
 
+/**
+ * Represents a {@linkplain JsonCodec}, which serializes and deserializes a {@linkplain ChatDecorationParameter
+ * chat decoration parameter}.
+ *
+ * @since 1.0
+ * @author Codestech
+ * @see ChatDecorationParameter
+ * @see JsonCodec
+ */
 public final class ChatDecorationParameterJsonCodec implements JsonCodec<ChatDecorationParameter> {
 
     private static final String SENDER = "sender";

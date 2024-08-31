@@ -6,6 +6,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import net.hypejet.jet.data.generator.generators.BiomeGenerator;
+import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
 import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.generator.util.JavaDocBuilder;
@@ -84,7 +85,7 @@ public final class GeneratorEntrypoint {
 
         RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
         Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess),
-                new DimensionTypeGenerator(frozenAccess));
+                new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess));
 
         Logger logger = LogUtils.getLogger();
 

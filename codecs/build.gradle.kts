@@ -7,6 +7,7 @@ dependencies {
     compileOnly(libs.gson)
     compileOnly(libs.bundles.adventure)
     compileOnly(libs.checkerFrameworkQual)
+    compileOnly(libs.bundles.adventureSerializers)
 }
 
 publishing {

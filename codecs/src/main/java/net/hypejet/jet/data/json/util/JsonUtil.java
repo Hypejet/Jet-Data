@@ -18,6 +18,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public final class JsonUtil {
 
     private JsonUtil() {}
+
     /**
      * Reads and deserializes a value from a {@linkplain JsonObject json object}.
      *

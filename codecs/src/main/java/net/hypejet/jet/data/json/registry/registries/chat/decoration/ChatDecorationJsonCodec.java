@@ -9,7 +9,6 @@ import net.hypejet.jet.data.json.JsonCodec;
 import net.hypejet.jet.data.json.util.JsonUtil;
 import net.hypejet.jet.registry.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.registry.registries.chat.decoration.ChatDecorationParameter;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.format.Style;
 
 import java.lang.reflect.Type;
@@ -42,7 +41,7 @@ public final class ChatDecorationJsonCodec implements JsonCodec<ChatDecoration> 
         for (JsonElement element : jsonParameterArray)
             parameters.add(context.deserialize(element, ChatDecorationParameter.class));
 
-        return new ChatDecoration(JsonUtil.read(TRANSLATION_KEY, Key.class, object, context),
+        return new ChatDecoration(JsonUtil.read(TRANSLATION_KEY, String.class, object, context),
                 JsonUtil.readOptional(STYLE, Style.class, object, context), List.copyOf(parameters));
     }
 
@@ -50,7 +49,7 @@ public final class ChatDecorationJsonCodec implements JsonCodec<ChatDecoration> 
     public JsonElement serialize(ChatDecoration src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
 
-        JsonUtil.write(TRANSLATION_KEY, src.translationKey(), Key.class, object, context);
+        JsonUtil.write(TRANSLATION_KEY, src.translationKey(), object, context);
         JsonUtil.writeOptional(STYLE, src.style(), Style.class, object, context);
 
         JsonArray jsonParameterArray = new JsonArray();
