@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.json.registry.registries.biome.binary;
+package net.hypejet.jet.data.json.binary;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -104,7 +104,7 @@ public final class BinaryTagJsonCodec implements JsonCodec<BinaryTag> {
 
         JsonObject object = new JsonObject();
         object.addProperty(ID, src.type().id());
-        object.add(DATA, object);
+        object.add(DATA, data);
         return object;
     }
 

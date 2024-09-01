@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.hypejet.jet.color.Color;
 import net.hypejet.jet.data.json.registry.registries.biome.BiomeJsonCodec;
-import net.hypejet.jet.data.json.registry.registries.biome.binary.BinaryTagJsonCodec;
+import net.hypejet.jet.data.json.binary.BinaryTagJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.BiomeEffectSettingsJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.modifier.GrassColorModifierJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.music.BiomeMusicJsonCodec;
@@ -19,6 +19,9 @@ import net.hypejet.jet.data.json.color.ColorJsonCodec;
 import net.hypejet.jet.data.json.datapack.DataPackJsonCodec;
 import net.hypejet.jet.data.json.registry.RegistryEntryJsonCodec;
 import net.hypejet.jet.data.json.key.KeyJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.chat.ChatTypeJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.chat.decoration.ChatDecorationJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.chat.decoration.ChatDecorationParameterJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.DimensionTypeJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.number.IntegerProviderJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.number.WeightedListEntryJsonCodec;
@@ -35,10 +38,15 @@ import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeAdditionalSo
 import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.registry.registries.biome.effects.sound.BiomeSoundEvent;
 import net.hypejet.jet.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.registry.registries.chat.ChatType;
+import net.hypejet.jet.registry.registries.chat.ChatTypeRegistryEntry;
+import net.hypejet.jet.registry.registries.chat.decoration.ChatDecoration;
+import net.hypejet.jet.registry.registries.chat.decoration.ChatDecorationParameter;
 import net.hypejet.jet.registry.registries.dimension.DimensionType;
 import net.hypejet.jet.registry.registries.dimension.DimensionTypeRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
@@ -54,13 +62,9 @@ import java.util.List;
  */
 public final class JetDataJson {
 
-    private static final Gson GSON = new GsonBuilder()
+    private static final Gson GSON = GsonComponentSerializer.gson().populator()
+            .apply(new GsonBuilder())
             .setPrettyPrinting()
-            .registerTypeAdapter(Color.class, new ColorJsonCodec())
-            .registerTypeAdapter(Key.class, new KeyJsonCodec())
-            .registerTypeAdapter(BinaryTag.class, new BinaryTagJsonCodec())
-            .registerTypeAdapter(GrassColorModifier.class, new GrassColorModifierJsonCodec())
-            .registerTypeAdapter(DataPack.class, new DataPackJsonCodec())
             // Biomes
             .registerTypeAdapter(BiomeMusic.class, new BiomeMusicJsonCodec())
             .registerTypeAdapter(BiomeParticleSettings.class, new BiomeParticleSettingsJsonCodec())
@@ -78,6 +82,18 @@ public final class JetDataJson {
             .registerTypeAdapter(DimensionType.class, new DimensionTypeJsonCodec())
             .registerTypeAdapter(DimensionTypeRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(DimensionType.class, DimensionTypeRegistryEntry::new))
+            // Chat types
+            .registerTypeAdapter(ChatType.class, new ChatTypeJsonCodec())
+            .registerTypeAdapter(ChatDecoration.class, new ChatDecorationJsonCodec())
+            .registerTypeAdapter(ChatDecorationParameter.class, new ChatDecorationParameterJsonCodec())
+            .registerTypeAdapter(ChatTypeRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(ChatType.class, ChatTypeRegistryEntry::new))
+            // Misc type adapters
+            .registerTypeAdapter(Color.class, new ColorJsonCodec())
+            .registerTypeAdapter(Key.class, new KeyJsonCodec())
+            .registerTypeAdapter(BinaryTag.class, new BinaryTagJsonCodec())
+            .registerTypeAdapter(GrassColorModifier.class, new GrassColorModifierJsonCodec())
+            .registerTypeAdapter(DataPack.class, new DataPackJsonCodec())
             .create();
 
     private JetDataJson() {}
@@ -114,5 +130,15 @@ public final class JetDataJson {
         for (RegistryEntry<?> entry : entries)
             array.add(GSON.toJsonTree(entry));
         return GSON.toJson(array);
+    }
+
+    /**
+     * Gets an instance of {@linkplain Gson gson} which serializes and deserializes Jet data objects.
+     *
+     * @return the instance
+     * @since 1.0
+     */
+    public static @NonNull Gson gson() {
+        return GSON;
     }
 }

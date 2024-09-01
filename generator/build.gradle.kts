@@ -16,8 +16,9 @@ dependencies {
     implementation(project(":jet-data-model"))
     implementation(project(":jet-data-codecs"))
     implementation(libs.checkerFrameworkQual)
-    implementation(libs.bundles.adventure)
     implementation(libs.javaPoet)
+    implementation(libs.bundles.adventure)
+    implementation(libs.bundles.adventureSerializers)
 }
 
 application {
