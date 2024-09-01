@@ -30,7 +30,7 @@ public final class CodeBlocks {
      * @return the code block
      */
     public static @NonNull CodeBlock key(@NonNull Key key) {
-        return staticMethodInvocation(Key.class, "key", CodeBlock.of(STRING, key.asString()));
+        return staticMethodInvocation(Key.class, "key", string(key.asString()));
     }
 
     /**
@@ -60,5 +60,16 @@ public final class CodeBlocks {
                                                             @NonNull CodeBlock @NonNull ... arguments) {
         CodeBlock argumentBlock = CodeBlock.join(Arrays.asList(arguments), ", ");
         return CodeBlock.of(TYPE_REFERENCE + "." + name + "(" + LITERAL + ")", type, argumentBlock);
+    }
+
+    /**
+     * Creates a {@linkplain CodeBlock code block} creating a {@linkplain String string}.
+     *
+     * @param string the string
+     * @return the code block
+     * @since 1.0
+     */
+    public static @NonNull CodeBlock string(@NonNull String string) {
+        return CodeBlock.of(STRING, string);
     }
 }
