@@ -9,13 +9,11 @@ import net.hypejet.jet.data.json.mapper.MapperJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.BiomeJsonCodec;
 import net.hypejet.jet.data.json.binary.BinaryTagJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.BiomeEffectSettingsJsonCodec;
-import net.hypejet.jet.data.json.registry.registries.biome.effects.modifier.GrassColorModifierJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.music.BiomeMusicJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.particle.BiomeParticleSettingsJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeAdditionalSoundJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeMoodSoundJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.sound.BiomeSoundEventJsonCodec;
-import net.hypejet.jet.data.json.registry.registries.biome.modifier.BiomeTemperatureModifierJsonCodec;
 import net.hypejet.jet.data.json.color.ColorJsonCodec;
 import net.hypejet.jet.data.json.datapack.DataPackJsonCodec;
 import net.hypejet.jet.data.json.registry.RegistryEntryJsonCodec;
@@ -80,7 +78,19 @@ public final class JetDataJson {
             .registerTypeAdapter(BiomeSoundEvent.class, new BiomeSoundEventJsonCodec())
             .registerTypeAdapter(BiomeEffectSettings.class, new BiomeEffectSettingsJsonCodec())
             .registerTypeAdapter(Biome.class, new BiomeJsonCodec())
-            .registerTypeAdapter(BiomeTemperatureModifier.class, new BiomeTemperatureModifierJsonCodec())
+            .registerTypeAdapter(BiomeTemperatureModifier.class, new MapperJsonCodec<>(
+                    Mapper.builder(BiomeTemperatureModifier.class, String.class)
+                            .register(BiomeTemperatureModifier.NONE, "none")
+                            .register(BiomeTemperatureModifier.FROZEN, "frozen")
+                            .build()
+            ))
+            .registerTypeAdapter(GrassColorModifier.class, new MapperJsonCodec<>(
+                    Mapper.builder(GrassColorModifier.class, String.class)
+                            .register(GrassColorModifier.NONE, "none")
+                            .register(GrassColorModifier.DARK_FOREST, "dark-forest")
+                            .register(GrassColorModifier.SWAMP, "swamp")
+                            .build()
+            ))
             .registerTypeAdapter(BiomeRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(Biome.class, BiomeRegistryEntry::new))
             // Dimension types
@@ -126,7 +136,6 @@ public final class JetDataJson {
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
             .registerTypeAdapter(BinaryTag.class, new BinaryTagJsonCodec())
-            .registerTypeAdapter(GrassColorModifier.class, new GrassColorModifierJsonCodec())
             .registerTypeAdapter(DataPack.class, new DataPackJsonCodec())
             .create();
 
