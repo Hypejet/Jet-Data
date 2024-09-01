@@ -45,7 +45,7 @@ public final class DamageTypeJsonCodec implements JsonCodec<DamageType> {
     public JsonElement serialize(DamageType src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty(MESSAGE_ID, src.messageId());
-        JsonUtil.write(DAMAGE_EFFECT_TYPE, src.damageScalingType(), object, context);
+        JsonUtil.write(DAMAGE_SCALING_TYPE, src.damageScalingType(), object, context);
         object.addProperty(EXHAUSTION, src.exhaustion());
         JsonUtil.writeOptional(DAMAGE_EFFECT_TYPE, src.damageEffectType(), object, context);
         JsonUtil.writeOptional(DEATH_MESSAGE_TYPE, src.deathMessageType(), object, context);

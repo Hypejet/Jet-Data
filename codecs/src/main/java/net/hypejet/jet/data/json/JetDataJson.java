@@ -46,6 +46,7 @@ import net.hypejet.jet.registry.registries.chat.decoration.ChatDecorationParamet
 import net.hypejet.jet.registry.registries.damage.DamageEffectType;
 import net.hypejet.jet.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.registry.registries.damage.DamageType;
+import net.hypejet.jet.registry.registries.damage.DamageTypeRegistryEntry;
 import net.hypejet.jet.registry.registries.damage.DeathMessageType;
 import net.hypejet.jet.registry.registries.dimension.DimensionType;
 import net.hypejet.jet.registry.registries.dimension.DimensionTypeRegistryEntry;
@@ -132,6 +133,8 @@ public final class JetDataJson {
                             .register(DeathMessageType.INTENTIONAL_GAME_DESIGN, "intentional-game-design")
                             .build()
             ))
+            .registerTypeAdapter(DamageTypeRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(DamageType.class, DamageTypeRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
