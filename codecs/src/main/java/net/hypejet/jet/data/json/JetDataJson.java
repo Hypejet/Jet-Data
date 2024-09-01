@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.hypejet.jet.color.Color;
+import net.hypejet.jet.data.json.mapper.MapperJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.BiomeJsonCodec;
 import net.hypejet.jet.data.json.binary.BinaryTagJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.biome.effects.BiomeEffectSettingsJsonCodec;
@@ -22,9 +23,11 @@ import net.hypejet.jet.data.json.key.KeyJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.chat.ChatTypeJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.chat.decoration.ChatDecorationJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.chat.decoration.ChatDecorationParameterJsonCodec;
+import net.hypejet.jet.data.json.registry.registries.damage.DamageTypeJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.DimensionTypeJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.number.IntegerProviderJsonCodec;
 import net.hypejet.jet.data.json.registry.registries.dimension.number.WeightedListEntryJsonCodec;
+import net.hypejet.jet.data.json.util.mapper.Mapper;
 import net.hypejet.jet.number.IntegerProvider;
 import net.hypejet.jet.pack.DataPack;
 import net.hypejet.jet.registry.RegistryEntry;
@@ -42,6 +45,10 @@ import net.hypejet.jet.registry.registries.chat.ChatType;
 import net.hypejet.jet.registry.registries.chat.ChatTypeRegistryEntry;
 import net.hypejet.jet.registry.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.registry.registries.chat.decoration.ChatDecorationParameter;
+import net.hypejet.jet.registry.registries.damage.DamageEffectType;
+import net.hypejet.jet.registry.registries.damage.DamageScalingType;
+import net.hypejet.jet.registry.registries.damage.DamageType;
+import net.hypejet.jet.registry.registries.damage.DeathMessageType;
 import net.hypejet.jet.registry.registries.dimension.DimensionType;
 import net.hypejet.jet.registry.registries.dimension.DimensionTypeRegistryEntry;
 import net.kyori.adventure.key.Key;
@@ -88,6 +95,33 @@ public final class JetDataJson {
             .registerTypeAdapter(ChatDecorationParameter.class, new ChatDecorationParameterJsonCodec())
             .registerTypeAdapter(ChatTypeRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(ChatType.class, ChatTypeRegistryEntry::new))
+            // Damage types
+            .registerTypeAdapter(DamageType.class, new DamageTypeJsonCodec())
+            .registerTypeAdapter(DamageScalingType.class, new MapperJsonCodec<>(
+                    Mapper.builder(DamageScalingType.class, String.class)
+                            .register(DamageScalingType.NEVER, "never")
+                            .register(DamageScalingType.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
+                                    "when-caused-by-living-non-player")
+                            .register(DamageScalingType.ALWAYS, "always")
+                            .build()
+            ))
+            .registerTypeAdapter(DamageEffectType.class, new MapperJsonCodec<>(
+                    Mapper.builder(DamageEffectType.class, String.class)
+                            .register(DamageEffectType.HURT, "hurt")
+                            .register(DamageEffectType.THORNS, "thorns")
+                            .register(DamageEffectType.DROWNING, "drowning")
+                            .register(DamageEffectType.BURNING, "burning")
+                            .register(DamageEffectType.POKING, "poking")
+                            .register(DamageEffectType.FREEZING, "freezing")
+                            .build()
+            ))
+            .registerTypeAdapter(DeathMessageType.class, new MapperJsonCodec<>(
+                    Mapper.builder(DeathMessageType.class, String.class)
+                            .register(DeathMessageType.DEFAULT, "default")
+                            .register(DeathMessageType.FALL_VARIANTS, "full-variants")
+                            .register(DeathMessageType.INTENTIONAL_GAME_DESIGN, "intentional-game-design")
+                            .build()
+            ))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())

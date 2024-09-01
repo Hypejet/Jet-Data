@@ -32,7 +32,5 @@ public record DamageType(@NonNull String messageId, @NonNull DamageScalingType d
     public DamageType {
         NullabilityUtil.requireNonNull(messageId, "message identifier");
         NullabilityUtil.requireNonNull(damageScalingType, "damage scaling type");
-        NullabilityUtil.requireNonNull(damageEffectType, "damage effect type");
-        NullabilityUtil.requireNonNull(deathMessageType, "death message type");
     }
 }
