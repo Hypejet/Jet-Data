@@ -120,7 +120,7 @@ public final class BiomeGenerator extends Generator<Biome> {
                     .build();
 
             entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.dataPack(knownPack), convertedBiome));
+                    DataPackAdapter.convert(knownPack), convertedBiome));
         });
 
         return List.copyOf(entries);

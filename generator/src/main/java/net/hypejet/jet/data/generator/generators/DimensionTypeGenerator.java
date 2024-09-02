@@ -102,7 +102,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
                     .build();
 
             entries.add(new DimensionTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.dataPack(knownPack), convertedDimensionType));
+                    DataPackAdapter.convert(knownPack), convertedDimensionType));
         });
 
         return List.copyOf(entries);
