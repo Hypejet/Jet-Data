@@ -6,9 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.codecs.util.mapper.Mapper;
 import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterial;
-import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterial.ArmorMaterialType;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 
@@ -33,36 +31,21 @@ public final class ArmorTrimMaterialJsonCodec implements JsonCodec<ArmorTrimMate
     private static final String OVERRIDE_ARMOR_MATERIALS = "override-armor-materials";
     private static final String DESCRIPTION = "description";
 
-    private static final Mapper<ArmorMaterialType, String> MAPPER = Mapper
-            .builder(ArmorMaterialType.class, String.class)
-            .register(ArmorMaterialType.LEATHER, "leather")
-            .register(ArmorMaterialType.CHAINMAIL, "chainmail")
-            .register(ArmorMaterialType.IRON, "iron")
-            .register(ArmorMaterialType.GOLD, "gold")
-            .register(ArmorMaterialType.DIAMOND, "diamond")
-            .register(ArmorMaterialType.TURTLE, "turtle")
-            .register(ArmorMaterialType.NETHERITE, "netherite")
-            .build();
-
     @Override
     public ArmorTrimMaterial deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
         JsonObject overrideArmorMaterialsJson = object.getAsJsonObject(OVERRIDE_ARMOR_MATERIALS);
-        Map<ArmorMaterialType, Key> overrideArmorMaterials = null;
+        Map<Key, Key> overrideArmorMaterials = null;
 
         if (overrideArmorMaterialsJson != null) {
             overrideArmorMaterials = new HashMap<>();
 
             for (Map.Entry<String, JsonElement> entry : overrideArmorMaterialsJson.entrySet()) {
-                String key = entry.getKey();
-                ArmorMaterialType armorMaterialType = MAPPER.read(key);
-
-                if (armorMaterialType == null)
-                    throw new IllegalArgumentException(String.format("Unknown armor material type: %s", key));
-
-                overrideArmorMaterials.put(armorMaterialType, context.deserialize(entry.getValue(), Key.class));
+                Key armorMaterialKey = Key.key(entry.getKey());
+                Key assetKey = context.deserialize(entry.getValue(), Key.class);
+                overrideArmorMaterials.put(armorMaterialKey, assetKey);
             }
         }
 
@@ -80,21 +63,14 @@ public final class ArmorTrimMaterialJsonCodec implements JsonCodec<ArmorTrimMate
         JsonUtil.write(INGREDIENT, src.ingredient(), Key.class, object, context);
         object.addProperty(ITEM_MODEL_INDEX, src.itemModelIndex());
 
-        Map<ArmorMaterialType, Key> overrideArmorMaterials = src.overrideArmorMaterials();
+        Map<Key, Key> overrideArmorMaterials = src.overrideArmorMaterials();
         if (overrideArmorMaterials != null) {
             JsonObject overrideArmorMaterialsJson = new JsonObject();
 
-            for (Map.Entry<ArmorMaterialType, Key> entry : overrideArmorMaterials.entrySet()) {
-                ArmorMaterialType type = entry.getKey();
-                String serializedType = MAPPER.write(type);
-
-                if (serializedType == null) {
-                    throw new IllegalArgumentException(String.format(
-                            "Could not serialize armor material of: %s", type
-                    ));
-                }
-
-                overrideArmorMaterialsJson.add(serializedType, context.serialize(entry.getValue()));
+            for (Map.Entry<Key, Key> entry : overrideArmorMaterials.entrySet()) {
+                String key = entry.getKey().asString();
+                JsonElement value = context.serialize(entry.getValue(), Key.class);
+                overrideArmorMaterialsJson.add(key, value);
             }
 
             object.add(OVERRIDE_ARMOR_MATERIALS, overrideArmorMaterialsJson);
