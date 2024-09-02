@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import net.hypejet.jet.data.codecs.registry.registries.armor.pattern.ArmorTrimPatternJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
@@ -32,6 +33,8 @@ import net.hypejet.jet.data.codecs.util.mapper.Mapper;
 import net.hypejet.jet.data.model.number.IntegerProvider;
 import net.hypejet.jet.data.model.pack.DataPack;
 import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPattern;
+import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPatternRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.biome.Biome;
 import net.hypejet.jet.data.model.registry.registries.biome.BiomeRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
@@ -152,6 +155,10 @@ public final class JetDataJson {
             .registerTypeAdapter(PaintingVariant.class, new PaintingVariantJsonCodec())
             .registerTypeAdapter(PaintingVariantRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(PaintingVariant.class, PaintingVariantRegistryEntry::new))
+            // Armor trim patterns
+            .registerTypeAdapter(ArmorTrimPattern.class, new ArmorTrimPatternJsonCodec())
+            .registerTypeAdapter(ArmorTrimPatternRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(ArmorTrimPattern.class, ArmorTrimPatternRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
