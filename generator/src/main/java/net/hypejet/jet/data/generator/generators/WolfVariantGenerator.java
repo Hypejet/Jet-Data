@@ -96,7 +96,7 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
                     biomes);
 
             entries.add(new WolfVariantRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.dataPack(knownPack), convertedWolfVariant));
+                    DataPackAdapter.convert(knownPack), convertedWolfVariant));
         });
 
         return List.copyOf(entries);

@@ -59,7 +59,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
                     .orElseThrow();
 
             entries.add(new DamageTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.dataPack(knownPack), damageType(damageType)));
+                    DataPackAdapter.convert(knownPack), damageType(damageType)));
         });
 
         return List.copyOf(entries);

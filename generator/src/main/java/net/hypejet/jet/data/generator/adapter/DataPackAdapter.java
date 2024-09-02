@@ -24,7 +24,7 @@ public final class DataPackAdapter {
      * @return the data pack
      * @since 1.0
      */
-    public static @NonNull DataPack dataPack(@NonNull KnownPack knownPack) {
+    public static @NonNull DataPack convert(@NonNull KnownPack knownPack) {
         return new DataPack(Key.key(knownPack.namespace(), knownPack.id()), knownPack.version());
     }
 }

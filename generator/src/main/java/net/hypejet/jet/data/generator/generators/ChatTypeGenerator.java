@@ -50,7 +50,7 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
 
             ChatType converted = new ChatType(convert(chatType.chat()), convert(chatType.narration()));
             entries.add(new ChatTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.dataPack(knownPack), converted));
+                    DataPackAdapter.convert(knownPack), converted));
         });
 
         return List.copyOf(entries);
