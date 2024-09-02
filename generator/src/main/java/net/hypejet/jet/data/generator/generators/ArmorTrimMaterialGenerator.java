@@ -37,7 +37,7 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
      * @since 1.0
      */
     public ArmorTrimMaterialGenerator(@NonNull RegistryAccess registryAccess) {
-        super("armor-trim-materials", "ArmorTrimMaterialIdentifiers");
+        super("armor-trim-materials", "ArmorTrimMaterials");
         this.registryAccess = registryAccess;
     }
 

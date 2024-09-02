@@ -40,7 +40,7 @@ public final class ArmorTrimPatternGenerator extends Generator<ArmorTrimPattern>
      * @since 1.0
      */
     public ArmorTrimPatternGenerator(@NonNull RegistryAccess registryAccess) {
-        super("armor-trim-patterns", "ArmorTrimPatternIdentifiers");
+        super("armor-trim-patterns", "ArmorTrimPatterns");
         this.registryAccess = registryAccess;
     }
 

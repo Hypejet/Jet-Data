@@ -32,7 +32,7 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
      * @since 1.0
      */
     public ChatTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("chat-types", "ChatTypeIdentifiers");
+        super("chat-types", "ChatTypes");
         this.registryAccess = registryAccess;
     }
 

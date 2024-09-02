@@ -36,7 +36,7 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
      * @since 1.0
      */
     public PaintingVariantGenerator(@NonNull RegistryAccess registryAccess) {
-        super("painting-variants", "PaintingVariantIdentifiers");
+        super("painting-variants", "PaintingVariants");
         this.registryAccess = registryAccess;
     }
 

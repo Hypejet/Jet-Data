@@ -23,7 +23,7 @@ public abstract class Generator<V> {
      * Constructs the {@linkplain Generator generator}.
      *
      * @param resourceFileName a name of the resource file
-     * @param className a name of class, which contains identifiers of registry entries generated using the generator
+     * @param className a name of a java class, which should be generated using data from this generator
      * @since 1.0
      */
     public Generator(@NonNull String resourceFileName, @NonNull String className) {
