@@ -1,7 +1,7 @@
 package net.hypejet.jet.data.generator.adapter;
 
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
-import net.hypejet.jet.utils.NullabilityUtil;
+import net.hypejet.jet.data.model.utils.NullabilityUtil;
 import net.kyori.adventure.text.BlockNBTComponent.LocalPos;
 import net.kyori.adventure.text.BlockNBTComponent.Pos;
 import net.kyori.adventure.text.BlockNBTComponent.WorldPos;
