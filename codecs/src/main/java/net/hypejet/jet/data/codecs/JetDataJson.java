@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
 import net.hypejet.jet.data.model.color.Color;
@@ -52,6 +53,8 @@ import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeRegistryE
 import net.hypejet.jet.data.model.registry.registries.damage.DeathMessageType;
 import net.hypejet.jet.data.model.registry.registries.dimension.DimensionType;
 import net.hypejet.jet.data.model.registry.registries.dimension.DimensionTypeRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariant;
+import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariantRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntry;
@@ -145,6 +148,10 @@ public final class JetDataJson {
             .registerTypeAdapter(WolfBiomes.class, new WolfBiomesJsonCodec())
             .registerTypeAdapter(WolfVariantRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(WolfVariant.class, WolfVariantRegistryEntry::new))
+            // Painting variants
+            .registerTypeAdapter(PaintingVariant.class, new PaintingVariantJsonCodec())
+            .registerTypeAdapter(PaintingVariantRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(PaintingVariant.class, PaintingVariantRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
