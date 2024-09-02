@@ -5,6 +5,7 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
+import net.hypejet.jet.data.generator.generators.ArmorTrimMaterialGenerator;
 import net.hypejet.jet.data.generator.generators.ArmorTrimPatternGenerator;
 import net.hypejet.jet.data.generator.generators.BiomeGenerator;
 import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
@@ -91,7 +92,8 @@ public final class GeneratorEntrypoint {
         Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess),
                 new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess),
                 new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess),
-                new PaintingVariantGenerator(frozenAccess), new ArmorTrimPatternGenerator(frozenAccess));
+                new PaintingVariantGenerator(frozenAccess), new ArmorTrimPatternGenerator(frozenAccess),
+                new ArmorTrimMaterialGenerator(frozenAccess));
 
         Logger logger = LogUtils.getLogger();
 
