@@ -9,11 +9,12 @@ import net.hypejet.jet.data.generator.generators.BiomeGenerator;
 import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
 import net.hypejet.jet.data.generator.generators.DamageTypeGenerator;
 import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
+import net.hypejet.jet.data.generator.generators.WolfVariantGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.generator.util.JavaDocBuilder;
 import net.hypejet.jet.data.generator.util.JavaFileUtil;
-import net.hypejet.jet.data.json.JetDataJson;
-import net.hypejet.jet.registry.RegistryEntry;
+import net.hypejet.jet.data.codecs.JetDataJson;
+import net.hypejet.jet.data.model.registry.RegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.LayeredRegistryAccess;
@@ -87,7 +88,7 @@ public final class GeneratorEntrypoint {
         RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
         Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess),
                 new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess),
-                new DamageTypeGenerator(frozenAccess));
+                new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess));
 
         Logger logger = LogUtils.getLogger();
 

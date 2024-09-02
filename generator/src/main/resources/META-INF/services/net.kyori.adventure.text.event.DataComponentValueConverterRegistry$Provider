@@ -1,2 +1,2 @@
 net.kyori.adventure.text.serializer.gson.impl.GsonDataComponentValueConverterProvider
-net.hypejet.jet.data.json.item.component.JetDataComponentConversionProvider
+net.hypejet.jet.data.codecs.item.component.JetDataComponentConversionProvider

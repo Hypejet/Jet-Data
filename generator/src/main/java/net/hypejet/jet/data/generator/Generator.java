@@ -1,6 +1,6 @@
 package net.hypejet.jet.data.generator;
 
-import net.hypejet.jet.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
