@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntry;
@@ -79,11 +80,12 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
                 List<Holder<Biome>> biomeHolderList = optionalBiomeHolderList.get();
 
                 if (biomeHolderList.size() == 1) {
-                    biomes = new WolfBiomes.SingleBiome(keyOfHolder(biomeHolderList.getFirst(), biomeRegistry));
+                    Key biomeKey = RegistryUtil.keyOfHolder(biomeHolderList.getFirst(), biomeRegistry);
+                    biomes = new WolfBiomes.SingleBiome(biomeKey);
                 } else {
                     Set<Key> biomeKeys = new HashSet<>();
                     for (Holder<Biome> biomeHolder : biomeHolderList)
-                        biomeKeys.add(keyOfHolder(biomeHolder, biomeRegistry));
+                        biomeKeys.add(RegistryUtil.keyOfHolder(biomeHolder, biomeRegistry));
                     biomes = new WolfBiomes.Biomes(Set.copyOf(biomeKeys));
                 }
             } else {
@@ -100,12 +102,5 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
         });
 
         return List.copyOf(entries);
-    }
-
-    private static <T> @NonNull Key keyOfHolder(@NonNull Holder<T> holder, @NonNull Registry<T> registry) {
-        ResourceLocation biomeLocation = registry.getKey(holder.value());
-        if (biomeLocation == null)
-            throw new IllegalArgumentException("Could not find a resource location of a value from holder specified");
-        return IdentifierAdapter.convert(biomeLocation);
     }
 }
