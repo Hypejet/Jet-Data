@@ -44,7 +44,7 @@ public final class WolfVariantJsonCodec implements JsonCodec<WolfVariant> {
         JsonUtil.write(WILD_TEXTURE, src.wildTexture(), Key.class, object, context);
         JsonUtil.write(TAME_TEXTURE, src.tameTexture(), Key.class, object, context);
         JsonUtil.write(ANGRY_TEXTURE, src.angryTexture(), Key.class, object, context);
-        JsonUtil.write(BIOMES, src.biomes(), object, context);
+        JsonUtil.write(BIOMES, src.biomes(), WolfBiomes.class, object, context);
         return object;
     }
 }

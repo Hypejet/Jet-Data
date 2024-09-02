@@ -54,6 +54,7 @@ import net.hypejet.jet.data.model.registry.registries.dimension.DimensionType;
 import net.hypejet.jet.data.model.registry.registries.dimension.DimensionTypeRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
+import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -142,6 +143,8 @@ public final class JetDataJson {
             // Wolf variants
             .registerTypeAdapter(WolfVariant.class, new WolfVariantJsonCodec())
             .registerTypeAdapter(WolfBiomes.class, new WolfBiomesJsonCodec())
+            .registerTypeAdapter(WolfVariantRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(WolfVariant.class, WolfVariantRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
