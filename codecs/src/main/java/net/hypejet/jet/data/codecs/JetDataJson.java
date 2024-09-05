@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.hypejet.jet.data.codecs.registry.registries.armor.material.ArmorTrimMaterialJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.armor.pattern.ArmorTrimPatternJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.banner.BannerPatternJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
@@ -38,6 +39,8 @@ import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMa
 import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterialRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPattern;
 import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPatternRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.banner.BannerPattern;
+import net.hypejet.jet.data.model.registry.registries.banner.BannerPatternRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.biome.Biome;
 import net.hypejet.jet.data.model.registry.registries.biome.BiomeRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
@@ -166,6 +169,10 @@ public final class JetDataJson {
             .registerTypeAdapter(ArmorTrimMaterial.class, new ArmorTrimMaterialJsonCodec())
             .registerTypeAdapter(ArmorTrimMaterialRegistryEntry.class,
                     new RegistryEntryJsonCodec<>(ArmorTrimMaterial.class, ArmorTrimMaterialRegistryEntry::new))
+            // Banner patterns
+            .registerTypeAdapter(BannerPattern.class, new BannerPatternJsonCodec())
+            .registerTypeAdapter(BannerPatternRegistryEntry.class,
+                    new RegistryEntryJsonCodec<>(BannerPattern.class, BannerPatternRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())
