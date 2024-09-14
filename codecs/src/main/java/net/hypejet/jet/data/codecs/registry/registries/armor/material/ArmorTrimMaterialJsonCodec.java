@@ -76,6 +76,7 @@ public final class ArmorTrimMaterialJsonCodec implements JsonCodec<ArmorTrimMate
             object.add(OVERRIDE_ARMOR_MATERIALS, overrideArmorMaterialsJson);
         }
 
+        JsonUtil.write(DESCRIPTION, src.description(), Component.class, object, context);
         return object;
     }
 }
