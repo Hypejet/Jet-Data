@@ -6,7 +6,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.model.number.IntegerProvider;
 import net.hypejet.jet.data.model.registry.registries.dimension.DimensionType;
-import net.hypejet.jet.data.model.registry.registries.dimension.DimensionTypeRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.dimension.DimensionTypeRegistryEntryData;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -64,8 +64,8 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
     }
 
     @Override
-    public @NonNull List<DimensionTypeRegistryEntry> generate(@NonNull Logger logger) {
-        List<DimensionTypeRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DimensionTypeRegistryEntryData> generate(@NonNull Logger logger) {
+        List<DimensionTypeRegistryEntryData> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.dimension.DimensionType> registry = this.registryAccess
                 .registryOrThrow(Registries.DIMENSION_TYPE);
 
@@ -101,7 +101,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
                     .monsterSpawnBlockLightLimit(dimensionType.monsterSpawnBlockLightLimit())
                     .build();
 
-            entries.add(new DimensionTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new DimensionTypeRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), convertedDimensionType));
         });
 

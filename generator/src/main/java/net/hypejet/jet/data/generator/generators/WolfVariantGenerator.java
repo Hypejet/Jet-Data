@@ -7,7 +7,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
-import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntryData;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
@@ -15,7 +15,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -52,8 +51,8 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
     }
 
     @Override
-    public @NonNull List<WolfVariantRegistryEntry> generate(@NonNull Logger logger) {
-        List<WolfVariantRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<WolfVariantRegistryEntryData> generate(@NonNull Logger logger) {
+        List<WolfVariantRegistryEntryData> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.entity.animal.WolfVariant> registry = this.registryAccess
                 .registryOrThrow(Registries.WOLF_VARIANT);
@@ -97,7 +96,7 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
                     IdentifierAdapter.convert(wolfVariant.angryTexture()),
                     biomes);
 
-            entries.add(new WolfVariantRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new WolfVariantRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), convertedWolfVariant));
         });
 

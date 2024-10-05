@@ -1,17 +1,18 @@
 package net.hypejet.jet.data.model.registry.registries.painting;
 
 import net.hypejet.jet.data.model.pack.DataPack;
-import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntryData;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Represents a {@linkplain RegistryEntry registry entry} which holds a {@linkplain PaintingVariant painting variant}.
+ * Represents a {@linkplain RegistryEntryData registry entry data} which holds
+ * a {@linkplain PaintingVariant painting variant}.
  *
  * @since 1.0
  * @author Codestech
  */
-public final class PaintingVariantRegistryEntry extends RegistryEntry<PaintingVariant> {
+public final class PaintingVariantRegistryEntryData extends RegistryEntryData<PaintingVariant> {
     /**
      * Constructs the {@linkplain PaintingVariant painting-variant registry entry}.
      *
@@ -20,7 +21,7 @@ public final class PaintingVariantRegistryEntry extends RegistryEntry<PaintingVa
      * @param value the painting variant
      * @since 1.0
      */
-    public PaintingVariantRegistryEntry(@NonNull Key key, @NonNull DataPack knownPack, @NonNull PaintingVariant value) {
+    public PaintingVariantRegistryEntryData(@NonNull Key key, @NonNull DataPack knownPack, @NonNull PaintingVariant value) {
         super(key, knownPack, value);
     }
 }

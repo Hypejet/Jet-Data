@@ -6,7 +6,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageEffectType;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageType;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeRegistryEntryData;
 import net.hypejet.jet.data.model.registry.registries.damage.DeathMessageType;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a {@linkplain Generator generator} which generates {@linkplain DamageTypeRegistryEntry damage type
+ * Represents a {@linkplain Generator generator} which generates {@linkplain DamageTypeRegistryEntryData damage type
  * registry entries}.
  *
  * @since 1.0
  * @author Codestech
- * @see DamageTypeRegistryEntry
+ * @see DamageTypeRegistryEntryData
  * @see Generator
  */
 public final class DamageTypeGenerator extends Generator<DamageType> {
@@ -46,8 +46,8 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
     }
 
     @Override
-    public @NonNull List<DamageTypeRegistryEntry> generate(@NonNull Logger logger) {
-        List<DamageTypeRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DamageTypeRegistryEntryData> generate(@NonNull Logger logger) {
+        List<DamageTypeRegistryEntryData> entries = new ArrayList<>();
         Registry<net.minecraft.world.damagesource.DamageType> registry = this.registryAccess
                 .registryOrThrow(Registries.DAMAGE_TYPE);
 
@@ -58,7 +58,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
                     .flatMap(RegistrationInfo::knownPackInfo)
                     .orElseThrow();
 
-            entries.add(new DamageTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new DamageTypeRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), damageType(damageType)));
         });
 

@@ -4,7 +4,7 @@ import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariant;
-import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariantRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariantRegistryEntryData;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -41,8 +41,8 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
     }
 
     @Override
-    public @NonNull List<PaintingVariantRegistryEntry> generate(@NonNull Logger logger) {
-        List<PaintingVariantRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<PaintingVariantRegistryEntryData> generate(@NonNull Logger logger) {
+        List<PaintingVariantRegistryEntryData> entries = new ArrayList<>();
         Registry<net.minecraft.world.entity.decoration.PaintingVariant> registry = this.registryAccess
                 .registryOrThrow(Registries.PAINTING_VARIANT);
 
@@ -55,7 +55,7 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
 
             PaintingVariant convertedVariant = new PaintingVariant(IdentifierAdapter.convert(variant.assetId()),
                     variant.height(), variant.width());
-            entries.add(new PaintingVariantRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new PaintingVariantRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), convertedVariant));
         });
 

@@ -1,18 +1,18 @@
 package net.hypejet.jet.data.generator;
 
-import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntryData;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
 import java.util.List;
 
 /**
- * Represents something that generates {@linkplain RegistryEntry registry entries}.
+ * Represents something that generates {@linkplain RegistryEntryData registry entry data objects}.
  *
  * @since 1.0
  * @param <V> a type of values of the registry entries
  * @author Codestech
- * @see RegistryEntry
+ * @see RegistryEntryData
  */
 public abstract class Generator<V> {
 
@@ -52,7 +52,7 @@ public abstract class Generator<V> {
     }
 
     /**
-     * Generates the {@linkplain RegistryEntry registry entries}.
+     * Generates the {@linkplain RegistryEntryData registry entry data objects}.
      *
      * <p>The registry entries keep their natural Minecraft order.</p>
      *
@@ -60,5 +60,5 @@ public abstract class Generator<V> {
      * @return the registry entries
      * @since 1.0
      */
-    public abstract @NonNull List<? extends RegistryEntry<V>> generate(@NonNull Logger logger);
+    public abstract @NonNull List<? extends RegistryEntryData<V>> generate(@NonNull Logger logger);
 }

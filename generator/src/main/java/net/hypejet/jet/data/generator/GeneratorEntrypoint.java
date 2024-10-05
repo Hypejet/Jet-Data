@@ -18,7 +18,7 @@ import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.generator.util.JavaDocBuilder;
 import net.hypejet.jet.data.generator.util.JavaFileUtil;
 import net.hypejet.jet.data.codecs.JetDataJson;
-import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntryData;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.LayeredRegistryAccess;
@@ -108,7 +108,7 @@ public final class GeneratorEntrypoint {
 
             try {
                 logger.info("Generating registry entries using \"{}\"...", generatorName);
-                List<? extends RegistryEntry<?>> entries = generator.generate(logger);
+                List<? extends RegistryEntryData<?>> entries = generator.generate(logger);
 
                 logger.info("Converting the generated registry entries to a string...");
                 String json = JetDataJson.serialize(entries);
@@ -125,7 +125,7 @@ public final class GeneratorEntrypoint {
                 logger.info("Creating a java class with identifiers of registry entries...");
 
                 List<FieldSpec> specs = new ArrayList<>();
-                for (RegistryEntry<?> entry : entries) {
+                for (RegistryEntryData<?> entry : entries) {
                     Key key = entry.key();
                     specs.add(FieldSpec.builder(Key.class, createFieldName(key))
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

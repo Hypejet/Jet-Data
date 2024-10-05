@@ -5,7 +5,7 @@ import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.StyleAdapter;
 import net.hypejet.jet.data.model.registry.registries.chat.ChatType;
-import net.hypejet.jet.data.model.registry.registries.chat.ChatTypeRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.chat.ChatTypeRegistryEntryData;
 import net.hypejet.jet.data.model.registry.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.data.model.registry.registries.chat.decoration.ChatDecorationParameter;
 import net.minecraft.core.RegistrationInfo;
@@ -37,8 +37,8 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
     }
 
     @Override
-    public @NonNull List<ChatTypeRegistryEntry> generate(@NonNull Logger logger) {
-        List<ChatTypeRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<ChatTypeRegistryEntryData> generate(@NonNull Logger logger) {
+        List<ChatTypeRegistryEntryData> entries = new ArrayList<>();
         Registry<net.minecraft.network.chat.ChatType> registry = this.registryAccess
                 .registryOrThrow(Registries.CHAT_TYPE);
 
@@ -49,7 +49,7 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
                     .orElseThrow();
 
             ChatType converted = new ChatType(convert(chatType.chat()), convert(chatType.narration()));
-            entries.add(new ChatTypeRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new ChatTypeRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), converted));
         });
 

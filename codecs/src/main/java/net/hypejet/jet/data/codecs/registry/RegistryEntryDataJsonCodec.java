@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.pack.DataPack;
-import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntryData;
 import net.hypejet.jet.data.model.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -15,16 +15,16 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.lang.reflect.Type;
 
 /**
- * Represents a {@linkplain JsonCodec json codec}, which deserializes and serializes a {@linkplain RegistryEntry
- * registry entry}.
+ * Represents a {@linkplain JsonCodec json codec}, which deserializes and serializes a {@linkplain RegistryEntryData
+ * registry entry data}.
  *
- * @param <V> a type of value held by the registry entries, which this codec deserializes and serializes
+ * @param <V> a type of value held by the registry entry data, which this codec deserializes and serializes
  * @since 1.0
  * @author Codestech
- * @see RegistryEntry
+ * @see RegistryEntryData
  * @see JsonCodec
  */
-public final class RegistryEntryJsonCodec<V> implements JsonCodec<RegistryEntry<V>> {
+public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<RegistryEntryData<V>> {
 
     private static final String KEY = "key";
     private static final String KNOWN_PACK = "known-pack";
@@ -34,20 +34,20 @@ public final class RegistryEntryJsonCodec<V> implements JsonCodec<RegistryEntry<
     private final RegistryEntrySupplier<V> supplier;
 
     /**
-     * Constructs the {@linkplain RegistryEntryJsonCodec registry entry json codec}.
+     * Constructs the {@linkplain RegistryEntryDataJsonCodec registry entry json codec}.
      *
      * @param valueClass a class of the type of value held by the registry entries, which this
      *                   codec deserializes and serializes
      * @param supplier a supplier used to create instances of the registry entries
      * @since 1.0
      */
-    public RegistryEntryJsonCodec(@NonNull Class<V> valueClass, @NonNull RegistryEntrySupplier<V> supplier) {
+    public RegistryEntryDataJsonCodec(@NonNull Class<V> valueClass, @NonNull RegistryEntrySupplier<V> supplier) {
         this.valueClass = NullabilityUtil.requireNonNull(valueClass, "value class");
         this.supplier = NullabilityUtil.requireNonNull(supplier, "supplier");
     }
 
     @Override
-    public RegistryEntry<V> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+    public RegistryEntryData<V> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
@@ -61,7 +61,7 @@ public final class RegistryEntryJsonCodec<V> implements JsonCodec<RegistryEntry<
     }
 
     @Override
-    public JsonElement serialize(RegistryEntry<V> src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(RegistryEntryData<V> src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
 
         V value = src.value();
@@ -76,7 +76,7 @@ public final class RegistryEntryJsonCodec<V> implements JsonCodec<RegistryEntry<
     }
 
     /**
-     * Represents a supplier of {@linkplain RegistryEntry registry entries}.
+     * Represents a supplier of {@linkplain RegistryEntryData registry entry data}.
      *
      * @param <V> a type of values of the registry entries
      * @since 1.0
@@ -84,14 +84,15 @@ public final class RegistryEntryJsonCodec<V> implements JsonCodec<RegistryEntry<
      */
     public interface RegistryEntrySupplier<V> {
         /**
-         * Creates a {@linkplain RegistryEntry registry entry} with value provided.
+         * Creates a {@linkplain RegistryEntryData registry entry data} with value provided.
          *
-         * @param key an identifier that the registry entry should have
-         * @param knownPack a data pack, which should enable the registry entry
-         * @param value a value that the registry entry should have
-         * @return the registry entry created
+         * @param key an identifier that the registry entry data should have
+         * @param knownPack a data pack, which should enable the registry entry data
+         * @param value a value that the registry entry data should have
+         * @return the registry entry data created
          * @since 1.0
          */
-        @NonNull RegistryEntry<V> create(@NonNull Key key, @NonNull DataPack knownPack, @NonNull V value);
+        @NonNull
+        RegistryEntryData<V> create(@NonNull Key key, @NonNull DataPack knownPack, @NonNull V value);
     }
 }

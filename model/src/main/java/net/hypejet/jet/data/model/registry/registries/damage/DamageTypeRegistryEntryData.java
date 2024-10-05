@@ -1,28 +1,28 @@
 package net.hypejet.jet.data.model.registry.registries.damage;
 
 import net.hypejet.jet.data.model.pack.DataPack;
-import net.hypejet.jet.data.model.registry.RegistryEntry;
+import net.hypejet.jet.data.model.registry.RegistryEntryData;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Represents a {@linkplain RegistryEntry registry entry} which holds a {@linkplain DamageType damage type}.
+ * Represents a {@linkplain RegistryEntryData registry entry data} which holds a {@linkplain DamageType damage type}.
  *
  * @since 1.0
  * @author Codestech
  * @see DamageType
- * @see RegistryEntry
+ * @see RegistryEntryData
  */
-public final class DamageTypeRegistryEntry extends RegistryEntry<DamageType> {
+public final class DamageTypeRegistryEntryData extends RegistryEntryData<DamageType> {
     /**
-     * Constructs the {@linkplain DamageTypeRegistryEntry damage type registry entry}.
+     * Constructs the {@linkplain DamageTypeRegistryEntryData damage type registry entry}.
      *
      * @param key an identifier, which the registry entry should have
      * @param knownPack a data pack, which should enable the registry entry
      * @param value the damage type
      * @since 1.0
      */
-    public DamageTypeRegistryEntry(@NonNull Key key, @NonNull DataPack knownPack, @NonNull DamageType value) {
+    public DamageTypeRegistryEntryData(@NonNull Key key, @NonNull DataPack knownPack, @NonNull DamageType value) {
         super(key, knownPack, value);
     }
 }

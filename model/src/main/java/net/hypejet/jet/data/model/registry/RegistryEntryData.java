@@ -19,21 +19,21 @@ import java.util.Objects;
  * @author Codestech
  * @see Keyed
  */
-public abstract class RegistryEntry<V> implements Keyed {
+public abstract class RegistryEntryData<V> implements Keyed {
 
     private final Key key;
     private final DataPack knownPack;
     private final V value;
 
     /**
-     * Constructs the {@linkplain RegistryEntry registry entry}.
+     * Constructs the {@linkplain RegistryEntryData registry entry data}.
      *
-     * @param key an identifier, which the registry entry should have
-     * @param knownPack a data pack, which should enable the registry entry
+     * @param key an identifier, which the registry entry data should have
+     * @param knownPack a data pack, which should enable the registry entry data
      * @param value the value
      * @since 1.0
      */
-    public RegistryEntry(@NonNull Key key, @NonNull DataPack knownPack, @NonNull V value) {
+    public RegistryEntryData(@NonNull Key key, @NonNull DataPack knownPack, @NonNull V value) {
         this.key = NullabilityUtil.requireNonNull(key, "key");
         this.knownPack = NullabilityUtil.requireNonNull(knownPack, "known pack");
         this.value = NullabilityUtil.requireNonNull(value, "value");
@@ -73,7 +73,7 @@ public abstract class RegistryEntry<V> implements Keyed {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof RegistryEntry<?> that)) return false;
+        if (!(o instanceof RegistryEntryData<?> that)) return false;
         return Objects.equals(this.key, that.key)
                 && Objects.equals(this.knownPack, that.knownPack)
                 && Objects.equals(this.value, that.value);

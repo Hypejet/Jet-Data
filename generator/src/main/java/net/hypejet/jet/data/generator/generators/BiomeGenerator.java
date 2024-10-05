@@ -8,7 +8,7 @@ import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.model.registry.registries.biome.Biome;
-import net.hypejet.jet.data.model.registry.registries.biome.BiomeRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.biome.BiomeRegistryEntryData;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.modifier.GrassColorModifier;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.music.BiomeMusic;
@@ -98,8 +98,8 @@ public final class BiomeGenerator extends Generator<Biome> {
     }
 
     @Override
-    public @NonNull List<BiomeRegistryEntry> generate(@NonNull Logger logger) {
-        List<BiomeRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<BiomeRegistryEntryData> generate(@NonNull Logger logger) {
+        List<BiomeRegistryEntryData> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess
                 .registryOrThrow(Registries.BIOME);
@@ -119,7 +119,7 @@ public final class BiomeGenerator extends Generator<Biome> {
                     .effectSettings(biomeEffects(biome.getSpecialEffects()))
                     .build();
 
-            entries.add(new BiomeRegistryEntry(IdentifierAdapter.convert(key.location()),
+            entries.add(new BiomeRegistryEntryData(IdentifierAdapter.convert(key.location()),
                     DataPackAdapter.convert(knownPack), convertedBiome));
         });
 
