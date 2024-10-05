@@ -1,12 +1,12 @@
-package net.hypejet.jet.data.generator.generators;
+package net.hypejet.jet.data.generator.generators.api;
 
 import net.hypejet.jet.data.generator.Generator;
-import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageEffectType;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.data.model.registry.registries.damage.DamageType;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeRegistryEntryData;
+import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeDataRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.damage.DeathMessageType;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
@@ -22,12 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a {@linkplain Generator generator} which generates {@linkplain DamageTypeRegistryEntryData damage type
+ * Represents a {@linkplain Generator generator} which generates {@linkplain DamageTypeDataRegistryEntry damage type
  * registry entries}.
  *
  * @since 1.0
  * @author Codestech
- * @see DamageTypeRegistryEntryData
+ * @see DamageTypeDataRegistryEntry
  * @see Generator
  */
 public final class DamageTypeGenerator extends Generator<DamageType> {
@@ -46,8 +46,8 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
     }
 
     @Override
-    public @NonNull List<DamageTypeRegistryEntryData> generate(@NonNull Logger logger) {
-        List<DamageTypeRegistryEntryData> entries = new ArrayList<>();
+    public @NonNull List<DamageTypeDataRegistryEntry> generate(@NonNull Logger logger) {
+        List<DamageTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.damagesource.DamageType> registry = this.registryAccess
                 .registryOrThrow(Registries.DAMAGE_TYPE);
 
@@ -58,8 +58,8 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
                     .flatMap(RegistrationInfo::knownPackInfo)
                     .orElseThrow();
 
-            entries.add(new DamageTypeRegistryEntryData(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.convert(knownPack), damageType(damageType)));
+            entries.add(new DamageTypeDataRegistryEntry(IdentifierAdapter.convert(key.location()),
+                    damageType(damageType), PackAdapter.convert(knownPack)));
         });
 
         return List.copyOf(entries);

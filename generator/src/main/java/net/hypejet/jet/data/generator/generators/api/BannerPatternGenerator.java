@@ -1,10 +1,10 @@
-package net.hypejet.jet.data.generator.generators;
+package net.hypejet.jet.data.generator.generators.api;
 
 import net.hypejet.jet.data.generator.Generator;
-import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.model.registry.registries.banner.BannerPattern;
-import net.hypejet.jet.data.model.registry.registries.banner.BannerPatternRegistryEntryData;
+import net.hypejet.jet.data.model.registry.registries.banner.BannerPatternDataRegistryEntry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -41,8 +41,8 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
     }
 
     @Override
-    public @NonNull List<BannerPatternRegistryEntryData> generate(@NonNull Logger logger) {
-        List<BannerPatternRegistryEntryData> entries = new ArrayList<>();
+    public @NonNull List<BannerPatternDataRegistryEntry> generate(@NonNull Logger logger) {
+        List<BannerPatternDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.block.entity.BannerPattern> registry = this.registryAccess
                 .registryOrThrow(Registries.BANNER_PATTERN);
 
@@ -55,8 +55,8 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
 
             BannerPattern bannerPattern = new BannerPattern(IdentifierAdapter.convert(pattern.assetId()),
                     pattern.translationKey());
-            entries.add(new BannerPatternRegistryEntryData(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.convert(knownPack), bannerPattern));
+            entries.add(new BannerPatternDataRegistryEntry(IdentifierAdapter.convert(key.location()),
+                    bannerPattern, PackAdapter.convert(knownPack)));
         });
 
         return List.copyOf(entries);

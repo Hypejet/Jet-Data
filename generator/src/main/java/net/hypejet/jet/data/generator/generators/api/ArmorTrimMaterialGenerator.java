@@ -1,12 +1,12 @@
-package net.hypejet.jet.data.generator.generators;
+package net.hypejet.jet.data.generator.generators.api;
 
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.ComponentAdapter;
-import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterial;
-import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterialRegistryEntryData;
+import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterialDataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
@@ -42,8 +42,8 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
     }
 
     @Override
-    public @NonNull List<ArmorTrimMaterialRegistryEntryData> generate(@NonNull Logger logger) {
-        List<ArmorTrimMaterialRegistryEntryData> entries = new ArrayList<>();
+    public @NonNull List<ArmorTrimMaterialDataRegistryEntry> generate(@NonNull Logger logger) {
+        List<ArmorTrimMaterialDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<TrimMaterial> registry = this.registryAccess.registryOrThrow(Registries.TRIM_MATERIAL);
         Registry<Item> itemRegistry = this.registryAccess.registryOrThrow(Registries.ITEM);
@@ -67,8 +67,8 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
                     material.itemModelIndex(), Map.copyOf(overrideArmorMaterials),
                     ComponentAdapter.convert(material.description(), registryAccess));
 
-            entries.add(new ArmorTrimMaterialRegistryEntryData(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.convert(knownPack), convertedMaterial));
+            entries.add(new ArmorTrimMaterialDataRegistryEntry(IdentifierAdapter.convert(key.location()),
+                    convertedMaterial, PackAdapter.convert(knownPack)));
         });
 
         return List.copyOf(entries);

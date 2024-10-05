@@ -1,13 +1,13 @@
-package net.hypejet.jet.data.generator.generators;
+package net.hypejet.jet.data.generator.generators.api;
 
 import com.mojang.datafixers.util.Either;
 import net.hypejet.jet.data.generator.Generator;
-import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
-import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantRegistryEntryData;
+import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantDataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
@@ -51,8 +51,8 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
     }
 
     @Override
-    public @NonNull List<WolfVariantRegistryEntryData> generate(@NonNull Logger logger) {
-        List<WolfVariantRegistryEntryData> entries = new ArrayList<>();
+    public @NonNull List<WolfVariantDataRegistryEntry> generate(@NonNull Logger logger) {
+        List<WolfVariantDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.entity.animal.WolfVariant> registry = this.registryAccess
                 .registryOrThrow(Registries.WOLF_VARIANT);
@@ -96,8 +96,8 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
                     IdentifierAdapter.convert(wolfVariant.angryTexture()),
                     biomes);
 
-            entries.add(new WolfVariantRegistryEntryData(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.convert(knownPack), convertedWolfVariant));
+            entries.add(new WolfVariantDataRegistryEntry(IdentifierAdapter.convert(key.location()),
+                    convertedWolfVariant, PackAdapter.convert(knownPack)));
         });
 
         return List.copyOf(entries);

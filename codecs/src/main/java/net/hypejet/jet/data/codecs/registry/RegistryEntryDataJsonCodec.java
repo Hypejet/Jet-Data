@@ -6,32 +6,33 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.pack.DataPack;
-import net.hypejet.jet.data.model.registry.RegistryEntryData;
+import net.hypejet.jet.data.model.pack.info.PackInfo;
+import net.hypejet.jet.data.model.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Type;
 
 /**
- * Represents a {@linkplain JsonCodec json codec}, which deserializes and serializes a {@linkplain RegistryEntryData
- * registry entry data}.
+ * Represents a {@linkplain JsonCodec json codec}, which deserializes and serializes a {@linkplain DataRegistryEntry
+ * data registry entry}.
  *
- * @param <V> a type of value held by the registry entry data, which this codec deserializes and serializes
+ * @param <V> a type of value held by the data registry entry, which this codec deserializes and serializes
  * @since 1.0
  * @author Codestech
- * @see RegistryEntryData
+ * @see DataRegistryEntry
  * @see JsonCodec
  */
-public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<RegistryEntryData<V>> {
+public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<DataRegistryEntry<V>> {
 
     private static final String KEY = "key";
-    private static final String KNOWN_PACK = "known-pack";
     private static final String VALUE = "value";
+    private static final String KNOWN_PACK_INFO = "known-pack-info";
 
     private final Class<V> valueClass;
-    private final RegistryEntrySupplier<V> supplier;
+    private final PackRegistryEntrySupplier<V> supplier;
 
     /**
      * Constructs the {@linkplain RegistryEntryDataJsonCodec registry entry json codec}.
@@ -41,27 +42,28 @@ public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<RegistryEn
      * @param supplier a supplier used to create instances of the registry entries
      * @since 1.0
      */
-    public RegistryEntryDataJsonCodec(@NonNull Class<V> valueClass, @NonNull RegistryEntrySupplier<V> supplier) {
+    public RegistryEntryDataJsonCodec(@NonNull Class<V> valueClass,
+                                      @NonNull PackRegistryEntrySupplier<V> supplier) {
         this.valueClass = NullabilityUtil.requireNonNull(valueClass, "value class");
         this.supplier = NullabilityUtil.requireNonNull(supplier, "supplier");
     }
 
     @Override
-    public RegistryEntryData<V> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+    public DataRegistryEntry<V> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
         Key key = JsonUtil.read(KEY, Key.class, object, context);
-        DataPack dataPack = JsonUtil.read(KNOWN_PACK, DataPack.class, object, context);
         V value = JsonUtil.read(VALUE, this.valueClass, object, context);
+        PackInfo knownPackInfo = JsonUtil.readOptional(KNOWN_PACK_INFO, PackInfo.class, object, context);
 
         if (!this.valueClass.isAssignableFrom(value.getClass()))
             throw new IllegalArgumentException("The value class is not assignable from the class of value specified");
-        return this.supplier.create(key, dataPack, value);
+        return this.supplier.create(key, value, knownPackInfo);
     }
 
     @Override
-    public JsonElement serialize(RegistryEntryData<V> src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(DataRegistryEntry<V> src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
 
         V value = src.value();
@@ -69,30 +71,29 @@ public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<RegistryEn
             throw new IllegalArgumentException("The value class is not assignable from the class of value specified");
 
         JsonUtil.write(KEY, src.key(), Key.class, object, context);
-        JsonUtil.write(KNOWN_PACK, src.knownPack(), object, context);
         JsonUtil.write(VALUE, src.value(), object, context);
+        JsonUtil.writeOptional(KNOWN_PACK_INFO, src.knownPackInfo(), object, context);
 
         return object;
     }
 
     /**
-     * Represents a supplier of {@linkplain RegistryEntryData registry entry data}.
+     * Represents a supplier of a {@linkplain DataRegistryEntry data registry entry}.
      *
-     * @param <V> a type of values of the registry entries
+     * @param <V> a type of values of the registry entry
      * @since 1.0
      * @author Codestech
      */
-    public interface RegistryEntrySupplier<V> {
+    public interface PackRegistryEntrySupplier<V> {
         /**
-         * Creates a {@linkplain RegistryEntryData registry entry data} with value provided.
+         * Creates a {@linkplain DataRegistryEntry data registry entry} with value provided.
          *
-         * @param key an identifier that the registry entry data should have
-         * @param knownPack a data pack, which should enable the registry entry data
-         * @param value a value that the registry entry data should have
-         * @return the registry entry data created
+         * @param key an identifier that the data registry entry should have
+         * @param value a value that the data registry entry should have
+         * @param knownPackInfo an information of a data pack, which enables the data registry entry
+         * @return the data registry entry created
          * @since 1.0
          */
-        @NonNull
-        RegistryEntryData<V> create(@NonNull Key key, @NonNull DataPack knownPack, @NonNull V value);
+        @NonNull DataRegistryEntry<V> create(@NonNull Key key, @NonNull V value, @Nullable PackInfo knownPackInfo);
     }
 }

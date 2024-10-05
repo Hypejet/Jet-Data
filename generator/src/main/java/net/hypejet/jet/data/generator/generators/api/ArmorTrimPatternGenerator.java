@@ -1,12 +1,12 @@
-package net.hypejet.jet.data.generator.generators;
+package net.hypejet.jet.data.generator.generators.api;
 
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.ComponentAdapter;
-import net.hypejet.jet.data.generator.adapter.DataPackAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPattern;
-import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPatternRegistryEntryData;
+import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPatternDataRegistryEntry;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -45,8 +45,8 @@ public final class ArmorTrimPatternGenerator extends Generator<ArmorTrimPattern>
     }
 
     @Override
-    public @NonNull List<ArmorTrimPatternRegistryEntryData> generate(@NonNull Logger logger) {
-        List<ArmorTrimPatternRegistryEntryData> entries = new ArrayList<>();
+    public @NonNull List<ArmorTrimPatternDataRegistryEntry> generate(@NonNull Logger logger) {
+        List<ArmorTrimPatternDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<TrimPattern> registry = this.registryAccess.registryOrThrow(Registries.TRIM_PATTERN);
         Registry<Item> itemRegistry = this.registryAccess.registryOrThrow(Registries.ITEM);
@@ -62,8 +62,8 @@ public final class ArmorTrimPatternGenerator extends Generator<ArmorTrimPattern>
                     ComponentAdapter.convert(pattern.description(), registryAccess),
                     pattern.decal());
 
-            entries.add(new ArmorTrimPatternRegistryEntryData(IdentifierAdapter.convert(key.location()),
-                    DataPackAdapter.convert(knownPack), armorTrimPattern));
+            entries.add(new ArmorTrimPatternDataRegistryEntry(IdentifierAdapter.convert(key.location()),
+                    armorTrimPattern, PackAdapter.convert(knownPack)));
         });
 
         return List.copyOf(entries);

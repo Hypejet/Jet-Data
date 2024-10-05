@@ -5,20 +5,21 @@ import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
-import net.hypejet.jet.data.generator.generators.ArmorTrimMaterialGenerator;
-import net.hypejet.jet.data.generator.generators.ArmorTrimPatternGenerator;
-import net.hypejet.jet.data.generator.generators.BannerPatternGenerator;
-import net.hypejet.jet.data.generator.generators.BiomeGenerator;
-import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
-import net.hypejet.jet.data.generator.generators.DamageTypeGenerator;
-import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
-import net.hypejet.jet.data.generator.generators.PaintingVariantGenerator;
-import net.hypejet.jet.data.generator.generators.WolfVariantGenerator;
+import net.hypejet.jet.data.codecs.JetDataJson;
+import net.hypejet.jet.data.generator.generators.api.ArmorTrimMaterialGenerator;
+import net.hypejet.jet.data.generator.generators.api.ArmorTrimPatternGenerator;
+import net.hypejet.jet.data.generator.generators.api.BannerPatternGenerator;
+import net.hypejet.jet.data.generator.generators.api.BiomeGenerator;
+import net.hypejet.jet.data.generator.generators.api.ChatTypeGenerator;
+import net.hypejet.jet.data.generator.generators.api.DamageTypeGenerator;
+import net.hypejet.jet.data.generator.generators.api.DimensionTypeGenerator;
+import net.hypejet.jet.data.generator.generators.api.PaintingVariantGenerator;
+import net.hypejet.jet.data.generator.generators.api.WolfVariantGenerator;
+import net.hypejet.jet.data.generator.generators.server.DataPackGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.generator.util.JavaDocBuilder;
 import net.hypejet.jet.data.generator.util.JavaFileUtil;
-import net.hypejet.jet.data.codecs.JetDataJson;
-import net.hypejet.jet.data.model.registry.RegistryEntryData;
+import net.hypejet.jet.data.model.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.LayeredRegistryAccess;
@@ -73,7 +74,7 @@ public final class GeneratorEntrypoint {
         Bootstrap.bootStrap();
 
         LayeredRegistryAccess<RegistryLayer> rootAccess = RegistryLayer.createRegistryAccess();
-        PackRepository repository = new PackRepository(new ServerPacksSource(new DirectoryValidator(path -> true)));
+        PackRepository repository = new PackRepository(new ServerPacksSource(new DirectoryValidator(path -> false)));
 
         MinecraftServer.configurePackRepository(repository,
                 new WorldDataConfiguration(DataPackConfig.DEFAULT, FeatureFlags.REGISTRY.allFlags()),
@@ -90,25 +91,31 @@ public final class GeneratorEntrypoint {
         );
 
         RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
-        Set<Generator<?>> generators = Set.of(new BiomeGenerator(frozenAccess),
+
+        Set<Generator<?>> apiGenerators = Set.of(new BiomeGenerator(frozenAccess),
                 new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess),
                 new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess),
                 new PaintingVariantGenerator(frozenAccess), new ArmorTrimPatternGenerator(frozenAccess),
                 new ArmorTrimMaterialGenerator(frozenAccess), new BannerPatternGenerator(frozenAccess));
+        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(repository));
 
         Logger logger = LogUtils.getLogger();
-
-        Path resourcesPath = Path.of(args[0]);
-        Path javaPath = Path.of(args[1]);
-
         logger.info("Starting generation...");
 
+        generate(apiGenerators, logger, Path.of(args[0]), Path.of(args[1]), "api");
+        generate(serverGenerators, logger, Path.of(args[2]), Path.of(args[3]), "server");
+
+        logger.info("Generation complete!");
+    }
+
+    private static void generate(@NonNull Set<Generator<?>> generators, @NonNull Logger logger,
+                                 @NonNull Path resourcesPath, @NonNull Path javaPath, @NonNull String subpackage) {
         for (Generator<?> generator : generators) {
             String generatorName = generator.getClass().getSimpleName();
 
             try {
                 logger.info("Generating registry entries using \"{}\"...", generatorName);
-                List<? extends RegistryEntryData<?>> entries = generator.generate(logger);
+                List<? extends DataRegistryEntry<?>> entries = generator.generate(logger);
 
                 logger.info("Converting the generated registry entries to a string...");
                 String json = JetDataJson.serialize(entries);
@@ -125,7 +132,7 @@ public final class GeneratorEntrypoint {
                 logger.info("Creating a java class with identifiers of registry entries...");
 
                 List<FieldSpec> specs = new ArrayList<>();
-                for (RegistryEntryData<?> entry : entries) {
+                for (DataRegistryEntry<?> entry : entries) {
                     Key key = entry.key();
                     specs.add(FieldSpec.builder(Key.class, createFieldName(key))
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
@@ -162,7 +169,7 @@ public final class GeneratorEntrypoint {
 
                 logger.info("Writing the created java class...");
 
-                JavaFile file = JavaFile.builder("net.hypejet.jet.data.generated", spec)
+                JavaFile file = JavaFile.builder("net.hypejet.jet.data.generated." + subpackage, spec)
                         .indent(JavaFileUtil.INDENT)
                         .build();
                 file.writeTo(javaPath);
@@ -172,8 +179,6 @@ public final class GeneratorEntrypoint {
                 logger.error("An error occurred during generation using: {}", generatorName, throwable);
             }
         }
-
-        logger.info("Generation complete!");
     }
 
     private static @NonNull String createFieldName(@NonNull Key key) {

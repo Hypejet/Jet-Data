@@ -1,7 +1,7 @@
 package net.hypejet.jet.data.generator.adapter;
 
-import net.hypejet.jet.data.model.component.JetDataComponentValue;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
+import net.hypejet.jet.data.model.component.JetDataComponentValue;
 import net.hypejet.jet.data.model.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
