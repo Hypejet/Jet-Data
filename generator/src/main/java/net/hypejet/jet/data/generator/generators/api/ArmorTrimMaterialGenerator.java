@@ -8,16 +8,15 @@ import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterial;
 import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterialDataRegistryEntry;
 import net.kyori.adventure.key.Key;
-import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.repository.KnownPack;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
@@ -45,9 +44,8 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
     public @NonNull List<ArmorTrimMaterialDataRegistryEntry> generate(@NonNull Logger logger) {
         List<ArmorTrimMaterialDataRegistryEntry> entries = new ArrayList<>();
 
-        Registry<TrimMaterial> registry = this.registryAccess.registryOrThrow(Registries.TRIM_MATERIAL);
-        Registry<Item> itemRegistry = this.registryAccess.registryOrThrow(Registries.ITEM);
-        Registry<ArmorMaterial> armorMaterialRegistry = this.registryAccess.registryOrThrow(Registries.ARMOR_MATERIAL);
+        Registry<TrimMaterial> registry = this.registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL);
+        Registry<Item> itemRegistry = this.registryAccess.lookupOrThrow(Registries.ITEM);
 
         registry.forEach(material -> {
             ResourceKey<TrimMaterial> key = registry.getResourceKey(material).orElseThrow();
@@ -56,11 +54,8 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
                     .orElseThrow();
 
             Map<Key, Key> overrideArmorMaterials = new HashMap<>();
-            for (Map.Entry<Holder<ArmorMaterial>, String> entry : material.overrideArmorMaterials().entrySet()) {
-                Key armorMaterialKey = RegistryUtil.keyOfHolder(entry.getKey(), armorMaterialRegistry);
-                Key assetKey = Key.key(entry.getValue());
-                overrideArmorMaterials.put(armorMaterialKey, assetKey);
-            }
+            for (Map.Entry<ResourceLocation, String> entry : material.overrideArmorMaterials().entrySet())
+                overrideArmorMaterials.put(IdentifierAdapter.convert(entry.getKey()), Key.key(entry.getValue()));
 
             ArmorTrimMaterial convertedMaterial = new ArmorTrimMaterial(Key.key(material.assetName()),
                     RegistryUtil.keyOfHolder(material.ingredient(), itemRegistry),

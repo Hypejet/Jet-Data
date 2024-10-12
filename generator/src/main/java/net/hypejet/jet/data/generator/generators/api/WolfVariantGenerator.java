@@ -55,8 +55,8 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
         List<WolfVariantDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.entity.animal.WolfVariant> registry = this.registryAccess
-                .registryOrThrow(Registries.WOLF_VARIANT);
-        Registry<Biome> biomeRegistry = this.registryAccess.registryOrThrow(Registries.BIOME);
+                .lookupOrThrow(Registries.WOLF_VARIANT);
+        Registry<Biome> biomeRegistry = this.registryAccess.lookupOrThrow(Registries.BIOME);
 
         registry.forEach(wolfVariant -> {
             ResourceKey<net.minecraft.world.entity.animal.WolfVariant> key = registry.getResourceKey(wolfVariant)

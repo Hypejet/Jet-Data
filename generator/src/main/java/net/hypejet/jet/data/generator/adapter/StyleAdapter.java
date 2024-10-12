@@ -118,7 +118,7 @@ public final class StyleAdapter {
                     "value of hover event");
 
             ResourceLocation location = Objects.requireNonNull(
-                    registryAccess.registryOrThrow(Registries.ENTITY_TYPE).getKey(tooltipInfo.type),
+                    registryAccess.lookupOrThrow(Registries.ENTITY_TYPE).getKey(tooltipInfo.type),
                     "An identifier of a entity type specified could not be found in a registry"
             );
 
@@ -126,7 +126,7 @@ public final class StyleAdapter {
                     .map(component -> ComponentAdapter.convert(component, registryAccess))
                     .orElse(null));
         } else if (action == Action.SHOW_ITEM) {
-            Registry<DataComponentType<?>> registry = registryAccess.registryOrThrow(Registries.DATA_COMPONENT_TYPE);
+            Registry<DataComponentType<?>> registry = registryAccess.lookupOrThrow(Registries.DATA_COMPONENT_TYPE);
             ItemStackInfo info = NullabilityUtil.requireNonNull(hoverEvent.getValue(Action.SHOW_ITEM),
                     "value of hover event");
 

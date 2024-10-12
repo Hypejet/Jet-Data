@@ -49,7 +49,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
     public @NonNull List<DamageTypeDataRegistryEntry> generate(@NonNull Logger logger) {
         List<DamageTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.damagesource.DamageType> registry = this.registryAccess
-                .registryOrThrow(Registries.DAMAGE_TYPE);
+                .lookupOrThrow(Registries.DAMAGE_TYPE);
 
         registry.forEach(damageType -> {
             ResourceKey<net.minecraft.world.damagesource.DamageType> key = registry.getResourceKey(damageType)

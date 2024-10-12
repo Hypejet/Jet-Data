@@ -101,9 +101,7 @@ public final class BiomeGenerator extends Generator<Biome> {
     public @NonNull List<BiomeDataRegistryEntry> generate(@NonNull Logger logger) {
         List<BiomeDataRegistryEntry> entries = new ArrayList<>();
 
-        Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess
-                .registryOrThrow(Registries.BIOME);
-
+        Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess.lookupOrThrow(Registries.BIOME);
         registry.forEach(biome -> {
             ResourceKey<net.minecraft.world.level.biome.Biome> key = registry.getResourceKey(biome).orElseThrow();
             KnownPack knownPack = registry.registrationInfo(key)
@@ -219,7 +217,7 @@ public final class BiomeGenerator extends Generator<Biome> {
         }
 
         Float range = (Float) optionalFixedRange.orElse(null);
-        return new BiomeSoundEvent(IdentifierAdapter.convert(event.getLocation()), range);
+        return new BiomeSoundEvent(IdentifierAdapter.convert(event.location()), range);
     }
 
     private static @NonNull BiomeTemperatureModifier temperatureModifier(@NonNull Object climateSettings) {

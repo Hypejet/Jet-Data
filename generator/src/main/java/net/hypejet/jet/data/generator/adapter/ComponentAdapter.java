@@ -12,6 +12,7 @@ import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.LocalCoordinates;
 import net.minecraft.commands.arguments.coordinates.WorldCoordinate;
 import net.minecraft.commands.arguments.coordinates.WorldCoordinates;
+import net.minecraft.commands.arguments.selector.SelectorPattern;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.BlockDataSource;
@@ -89,13 +90,13 @@ public final class ComponentAdapter {
             case TranslatableContents translatable -> Component.translatable(translatable.getKey(), style);
             case KeybindContents keybind -> Component.keybind(keybind.getName(), style);
             case ScoreContents score -> Component.score()
-                    .name(score.getName())
-                    .objective(score.getObjective())
+                    .name(score.name().map(SelectorPattern::pattern, string -> string))
+                    .objective(score.objective())
                     .style(style)
                     .build();
             case SelectorContents selector -> Component.selector()
-                    .pattern(selector.getPattern())
-                    .separator(selector.getSeparator()
+                    .pattern(selector.selector().pattern())
+                    .separator(selector.separator()
                             .map(separatorComponent -> ComponentAdapter.convert(separatorComponent, registryAccess))
                             .orElse(null))
                     .style(style)

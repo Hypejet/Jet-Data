@@ -40,7 +40,7 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
     public @NonNull List<ChatTypeDataRegistryEntry> generate(@NonNull Logger logger) {
         List<ChatTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.network.chat.ChatType> registry = this.registryAccess
-                .registryOrThrow(Registries.CHAT_TYPE);
+                .lookupOrThrow(Registries.CHAT_TYPE);
 
         registry.forEach(chatType -> {
             ResourceKey<net.minecraft.network.chat.ChatType> key = registry.getResourceKey(chatType).orElseThrow();

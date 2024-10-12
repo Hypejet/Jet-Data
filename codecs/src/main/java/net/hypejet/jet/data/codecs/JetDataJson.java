@@ -21,6 +21,8 @@ import net.hypejet.jet.data.codecs.registry.registries.biome.effects.particle.Bi
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeAdditionalSoundJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeMoodSoundJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeSoundEventJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.block.BlockJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.block.BlockStateJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.chat.ChatTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.chat.decoration.ChatDecorationJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.chat.decoration.ChatDecorationParameterJsonCodec;
@@ -53,6 +55,10 @@ import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeA
 import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeSoundEvent;
 import net.hypejet.jet.data.model.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.data.model.registry.registries.block.Block;
+import net.hypejet.jet.data.model.registry.registries.block.BlockRegistryEntry;
+import net.hypejet.jet.data.model.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.registry.registries.block.state.BlockStateRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.chat.ChatType;
 import net.hypejet.jet.data.model.registry.registries.chat.ChatTypeDataRegistryEntry;
 import net.hypejet.jet.data.model.registry.registries.chat.decoration.ChatDecoration;
@@ -186,6 +192,13 @@ public final class JetDataJson {
                             DataPack.class,
                             (key, value, knownPackInfo) -> new DataPackDataRegistryEntry(key, value)
                     ))
+            // Blocks
+            .registerTypeAdapter(Block.class, new BlockJsonCodec())
+            .registerTypeAdapter(BlockRegistryEntry.class,
+                    new RegistryEntryDataJsonCodec<>(Block.class, BlockRegistryEntry::new))
+            .registerTypeAdapter(BlockState.class, new BlockStateJsonCodec())
+            .registerTypeAdapter(BlockStateRegistryEntry.class,
+                    new RegistryEntryDataJsonCodec<>(BlockState.class, BlockStateRegistryEntry::new))
             // Misc type adapters
             .registerTypeAdapter(Color.class, new ColorJsonCodec())
             .registerTypeAdapter(Key.class, new KeyJsonCodec())

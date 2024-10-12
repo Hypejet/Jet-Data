@@ -44,7 +44,7 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
     public @NonNull List<PaintingVariantDataRegistryEntry> generate(@NonNull Logger logger) {
         List<PaintingVariantDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.entity.decoration.PaintingVariant> registry = this.registryAccess
-                .registryOrThrow(Registries.PAINTING_VARIANT);
+                .lookupOrThrow(Registries.PAINTING_VARIANT);
 
         registry.forEach(variant -> {
             ResourceKey<net.minecraft.world.entity.decoration.PaintingVariant> key = registry.getResourceKey(variant)

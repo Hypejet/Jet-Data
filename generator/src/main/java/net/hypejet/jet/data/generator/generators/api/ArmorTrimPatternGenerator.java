@@ -14,7 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.armortrim.TrimPattern;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
@@ -48,8 +48,8 @@ public final class ArmorTrimPatternGenerator extends Generator<ArmorTrimPattern>
     public @NonNull List<ArmorTrimPatternDataRegistryEntry> generate(@NonNull Logger logger) {
         List<ArmorTrimPatternDataRegistryEntry> entries = new ArrayList<>();
 
-        Registry<TrimPattern> registry = this.registryAccess.registryOrThrow(Registries.TRIM_PATTERN);
-        Registry<Item> itemRegistry = this.registryAccess.registryOrThrow(Registries.ITEM);
+        Registry<TrimPattern> registry = this.registryAccess.lookupOrThrow(Registries.TRIM_PATTERN);
+        Registry<Item> itemRegistry = this.registryAccess.lookupOrThrow(Registries.ITEM);
 
         registry.forEach(pattern -> {
             ResourceKey<TrimPattern> key = registry.getResourceKey(pattern).orElseThrow();

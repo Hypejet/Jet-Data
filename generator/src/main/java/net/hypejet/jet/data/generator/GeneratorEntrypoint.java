@@ -15,6 +15,8 @@ import net.hypejet.jet.data.generator.generators.api.DamageTypeGenerator;
 import net.hypejet.jet.data.generator.generators.api.DimensionTypeGenerator;
 import net.hypejet.jet.data.generator.generators.api.PaintingVariantGenerator;
 import net.hypejet.jet.data.generator.generators.api.WolfVariantGenerator;
+import net.hypejet.jet.data.generator.generators.server.BlockGenerator;
+import net.hypejet.jet.data.generator.generators.server.BlockStateGenerator;
 import net.hypejet.jet.data.generator.generators.server.DataPackGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.generator.util.JavaDocBuilder;
@@ -34,6 +36,7 @@ import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
+import net.minecraft.tags.TagLoader;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.WorldDataConfiguration;
@@ -86,7 +89,12 @@ public final class GeneratorEntrypoint {
         LayeredRegistryAccess<RegistryLayer> layeredAccess = rootAccess.replaceFrom(
                 RegistryLayer.WORLDGEN,
                 RegistryDataLoader.load(resourceManager,
-                        rootAccess.getAccessForLoading(RegistryLayer.WORLDGEN),
+                        TagLoader.buildUpdatedLookups(
+                                rootAccess.getAccessForLoading(RegistryLayer.WORLDGEN),
+                                TagLoader.loadTagsForExistingRegistries(
+                                        resourceManager,
+                                        rootAccess.getLayer(RegistryLayer.STATIC)
+                                )),
                         RegistryDataLoader.WORLDGEN_REGISTRIES)
         );
 
@@ -97,7 +105,8 @@ public final class GeneratorEntrypoint {
                 new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess),
                 new PaintingVariantGenerator(frozenAccess), new ArmorTrimPatternGenerator(frozenAccess),
                 new ArmorTrimMaterialGenerator(frozenAccess), new BannerPatternGenerator(frozenAccess));
-        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(repository));
+        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(repository), new BlockStateGenerator(),
+                new BlockGenerator());
 
         Logger logger = LogUtils.getLogger();
         logger.info("Starting generation...");
@@ -129,50 +138,53 @@ public final class GeneratorEntrypoint {
                 Files.deleteIfExists(resourceFilePath);
                 Files.writeString(resourceFilePath, json, StandardOpenOption.CREATE);
 
-                logger.info("Creating a java class with identifiers of registry entries...");
+                String className = generator.className();
+                if (className != null) {
+                    logger.info("Creating a java class with identifiers of registry entries...");
 
-                List<FieldSpec> specs = new ArrayList<>();
-                for (DataRegistryEntry<?> entry : entries) {
-                    Key key = entry.key();
-                    specs.add(FieldSpec.builder(Key.class, createFieldName(key))
+                    List<FieldSpec> specs = new ArrayList<>();
+                    for (DataRegistryEntry<?> entry : entries) {
+                        Key key = entry.key();
+                        specs.add(FieldSpec.builder(Key.class, createFieldName(key))
+                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer(CodeBlocks.key(entry.key()))
+                                .addJavadoc(JavaDocBuilder.builder()
+                                        .append(String.format("Represents an identifier of a \"%s\" registry entry.",
+                                                key.value()))
+                                        .appendEmpty()
+                                        .build())
+                                .build());
+                    }
+
+                    specs.addFirst(FieldSpec.builder(String.class, "SPEC_JSON_FILE_NAME")
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer(CodeBlocks.key(entry.key()))
+                            .initializer(CodeBlocks.string(resourceFileName))
                             .addJavadoc(JavaDocBuilder.builder()
-                                    .append(String.format("Represents an identifier of a \"%s\" registry entry.",
-                                            key.value()))
-                                    .appendEmpty()
+                                    .append(String.format("A name of a resource file that contains registry entries" +
+                                            " generated by a \"%s\" generator.", generatorName))
                                     .build())
                             .build());
+
+                    TypeSpec spec = TypeSpec.classBuilder(className)
+                            .addFields(specs)
+                            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                            .addJavadoc(JavaDocBuilder.builder()
+                                    .append(String.format("Represents a holder of keys of registry entries" +
+                                            " generated by a \"%s\" generator.", generatorName))
+                                    .appendEmpty()
+                                    .build())
+                            .addMethod(MethodSpec.constructorBuilder()
+                                    .addModifiers(Modifier.PRIVATE)
+                                    .build())
+                            .build();
+
+                    logger.info("Writing the created java class...");
+
+                    JavaFile file = JavaFile.builder("net.hypejet.jet.data.generated." + subpackage, spec)
+                            .indent(JavaFileUtil.INDENT)
+                            .build();
+                    file.writeTo(javaPath);
                 }
-
-                specs.addFirst(FieldSpec.builder(String.class, "SPEC_JSON_FILE_NAME")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer(CodeBlocks.string(resourceFileName))
-                        .addJavadoc(JavaDocBuilder.builder()
-                                .append(String.format("A name of a resource file that contains registry entries" +
-                                        " generated by a \"%s\" generator.", generatorName))
-                                .build())
-                        .build());
-
-                TypeSpec spec = TypeSpec.classBuilder(generator.className())
-                        .addFields(specs)
-                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                        .addJavadoc(JavaDocBuilder.builder()
-                                .append(String.format("Represents a holder of keys of registry entries" +
-                                        " generated by a \"%s\" generator.", generatorName))
-                                .appendEmpty()
-                                .build())
-                        .addMethod(MethodSpec.constructorBuilder()
-                                .addModifiers(Modifier.PRIVATE)
-                                .build())
-                        .build();
-
-                logger.info("Writing the created java class...");
-
-                JavaFile file = JavaFile.builder("net.hypejet.jet.data.generated." + subpackage, spec)
-                        .indent(JavaFileUtil.INDENT)
-                        .build();
-                file.writeTo(javaPath);
 
                 logger.info("Generation using \"{}\" has completed successfully!", generatorName);
             } catch (Throwable throwable) {

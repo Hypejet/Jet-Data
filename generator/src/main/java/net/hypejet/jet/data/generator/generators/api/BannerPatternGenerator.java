@@ -44,7 +44,7 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
     public @NonNull List<BannerPatternDataRegistryEntry> generate(@NonNull Logger logger) {
         List<BannerPatternDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.block.entity.BannerPattern> registry = this.registryAccess
-                .registryOrThrow(Registries.BANNER_PATTERN);
+                .lookupOrThrow(Registries.BANNER_PATTERN);
 
         registry.forEach(pattern -> {
             ResourceKey<net.minecraft.world.level.block.entity.BannerPattern> key = registry.getResourceKey(pattern)

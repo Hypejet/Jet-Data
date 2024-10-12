@@ -67,7 +67,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
     public @NonNull List<DimensionTypeDataRegistryEntry> generate(@NonNull Logger logger) {
         List<DimensionTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.dimension.DimensionType> registry = this.registryAccess
-                .registryOrThrow(Registries.DIMENSION_TYPE);
+                .lookupOrThrow(Registries.DIMENSION_TYPE);
 
         registry.forEach(dimensionType -> {
             ResourceKey<net.minecraft.world.level.dimension.DimensionType> key = registry.getResourceKey(dimensionType)
