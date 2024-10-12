@@ -35,7 +35,7 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
      * @since 1.0
      */
     public BannerPatternGenerator(@NonNull RegistryAccess registryAccess) {
-        super("banner-patterns", "BannerPatterns");
+        super("banner-patterns", "BannerPatterns", true);
         this.registryAccess = registryAccess;
     }
 

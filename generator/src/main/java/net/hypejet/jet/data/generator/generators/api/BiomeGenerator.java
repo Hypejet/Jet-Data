@@ -92,7 +92,7 @@ public final class BiomeGenerator extends Generator<Biome> {
      * @since 1.0
      */
     public BiomeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("biomes", "Biomes");
+        super("biomes", "Biomes", true);
         this.registryAccess = registryAccess;
     }
 

@@ -45,7 +45,7 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
      * @since 1.0
      */
     public WolfVariantGenerator(@NonNull RegistryAccess registryAccess) {
-        super("wolf-variants", "WolfVariants");
+        super("wolf-variants", "WolfVariants", true);
         this.registryAccess = registryAccess;
     }
 

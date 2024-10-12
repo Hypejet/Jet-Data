@@ -89,10 +89,10 @@ public final class GeneratorEntrypoint {
                 "MinecraftVersionInfo",
                 CodeBlock.of("Represents a holder of Minecraft version information."),
                 List.of(new Constant("VERSION_NAME", String.class,
-                                CodeBlock.of("$S", versionInfo.getName()),
+                                CodeBlocks.string(versionInfo.getName()),
                                 CodeBlock.of("A name of the Minecraft version.")),
                         new Constant("PROTOCOL_VERSION", int.class,
-                                CodeBlock.of("$L", versionInfo.getProtocolVersion()),
+                                CodeBlock.of(String.valueOf(versionInfo.getProtocolVersion())),
                                 CodeBlock.of("A numeric version of the Minecraft protocol.")))
         ));
 
@@ -122,10 +122,12 @@ public final class GeneratorEntrypoint {
             List<? extends DataRegistryEntry<?>> entries = generator.generate();
             String json = JetDataJson.serialize(entries);
 
+            String resourceFileName;
+
             try {
                 Files.createDirectories(resourcePath);
 
-                String resourceFileName = generator.resourceFileName() + JSON_FILE_SUFFIX;
+                resourceFileName = generator.resourceFileName() + JSON_FILE_SUFFIX;
                 Path resourceFilePath = resourcePath.resolve(resourceFileName);
 
                 Files.deleteIfExists(resourceFilePath);
@@ -134,21 +136,26 @@ public final class GeneratorEntrypoint {
                 throw new RuntimeException(exception);
             }
 
-            String className = generator.className();
-            if (className == null) return;
-
             String generatorName = generator.getClass().getSimpleName();
             List<Constant> constants = new ArrayList<>();
 
-            entries.forEach(entry -> {
-                Key key = entry.key();
-                constants.add(new Constant(
-                        createFieldName(key), Key.class, CodeBlocks.key(key),
-                        CodeBlock.of(String.format("Represents an identifier of \"%s\" registry entry.", key.value()))
-                ));
-            });
+            constants.add(new Constant("RESOURCE_FILE_NAME", String.class, CodeBlocks.string(resourceFileName),
+                    CodeBlock.of("A name of a resource file, which contains all generated entries.")));
 
-            constantContainers.add(new ConstantContainer(className,
+            if (generator.createEntryKeyConstants()) {
+                entries.forEach(entry -> {
+                    Key key = entry.key();
+                    constants.add(new Constant(
+                            createFieldName(key), Key.class, CodeBlocks.key(key),
+                            CodeBlock.of(String.format(
+                                    "Represents an identifier of \"%s\" registry entry.",
+                                    key.value()
+                            ))
+                    ));
+                });
+            }
+
+            constantContainers.add(new ConstantContainer(generator.className(),
                     CodeBlock.of(String.format("Represents a holder of keys of registry entries generated" +
                             " by a \"%s\" generator.", generatorName)),
                     List.copyOf(constants)));

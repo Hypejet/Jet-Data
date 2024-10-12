@@ -39,7 +39,7 @@ public final class FeaturePackGenerator extends Generator<FeaturePack> {
      * @since 1.0
      */
     public FeaturePackGenerator(@NonNull PackRepository packRepository) {
-        super("feature-packs", "FeaturePacks");
+        super("feature-packs", "FeaturePacks", true);
         this.packRepository = packRepository;
     }
 

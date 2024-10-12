@@ -33,7 +33,7 @@ public final class BlockStateGenerator extends Generator<BlockState> {
      * @since 1.0
      */
     public BlockStateGenerator() {
-        super("block-states", null);
+        super("block-states", "BlockStates", false);
     }
 
     @Override

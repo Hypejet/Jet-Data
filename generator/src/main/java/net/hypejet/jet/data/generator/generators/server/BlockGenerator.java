@@ -31,7 +31,7 @@ public final class BlockGenerator extends Generator<Block> {
      * @since 1.0
      */
     public BlockGenerator() {
-        super("blocks", "Blocks");
+        super("blocks", "Blocks", true);
     }
 
     @Override

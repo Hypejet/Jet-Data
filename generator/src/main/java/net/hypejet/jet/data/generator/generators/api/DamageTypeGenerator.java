@@ -40,7 +40,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
      * @since 1.0
      */
     public DamageTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("damage-types", "DamageTypes");
+        super("damage-types", "DamageTypes", true);
         this.registryAccess = registryAccess;
     }
 
