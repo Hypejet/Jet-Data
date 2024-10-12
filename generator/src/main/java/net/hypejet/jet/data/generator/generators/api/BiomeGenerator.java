@@ -69,7 +69,7 @@ public final class BiomeGenerator extends Generator<Biome> {
     private static final Field PARTICLE_SETTINGS_PROBABILITY_FIELD;
     private static final Method SOUND_EVENT_FIXED_RANGE_METHOD;
 
-    private final RegistryAccess.Frozen registryAccess;
+    private final RegistryAccess registryAccess;
 
     static {
         try {
@@ -91,7 +91,7 @@ public final class BiomeGenerator extends Generator<Biome> {
      * @param registryAccess access to all Minecraft registries
      * @since 1.0
      */
-    public BiomeGenerator(RegistryAccess.@NonNull Frozen registryAccess) {
+    public BiomeGenerator(@NonNull RegistryAccess registryAccess) {
         super("biomes", "Biomes");
         this.registryAccess = registryAccess;
     }

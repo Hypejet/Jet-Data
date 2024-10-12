@@ -23,6 +23,7 @@ import net.hypejet.jet.data.model.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.WorldVersion;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
@@ -78,30 +79,6 @@ public final class GeneratorEntrypoint {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
 
-        LayeredRegistryAccess<RegistryLayer> rootAccess = RegistryLayer.createRegistryAccess();
-        PackRepository repository = new PackRepository(new ServerPacksSource(new DirectoryValidator(path -> false)));
-
-        MinecraftServer.configurePackRepository(repository,
-                new WorldDataConfiguration(DataPackConfig.DEFAULT, FeatureFlags.REGISTRY.allFlags()),
-                false, true);
-
-        List<PackResources> packResources = repository.openAllSelected();
-        CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packResources);
-
-        LayeredRegistryAccess<RegistryLayer> layeredAccess = rootAccess.replaceFrom(
-                RegistryLayer.WORLDGEN,
-                RegistryDataLoader.load(resourceManager,
-                        TagLoader.buildUpdatedLookups(
-                                rootAccess.getAccessForLoading(RegistryLayer.WORLDGEN),
-                                TagLoader.loadTagsForExistingRegistries(
-                                        resourceManager,
-                                        rootAccess.getLayer(RegistryLayer.STATIC)
-                                )),
-                        RegistryDataLoader.WORLDGEN_REGISTRIES)
-        );
-
-        RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
-
         Logger logger = LogUtils.getLogger();
         logger.info("Starting generation...");
 
@@ -119,12 +96,15 @@ public final class GeneratorEntrypoint {
                                 CodeBlock.of("A numeric version of the Minecraft protocol.")))
         ));
 
-        Set<Generator<?>> apiGenerators = Set.of(new BiomeGenerator(frozenAccess),
-                new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess),
-                new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess),
-                new PaintingVariantGenerator(frozenAccess), new ArmorTrimPatternGenerator(frozenAccess),
-                new ArmorTrimMaterialGenerator(frozenAccess), new BannerPatternGenerator(frozenAccess));
-        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(repository), new BlockStateGenerator(),
+        PackRepository packs = new PackRepository(new ServerPacksSource(new DirectoryValidator(path -> false)));
+        RegistryAccess registryAccess = createRegistryAccess(packs);
+
+        Set<Generator<?>> apiGenerators = Set.of(new BiomeGenerator(registryAccess),
+                new DimensionTypeGenerator(registryAccess), new ChatTypeGenerator(registryAccess),
+                new DamageTypeGenerator(registryAccess), new WolfVariantGenerator(registryAccess),
+                new PaintingVariantGenerator(registryAccess), new ArmorTrimPatternGenerator(registryAccess),
+                new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess));
+        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(packs), new BlockStateGenerator(),
                 new BlockGenerator());
 
         generate(apiGenerators, Set.of(), Path.of(args[0]), Path.of(args[1]), "api");
@@ -184,6 +164,26 @@ public final class GeneratorEntrypoint {
                 throw new RuntimeException(exception);
             }
         }
+    }
+
+    private static @NonNull RegistryAccess createRegistryAccess(@NonNull PackRepository packRepository) {
+        LayeredRegistryAccess<RegistryLayer> access = RegistryLayer.createRegistryAccess();
+        MinecraftServer.configurePackRepository(packRepository,
+                new WorldDataConfiguration(DataPackConfig.DEFAULT, FeatureFlags.REGISTRY.allFlags()),
+                false, true);
+
+        List<PackResources> packResources = packRepository.openAllSelected();
+        CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packResources);
+
+        List<HolderLookup.RegistryLookup<?>> registryLookups = TagLoader.buildUpdatedLookups(
+                access.getAccessForLoading(RegistryLayer.WORLDGEN),
+                TagLoader.loadTagsForExistingRegistries(resourceManager, access.getLayer(RegistryLayer.STATIC))
+        );
+
+        RegistryAccess.Frozen loadedRegistryData = RegistryDataLoader.load(resourceManager,
+                registryLookups,
+                RegistryDataLoader.WORLDGEN_REGISTRIES);
+        return access.replaceFrom(RegistryLayer.WORLDGEN, loadedRegistryData).compositeAccess();
     }
 
     private static @NonNull String createFieldName(@NonNull Key key) {

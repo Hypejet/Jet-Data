@@ -38,7 +38,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
 
     private static final Field WEIGHTED_LIST_DISTRIBUTION_FIELD;
 
-    private final RegistryAccess.Frozen registryAccess;
+    private final RegistryAccess registryAccess;
 
     static {
         try {
@@ -57,7 +57,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
      * @param registryAccess access to all Minecraft registries
      * @since 1.0
      */
-    public DimensionTypeGenerator(RegistryAccess.@NonNull Frozen registryAccess) {
+    public DimensionTypeGenerator(@NonNull RegistryAccess registryAccess) {
         super("dimension-types", "DimensionTypes");
         this.registryAccess = registryAccess;
     }
