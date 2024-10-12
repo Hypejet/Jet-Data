@@ -40,7 +40,6 @@ import net.minecraft.world.level.biome.AmbientParticleSettings;
 import net.minecraft.world.level.biome.Biome.TemperatureModifier;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -98,7 +97,7 @@ public final class BiomeGenerator extends Generator<Biome> {
     }
 
     @Override
-    public @NonNull List<BiomeDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<BiomeDataRegistryEntry> generate() {
         List<BiomeDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess.lookupOrThrow(Registries.BIOME);

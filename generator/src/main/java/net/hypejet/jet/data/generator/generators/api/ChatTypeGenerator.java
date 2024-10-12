@@ -16,7 +16,6 @@ import net.minecraft.network.chat.ChatTypeDecoration;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
     }
 
     @Override
-    public @NonNull List<ChatTypeDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<ChatTypeDataRegistryEntry> generate() {
         List<ChatTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.network.chat.ChatType> registry = this.registryAccess
                 .lookupOrThrow(Registries.CHAT_TYPE);

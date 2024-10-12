@@ -3,7 +3,6 @@ package net.hypejet.jet.data.generator;
 import net.hypejet.jet.data.model.registry.DataRegistryEntry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -58,9 +57,8 @@ public abstract class Generator<V> {
      *
      * <p>The registry entries keep their natural Minecraft order.</p>
      *
-     * @param logger logger to log events with
      * @return the registry entries
      * @since 1.0
      */
-    public abstract @NonNull List<? extends DataRegistryEntry<V>> generate(@NonNull Logger logger);
+    public abstract @NonNull List<? extends DataRegistryEntry<V>> generate();
 }

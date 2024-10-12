@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
     }
 
     @Override
-    public @NonNull List<DamageTypeDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<DamageTypeDataRegistryEntry> generate() {
         List<DamageTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.damagesource.DamageType> registry = this.registryAccess
                 .lookupOrThrow(Registries.DAMAGE_TYPE);

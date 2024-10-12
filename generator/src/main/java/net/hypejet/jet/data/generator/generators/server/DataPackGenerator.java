@@ -13,7 +13,6 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.world.flag.FeatureFlags;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +44,7 @@ public final class DataPackGenerator extends Generator<DataPack> {
     }
 
     @Override
-    public @NonNull List<DataPackDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<DataPackDataRegistryEntry> generate() {
         List<DataPackDataRegistryEntry> entries = new ArrayList<>();
 
         for (Pack pack : this.packRepository.getAvailablePacks()) {

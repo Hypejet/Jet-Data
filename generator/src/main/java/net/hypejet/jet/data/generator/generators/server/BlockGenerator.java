@@ -10,7 +10,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -36,7 +35,7 @@ public final class BlockGenerator extends Generator<Block> {
     }
 
     @Override
-    public @NonNull List<BlockRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<BlockRegistryEntry> generate() {
         List<BlockRegistryEntry> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.level.block.Block> registry = BuiltInRegistries.BLOCK;

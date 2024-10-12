@@ -18,7 +18,6 @@ import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +40,7 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
     }
 
     @Override
-    public @NonNull List<ArmorTrimMaterialDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<ArmorTrimMaterialDataRegistryEntry> generate() {
         List<ArmorTrimMaterialDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<TrimMaterial> registry = this.registryAccess.lookupOrThrow(Registries.TRIM_MATERIAL);

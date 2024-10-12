@@ -19,7 +19,6 @@ import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -51,7 +50,7 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
     }
 
     @Override
-    public @NonNull List<WolfVariantDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<WolfVariantDataRegistryEntry> generate() {
         List<WolfVariantDataRegistryEntry> entries = new ArrayList<>();
 
         Registry<net.minecraft.world.entity.animal.WolfVariant> registry = this.registryAccess

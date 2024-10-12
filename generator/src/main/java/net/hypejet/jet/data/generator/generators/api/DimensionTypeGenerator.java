@@ -23,7 +23,6 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.util.valueproviders.WeightedListInt;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
     }
 
     @Override
-    public @NonNull List<DimensionTypeDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<DimensionTypeDataRegistryEntry> generate() {
         List<DimensionTypeDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.dimension.DimensionType> registry = this.registryAccess
                 .lookupOrThrow(Registries.DIMENSION_TYPE);

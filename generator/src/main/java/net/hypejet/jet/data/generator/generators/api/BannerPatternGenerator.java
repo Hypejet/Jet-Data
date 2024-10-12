@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
     }
 
     @Override
-    public @NonNull List<BannerPatternDataRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<BannerPatternDataRegistryEntry> generate() {
         List<BannerPatternDataRegistryEntry> entries = new ArrayList<>();
         Registry<net.minecraft.world.level.block.entity.BannerPattern> registry = this.registryAccess
                 .lookupOrThrow(Registries.BANNER_PATTERN);

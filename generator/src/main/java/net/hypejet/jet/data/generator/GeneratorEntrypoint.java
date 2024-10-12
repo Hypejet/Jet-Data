@@ -1,11 +1,11 @@
 package net.hypejet.jet.data.generator;
 
 import com.mojang.logging.LogUtils;
-import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
 import net.hypejet.jet.data.codecs.JetDataJson;
+import net.hypejet.jet.data.generator.constant.Constant;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.generators.api.ArmorTrimMaterialGenerator;
 import net.hypejet.jet.data.generator.generators.api.ArmorTrimPatternGenerator;
 import net.hypejet.jet.data.generator.generators.api.BannerPatternGenerator;
@@ -19,11 +19,10 @@ import net.hypejet.jet.data.generator.generators.server.BlockGenerator;
 import net.hypejet.jet.data.generator.generators.server.BlockStateGenerator;
 import net.hypejet.jet.data.generator.generators.server.DataPackGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
-import net.hypejet.jet.data.generator.util.JavaDocBuilder;
-import net.hypejet.jet.data.generator.util.JavaFileUtil;
 import net.hypejet.jet.data.model.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
+import net.minecraft.WorldVersion;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
@@ -44,11 +43,13 @@ import net.minecraft.world.level.validation.DirectoryValidator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 
-import javax.lang.model.element.Modifier;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +64,7 @@ public final class GeneratorEntrypoint {
 
     private static final String JSON_FILE_SUFFIX = ".json";
     private static final String UNALLOWED_CHARACTER_REPLACEMENT = "_";
+    private static final String JAVA_FILE_INDENT = "    "; // 4 spaces
 
     private GeneratorEntrypoint() {}
 
@@ -100,6 +102,23 @@ public final class GeneratorEntrypoint {
 
         RegistryAccess.Frozen frozenAccess = layeredAccess.compositeAccess();
 
+        Logger logger = LogUtils.getLogger();
+        logger.info("Starting generation...");
+
+        Set<ConstantContainer> serverConstantContainers = new HashSet<>();
+
+        WorldVersion versionInfo = SharedConstants.getCurrentVersion();
+        serverConstantContainers.add(new ConstantContainer(
+                "MinecraftVersionInfo",
+                CodeBlock.of("Represents a holder of Minecraft version information."),
+                List.of(new Constant("VERSION_NAME", String.class,
+                                CodeBlock.of("$S", versionInfo.getName()),
+                                CodeBlock.of("A name of the Minecraft version.")),
+                        new Constant("PROTOCOL_VERSION", int.class,
+                                CodeBlock.of("$L", versionInfo.getProtocolVersion()),
+                                CodeBlock.of("A numeric version of the Minecraft protocol.")))
+        ));
+
         Set<Generator<?>> apiGenerators = Set.of(new BiomeGenerator(frozenAccess),
                 new DimensionTypeGenerator(frozenAccess), new ChatTypeGenerator(frozenAccess),
                 new DamageTypeGenerator(frozenAccess), new WolfVariantGenerator(frozenAccess),
@@ -108,87 +127,61 @@ public final class GeneratorEntrypoint {
         Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(repository), new BlockStateGenerator(),
                 new BlockGenerator());
 
-        Logger logger = LogUtils.getLogger();
-        logger.info("Starting generation...");
-
-        generate(apiGenerators, logger, Path.of(args[0]), Path.of(args[1]), "api");
-        generate(serverGenerators, logger, Path.of(args[2]), Path.of(args[3]), "server");
+        generate(apiGenerators, Set.of(), Path.of(args[0]), Path.of(args[1]), "api");
+        generate(serverGenerators, serverConstantContainers, Path.of(args[2]), Path.of(args[3]), "server");
 
         logger.info("Generation complete!");
     }
 
-    private static void generate(@NonNull Set<Generator<?>> generators, @NonNull Logger logger,
-                                 @NonNull Path resourcesPath, @NonNull Path javaPath, @NonNull String subpackage) {
-        for (Generator<?> generator : generators) {
-            String generatorName = generator.getClass().getSimpleName();
+    private static void generate(@NonNull Collection<Generator<?>> generators,
+                                 @NonNull Collection<ConstantContainer> defaultConstantContainers,
+                                 @NonNull Path resourcePath, @NonNull Path javaPath, @NonNull String subpackage) {
+        Set<ConstantContainer> constantContainers = new HashSet<>(defaultConstantContainers);
+
+        generators.forEach(generator -> {
+            List<? extends DataRegistryEntry<?>> entries = generator.generate();
+            String json = JetDataJson.serialize(entries);
 
             try {
-                logger.info("Generating registry entries using \"{}\"...", generatorName);
-                List<? extends DataRegistryEntry<?>> entries = generator.generate(logger);
-
-                logger.info("Converting the generated registry entries to a string...");
-                String json = JetDataJson.serialize(entries);
-
-                logger.info("Writing the resource file...");
-                Files.createDirectories(resourcesPath);
+                Files.createDirectories(resourcePath);
 
                 String resourceFileName = generator.resourceFileName() + JSON_FILE_SUFFIX;
-                Path resourceFilePath = resourcesPath.resolve(resourceFileName);
+                Path resourceFilePath = resourcePath.resolve(resourceFileName);
 
                 Files.deleteIfExists(resourceFilePath);
                 Files.writeString(resourceFilePath, json, StandardOpenOption.CREATE);
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
+            }
 
-                String className = generator.className();
-                if (className != null) {
-                    logger.info("Creating a java class with identifiers of registry entries...");
+            String className = generator.className();
+            if (className == null) return;
 
-                    List<FieldSpec> specs = new ArrayList<>();
-                    for (DataRegistryEntry<?> entry : entries) {
-                        Key key = entry.key();
-                        specs.add(FieldSpec.builder(Key.class, createFieldName(key))
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer(CodeBlocks.key(entry.key()))
-                                .addJavadoc(JavaDocBuilder.builder()
-                                        .append(String.format("Represents an identifier of a \"%s\" registry entry.",
-                                                key.value()))
-                                        .appendEmpty()
-                                        .build())
-                                .build());
-                    }
+            String generatorName = generator.getClass().getSimpleName();
+            List<Constant> constants = new ArrayList<>();
 
-                    specs.addFirst(FieldSpec.builder(String.class, "SPEC_JSON_FILE_NAME")
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            .initializer(CodeBlocks.string(resourceFileName))
-                            .addJavadoc(JavaDocBuilder.builder()
-                                    .append(String.format("A name of a resource file that contains registry entries" +
-                                            " generated by a \"%s\" generator.", generatorName))
-                                    .build())
-                            .build());
+            entries.forEach(entry -> {
+                Key key = entry.key();
+                constants.add(new Constant(
+                        createFieldName(key), Key.class, CodeBlocks.key(key),
+                        CodeBlock.of(String.format("Represents an identifier of \"%s\" registry entry.", key.value()))
+                ));
+            });
 
-                    TypeSpec spec = TypeSpec.classBuilder(className)
-                            .addFields(specs)
-                            .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                            .addJavadoc(JavaDocBuilder.builder()
-                                    .append(String.format("Represents a holder of keys of registry entries" +
-                                            " generated by a \"%s\" generator.", generatorName))
-                                    .appendEmpty()
-                                    .build())
-                            .addMethod(MethodSpec.constructorBuilder()
-                                    .addModifiers(Modifier.PRIVATE)
-                                    .build())
-                            .build();
+            constantContainers.add(new ConstantContainer(className,
+                    CodeBlock.of(String.format("Represents a holder of keys of registry entries generated" +
+                            " by a \"%s\" generator.", generatorName)),
+                    List.copyOf(constants)));
+        });
 
-                    logger.info("Writing the created java class...");
-
-                    JavaFile file = JavaFile.builder("net.hypejet.jet.data.generated." + subpackage, spec)
-                            .indent(JavaFileUtil.INDENT)
-                            .build();
-                    file.writeTo(javaPath);
-                }
-
-                logger.info("Generation using \"{}\" has completed successfully!", generatorName);
-            } catch (Throwable throwable) {
-                logger.error("An error occurred during generation using: {}", generatorName, throwable);
+        for (ConstantContainer container : constantContainers) {
+            try {
+                JavaFile.builder("net.hypejet.jet.data.generated." + subpackage, container.toTypeSpec())
+                        .indent(JAVA_FILE_INDENT)
+                        .build()
+                        .writeTo(javaPath);
+            } catch (IOException exception) {
+                throw new RuntimeException(exception);
             }
         }
     }

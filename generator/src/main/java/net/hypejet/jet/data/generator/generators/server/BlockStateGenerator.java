@@ -7,12 +7,10 @@ import net.hypejet.jet.data.model.registry.registries.block.state.BlockStateRegi
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +37,7 @@ public final class BlockStateGenerator extends Generator<BlockState> {
     }
 
     @Override
-    public @NonNull List<BlockStateRegistryEntry> generate(@NonNull Logger logger) {
+    public @NonNull List<BlockStateRegistryEntry> generate() {
         List<BlockStateRegistryEntry> entries = new ArrayList<>();
 
         Registry<Block> registry = BuiltInRegistries.BLOCK;
