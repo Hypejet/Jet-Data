@@ -1,9 +1,10 @@
 package net.hypejet.jet.data.generator;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
-import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.constant.Constant;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.generators.api.ArmorTrimMaterialGenerator;
@@ -23,8 +24,8 @@ import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.WorldVersion;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.LayeredRegistryAccess;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.Bootstrap;
@@ -105,7 +106,7 @@ public final class GeneratorEntrypoint {
                 new PaintingVariantGenerator(registryAccess), new ArmorTrimPatternGenerator(registryAccess),
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess));
         Set<Generator<?>> serverGenerators = Set.of(new FeaturePackGenerator(packs), new BlockStateGenerator(),
-                new BlockGenerator());
+                new BlockGenerator(registryAccess));
 
         generate(apiGenerators, Set.of(), Path.of(args[0]), Path.of(args[1]), "api");
         generate(serverGenerators, serverConstantContainers, Path.of(args[2]), Path.of(args[3]), "server");
@@ -120,8 +121,12 @@ public final class GeneratorEntrypoint {
 
         generators.forEach(generator -> {
             List<? extends DataRegistryEntry<?>> entries = generator.generate();
-            String json = JetDataJson.serialize(entries);
 
+            Gson gson = generator.gson();
+            JsonArray array = new JsonArray();
+            entries.forEach(element -> array.add(gson.toJsonTree(element)));
+
+            String json = gson.toJson(array);
             String resourceFileName;
 
             try {
@@ -182,13 +187,14 @@ public final class GeneratorEntrypoint {
         List<PackResources> packResources = packRepository.openAllSelected();
         CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packResources);
 
-        List<HolderLookup.RegistryLookup<?>> registryLookups = TagLoader.buildUpdatedLookups(
-                access.getAccessForLoading(RegistryLayer.WORLDGEN),
-                TagLoader.loadTagsForExistingRegistries(resourceManager, access.getLayer(RegistryLayer.STATIC))
-        );
+        List<Registry.PendingTags<?>> pendingTags = TagLoader.loadTagsForExistingRegistries(resourceManager,
+                access.getLayer(RegistryLayer.STATIC));
+
+        // Apply pending tags that have not been already applied
+        pendingTags.forEach(Registry.PendingTags::apply);
 
         RegistryAccess.Frozen loadedRegistryData = RegistryDataLoader.load(resourceManager,
-                registryLookups,
+                TagLoader.buildUpdatedLookups(access.getAccessForLoading(RegistryLayer.WORLDGEN), pendingTags),
                 RegistryDataLoader.WORLDGEN_REGISTRIES);
         return access.replaceFrom(RegistryLayer.WORLDGEN, loadedRegistryData).compositeAccess();
     }

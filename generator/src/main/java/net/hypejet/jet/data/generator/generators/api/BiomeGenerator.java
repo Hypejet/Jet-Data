@@ -1,14 +1,15 @@
 package net.hypejet.jet.data.generator.generators.api;
 
 import com.mojang.serialization.DataResult;
+import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.BinaryTagAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
-import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
+import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.color.Color;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.biome.Biome;
-import net.hypejet.jet.data.model.api.registry.registries.biome.BiomeDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.modifier.GrassColorModifier;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.music.BiomeMusic;
@@ -19,7 +20,6 @@ import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.Bi
 import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.ParticleOptions;
@@ -29,9 +29,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.AmbientAdditionsSettings;
@@ -44,7 +42,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,35 +89,23 @@ public final class BiomeGenerator extends Generator<Biome> {
      * @since 1.0
      */
     public BiomeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("biomes", "Biomes", true);
+        super("biomes", "Biomes", true, JetDataJson.createBiomesGson());
         this.registryAccess = registryAccess;
     }
 
     @Override
-    public @NonNull List<BiomeDataRegistryEntry> generate() {
-        List<BiomeDataRegistryEntry> entries = new ArrayList<>();
-
+    public @NonNull List<DataRegistryEntry<Biome>> generate() {
         Registry<net.minecraft.world.level.biome.Biome> registry = this.registryAccess.lookupOrThrow(Registries.BIOME);
-        registry.forEach(biome -> {
-            ResourceKey<net.minecraft.world.level.biome.Biome> key = registry.getResourceKey(biome).orElseThrow();
-            KnownPack knownPack = registry.registrationInfo(key)
-                    .flatMap(RegistrationInfo::knownPackInfo)
-                    .orElseThrow();
-
+        return RegistryUtil.createEntries(registry, biome -> {
             Object climateSettings = ReflectionUtil.access(CLIMATE_SETTINGS_FIELD, biome, Field::get);
-            Biome convertedBiome = Biome.builder()
+            return Biome.builder()
                     .hasPrecipitation(biome.hasPrecipitation())
                     .temperature(biome.getBaseTemperature())
                     .temperatureModifier(temperatureModifier(climateSettings))
                     .downfall((float) ReflectionUtil.invoke(DOWNFALL_METHOD, climateSettings))
                     .effectSettings(biomeEffects(biome.getSpecialEffects()))
                     .build();
-
-            entries.add(new BiomeDataRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    convertedBiome, PackAdapter.convert(knownPack)));
         });
-
-        return List.copyOf(entries);
     }
 
     private @NonNull BiomeEffectSettings biomeEffects(@NonNull BiomeSpecialEffects effects) {

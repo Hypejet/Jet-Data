@@ -1,19 +1,16 @@
 package net.hypejet.jet.data.generator.generators.api;
 
+import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
-import net.hypejet.jet.data.generator.adapter.PackAdapter;
+import net.hypejet.jet.data.generator.util.RegistryUtil;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPattern;
-import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPatternDataRegistryEntry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,29 +32,16 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
      * @since 1.0
      */
     public BannerPatternGenerator(@NonNull RegistryAccess registryAccess) {
-        super("banner-patterns", "BannerPatterns", true);
+        super("banner-patterns", "BannerPatterns", true, JetDataJson.createBannerPatternsGson());
         this.registryAccess = registryAccess;
     }
 
     @Override
-    public @NonNull List<BannerPatternDataRegistryEntry> generate() {
-        List<BannerPatternDataRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DataRegistryEntry<BannerPattern>> generate() {
         Registry<net.minecraft.world.level.block.entity.BannerPattern> registry = this.registryAccess
                 .lookupOrThrow(Registries.BANNER_PATTERN);
-
-        registry.forEach(pattern -> {
-            ResourceKey<net.minecraft.world.level.block.entity.BannerPattern> key = registry.getResourceKey(pattern)
-                    .orElseThrow();
-            KnownPack knownPack = registry.registrationInfo(key)
-                    .flatMap(RegistrationInfo::knownPackInfo)
-                    .orElseThrow();
-
-            BannerPattern bannerPattern = new BannerPattern(IdentifierAdapter.convert(pattern.assetId()),
-                    pattern.translationKey());
-            entries.add(new BannerPatternDataRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    bannerPattern, PackAdapter.convert(knownPack)));
-        });
-
-        return List.copyOf(entries);
+        return RegistryUtil.createEntries(registry, pattern -> new BannerPattern(
+                IdentifierAdapter.convert(pattern.assetId()), pattern.translationKey()
+        ));
     }
 }

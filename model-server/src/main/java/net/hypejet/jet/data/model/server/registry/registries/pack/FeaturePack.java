@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.model.server.pack;
+package net.hypejet.jet.data.model.server.registry.registries.pack;
 
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.kyori.adventure.key.Key;

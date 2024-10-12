@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.server.pack.FeaturePack;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;

@@ -1,19 +1,16 @@
 package net.hypejet.jet.data.generator.generators.api;
 
+import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
-import net.hypejet.jet.data.generator.adapter.PackAdapter;
+import net.hypejet.jet.data.generator.util.RegistryUtil;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariant;
-import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariantDataRegistryEntry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,29 +32,16 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
      * @since 1.0
      */
     public PaintingVariantGenerator(@NonNull RegistryAccess registryAccess) {
-        super("painting-variants", "PaintingVariants", true);
+        super("painting-variants", "PaintingVariants", true, JetDataJson.createPaintingVariantsGson());
         this.registryAccess = registryAccess;
     }
 
     @Override
-    public @NonNull List<PaintingVariantDataRegistryEntry> generate() {
-        List<PaintingVariantDataRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DataRegistryEntry<PaintingVariant>> generate() {
         Registry<net.minecraft.world.entity.decoration.PaintingVariant> registry = this.registryAccess
                 .lookupOrThrow(Registries.PAINTING_VARIANT);
-
-        registry.forEach(variant -> {
-            ResourceKey<net.minecraft.world.entity.decoration.PaintingVariant> key = registry.getResourceKey(variant)
-                    .orElseThrow();
-            KnownPack knownPack = registry.registrationInfo(key)
-                    .flatMap(RegistrationInfo::knownPackInfo)
-                    .orElseThrow();
-
-            PaintingVariant convertedVariant = new PaintingVariant(IdentifierAdapter.convert(variant.assetId()),
-                    variant.height(), variant.width());
-            entries.add(new PaintingVariantDataRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    convertedVariant, PackAdapter.convert(knownPack)));
-        });
-
-        return List.copyOf(entries);
+        return RegistryUtil.createEntries(registry, variant -> new PaintingVariant(
+                IdentifierAdapter.convert(variant.assetId()), variant.height(), variant.width()
+        ));
     }
 }

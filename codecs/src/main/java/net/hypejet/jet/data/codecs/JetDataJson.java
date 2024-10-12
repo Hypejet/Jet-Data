@@ -2,8 +2,6 @@ package net.hypejet.jet.data.codecs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import net.hypejet.jet.data.codecs.binary.BinaryTagJsonCodec;
 import net.hypejet.jet.data.codecs.color.ColorJsonCodec;
 import net.hypejet.jet.data.codecs.key.KeyJsonCodec;
@@ -36,17 +34,12 @@ import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec
 import net.hypejet.jet.data.codecs.util.mapper.Mapper;
 import net.hypejet.jet.data.model.api.color.Color;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
-import net.hypejet.jet.data.model.server.pack.FeaturePack;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterial;
-import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterialDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPattern;
-import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPatternDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPattern;
-import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPatternDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.biome.Biome;
-import net.hypejet.jet.data.model.api.registry.registries.biome.BiomeDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.modifier.GrassColorModifier;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.music.BiomeMusic;
@@ -55,35 +48,24 @@ import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.Bi
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
 import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
-import net.hypejet.jet.data.model.server.registry.registries.block.Block;
-import net.hypejet.jet.data.model.server.registry.registries.block.BlockRegistryEntry;
-import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
-import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockStateRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.chat.ChatType;
-import net.hypejet.jet.data.model.api.registry.registries.chat.ChatTypeDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecorationParameter;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageType;
-import net.hypejet.jet.data.model.api.registry.registries.damage.DamageTypeDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DeathMessageType;
-import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePackRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
-import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionTypeDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariant;
-import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariantDataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
-import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariantDataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.block.Block;
+import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Represents a holder of a {@linkplain Gson gson} serializing {@linkplain DataRegistryEntry data registry entries}
@@ -94,157 +76,227 @@ import java.util.List;
  */
 public final class JetDataJson {
 
-    private static final Gson GSON = GsonComponentSerializer.gson().populator()
-            .apply(new GsonBuilder())
-            .setPrettyPrinting()
-            // Biomes
-            .registerTypeAdapter(BiomeMusic.class, new BiomeMusicJsonCodec())
-            .registerTypeAdapter(BiomeParticleSettings.class, new BiomeParticleSettingsJsonCodec())
-            .registerTypeAdapter(BiomeAdditionalSound.class, new BiomeAdditionalSoundJsonCodec())
-            .registerTypeAdapter(BiomeMoodSound.class, new BiomeMoodSoundJsonCodec())
-            .registerTypeAdapter(BiomeSoundEvent.class, new BiomeSoundEventJsonCodec())
-            .registerTypeAdapter(BiomeEffectSettings.class, new BiomeEffectSettingsJsonCodec())
-            .registerTypeAdapter(Biome.class, new BiomeJsonCodec())
-            .registerTypeAdapter(BiomeTemperatureModifier.class, new MapperJsonCodec<>(
-                    Mapper.builder(BiomeTemperatureModifier.class, String.class)
-                            .register(BiomeTemperatureModifier.NONE, "none")
-                            .register(BiomeTemperatureModifier.FROZEN, "frozen")
-                            .build()
-            ))
-            .registerTypeAdapter(GrassColorModifier.class, new MapperJsonCodec<>(
-                    Mapper.builder(GrassColorModifier.class, String.class)
-                            .register(GrassColorModifier.NONE, "none")
-                            .register(GrassColorModifier.DARK_FOREST, "dark-forest")
-                            .register(GrassColorModifier.SWAMP, "swamp")
-                            .build()
-            ))
-            .registerTypeAdapter(BiomeDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(Biome.class, BiomeDataRegistryEntry::new))
-            // Dimension types
-            .registerTypeAdapter(IntegerProvider.WeightedList.Entry.class, new WeightedListEntryJsonCodec())
-            .registerTypeAdapter(IntegerProvider.class, new IntegerProviderJsonCodec())
-            .registerTypeAdapter(DimensionType.class, new DimensionTypeJsonCodec())
-            .registerTypeAdapter(DimensionTypeDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(DimensionType.class, DimensionTypeDataRegistryEntry::new))
-            // Chat types
-            .registerTypeAdapter(ChatType.class, new ChatTypeJsonCodec())
-            .registerTypeAdapter(ChatDecoration.class, new ChatDecorationJsonCodec())
-            .registerTypeAdapter(ChatDecorationParameter.class, new ChatDecorationParameterJsonCodec())
-            .registerTypeAdapter(ChatTypeDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(ChatType.class, ChatTypeDataRegistryEntry::new))
-            // Damage types
-            .registerTypeAdapter(DamageType.class, new DamageTypeJsonCodec())
-            .registerTypeAdapter(DamageScalingType.class, new MapperJsonCodec<>(
-                    Mapper.builder(DamageScalingType.class, String.class)
-                            .register(DamageScalingType.NEVER, "never")
-                            .register(DamageScalingType.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
-                                    "when-caused-by-living-non-player")
-                            .register(DamageScalingType.ALWAYS, "always")
-                            .build()
-            ))
-            .registerTypeAdapter(DamageEffectType.class, new MapperJsonCodec<>(
-                    Mapper.builder(DamageEffectType.class, String.class)
-                            .register(DamageEffectType.HURT, "hurt")
-                            .register(DamageEffectType.THORNS, "thorns")
-                            .register(DamageEffectType.DROWNING, "drowning")
-                            .register(DamageEffectType.BURNING, "burning")
-                            .register(DamageEffectType.POKING, "poking")
-                            .register(DamageEffectType.FREEZING, "freezing")
-                            .build()
-            ))
-            .registerTypeAdapter(DeathMessageType.class, new MapperJsonCodec<>(
-                    Mapper.builder(DeathMessageType.class, String.class)
-                            .register(DeathMessageType.DEFAULT, "default")
-                            .register(DeathMessageType.FALL_VARIANTS, "full-variants")
-                            .register(DeathMessageType.INTENTIONAL_GAME_DESIGN, "intentional-game-design")
-                            .build()
-            ))
-            .registerTypeAdapter(DamageTypeDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(DamageType.class, DamageTypeDataRegistryEntry::new))
-            // Wolf variants
-            .registerTypeAdapter(WolfVariant.class, new WolfVariantJsonCodec())
-            .registerTypeAdapter(WolfBiomes.class, new WolfBiomesJsonCodec())
-            .registerTypeAdapter(WolfVariantDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(WolfVariant.class, WolfVariantDataRegistryEntry::new))
-            // Painting variants
-            .registerTypeAdapter(PaintingVariant.class, new PaintingVariantJsonCodec())
-            .registerTypeAdapter(PaintingVariantDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(PaintingVariant.class, PaintingVariantDataRegistryEntry::new))
-            // Armor trim patterns
-            .registerTypeAdapter(ArmorTrimPattern.class, new ArmorTrimPatternJsonCodec())
-            .registerTypeAdapter(ArmorTrimPatternDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(ArmorTrimPattern.class,
-                            ArmorTrimPatternDataRegistryEntry::new))
-            // Armor trim materials
-            .registerTypeAdapter(ArmorTrimMaterial.class, new ArmorTrimMaterialJsonCodec())
-            .registerTypeAdapter(ArmorTrimMaterialDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(ArmorTrimMaterial.class,
-                            ArmorTrimMaterialDataRegistryEntry::new))
-            // Banner patterns
-            .registerTypeAdapter(BannerPattern.class, new BannerPatternJsonCodec())
-            .registerTypeAdapter(BannerPatternDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(BannerPattern.class, BannerPatternDataRegistryEntry::new))
-            // Packs
-            .registerTypeAdapter(PackInfo.class, new PackInfoCodec())
-            .registerTypeAdapter(FeaturePack.class, new FeaturePackJsonCodec())
-            .registerTypeAdapter(FeaturePackRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(FeaturePack.class, FeaturePackRegistryEntry::new))
-            // Blocks
-            .registerTypeAdapter(Block.class, new BlockJsonCodec())
-            .registerTypeAdapter(BlockRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(Block.class, BlockRegistryEntry::new))
-            .registerTypeAdapter(BlockState.class, new BlockStateJsonCodec())
-            .registerTypeAdapter(BlockStateRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(BlockState.class, BlockStateRegistryEntry::new))
-            // Misc type adapters
-            .registerTypeAdapter(Color.class, new ColorJsonCodec())
-            .registerTypeAdapter(Key.class, new KeyJsonCodec())
-            .registerTypeAdapter(BinaryTag.class, new BinaryTagJsonCodec())
-            .create();
-
     private JetDataJson() {}
 
     /**
-     * Deserializes {@linkplain DataRegistryEntry data registry entries} from a {@linkplain String string}.
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain Biome biomes}.
      *
-     * <p>The deserialized registry entries keep their order, which they were serialized with.</p>
-     *
-     * @param serialized the string
-     * @param entryClass a class of type of the registry entries
-     * @return the deserialized registry entries
-     * @param <E> a type of the registry entries
+     * @return the gson instance
      * @since 1.0
      */
-    public static <E extends DataRegistryEntry<?>> @NonNull List<E> deserialize(@NonNull String serialized,
-                                                                                @NonNull Class<E> entryClass) {
-        JsonArray array = GSON.fromJson(serialized, JsonArray.class);
-        List<E> entries = new ArrayList<>();
-        for (JsonElement element : array)
-            entries.add(GSON.fromJson(element, entryClass));
-        return List.copyOf(entries);
+    public static @NonNull Gson createBiomesGson() {
+        return createBuilder()
+                .registerTypeAdapter(BiomeMusic.class, new BiomeMusicJsonCodec())
+                .registerTypeAdapter(BiomeParticleSettings.class, new BiomeParticleSettingsJsonCodec())
+                .registerTypeAdapter(BiomeAdditionalSound.class, new BiomeAdditionalSoundJsonCodec())
+                .registerTypeAdapter(BiomeMoodSound.class, new BiomeMoodSoundJsonCodec())
+                .registerTypeAdapter(BiomeSoundEvent.class, new BiomeSoundEventJsonCodec())
+                .registerTypeAdapter(BiomeEffectSettings.class, new BiomeEffectSettingsJsonCodec())
+                .registerTypeAdapter(Biome.class, new BiomeJsonCodec())
+                .registerTypeAdapter(BiomeTemperatureModifier.class, new MapperJsonCodec<>(
+                        Mapper.builder(BiomeTemperatureModifier.class, String.class)
+                                .register(BiomeTemperatureModifier.NONE, "none")
+                                .register(BiomeTemperatureModifier.FROZEN, "frozen")
+                                .build()
+                ))
+                .registerTypeAdapter(GrassColorModifier.class, new MapperJsonCodec<>(
+                        Mapper.builder(GrassColorModifier.class, String.class)
+                                .register(GrassColorModifier.NONE, "none")
+                                .register(GrassColorModifier.DARK_FOREST, "dark-forest")
+                                .register(GrassColorModifier.SWAMP, "swamp")
+                                .build()
+                ))
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Biome.class))
+                .create();
     }
 
     /**
-     * Serializes {@linkplain DataRegistryEntry data registry entries} to a {@linkplain String string}.
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain DimensionType dimension
+     * types}.
      *
-     * @param entries the registry entries
-     * @return the string
+     * @return the gson instance
      * @since 1.0
      */
-    public static @NonNull String serialize(@NonNull Collection<? extends DataRegistryEntry<?>> entries) {
-        JsonArray array = new JsonArray();
-        for (DataRegistryEntry<?> entry : entries)
-            array.add(GSON.toJsonTree(entry));
-        return GSON.toJson(array);
+    public static @NonNull Gson createDimensionTypesGson() {
+        return createBuilder()
+                .registerTypeAdapter(IntegerProvider.WeightedList.Entry.class, new WeightedListEntryJsonCodec())
+                .registerTypeAdapter(IntegerProvider.class, new IntegerProviderJsonCodec())
+                .registerTypeAdapter(DimensionType.class, new DimensionTypeJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(DimensionType.class))
+                .create();
     }
 
     /**
-     * Gets an instance of {@linkplain Gson gson} which serializes and deserializes Jet data objects.
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain ChatType chat types}.
      *
-     * @return the instance
+     * @return the gson instance
      * @since 1.0
      */
-    public static @NonNull Gson gson() {
-        return GSON;
+    public static @NonNull Gson createChatTypesGson() {
+        return createBuilder()
+                .registerTypeAdapter(ChatType.class, new ChatTypeJsonCodec())
+                .registerTypeAdapter(ChatDecoration.class, new ChatDecorationJsonCodec())
+                .registerTypeAdapter(ChatDecorationParameter.class, new ChatDecorationParameterJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(ChatType.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain DamageType damage
+     * types}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createDamageTypesGson() {
+        return createBuilder()
+                .registerTypeAdapter(DamageType.class, new DamageTypeJsonCodec())
+                .registerTypeAdapter(DamageScalingType.class, new MapperJsonCodec<>(
+                        Mapper.builder(DamageScalingType.class, String.class)
+                                .register(DamageScalingType.NEVER, "never")
+                                .register(DamageScalingType.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
+                                        "when-caused-by-living-non-player")
+                                .register(DamageScalingType.ALWAYS, "always")
+                                .build()
+                ))
+                .registerTypeAdapter(DamageEffectType.class, new MapperJsonCodec<>(
+                        Mapper.builder(DamageEffectType.class, String.class)
+                                .register(DamageEffectType.HURT, "hurt")
+                                .register(DamageEffectType.THORNS, "thorns")
+                                .register(DamageEffectType.DROWNING, "drowning")
+                                .register(DamageEffectType.BURNING, "burning")
+                                .register(DamageEffectType.POKING, "poking")
+                                .register(DamageEffectType.FREEZING, "freezing")
+                                .build()
+                ))
+                .registerTypeAdapter(DeathMessageType.class, new MapperJsonCodec<>(
+                        Mapper.builder(DeathMessageType.class, String.class)
+                                .register(DeathMessageType.DEFAULT, "default")
+                                .register(DeathMessageType.FALL_VARIANTS, "full-variants")
+                                .register(DeathMessageType.INTENTIONAL_GAME_DESIGN, "intentional-game-design")
+                                .build()
+                ))
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(DamageType.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain WolfVariant wolf
+     * variants}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createWolfVariantsGson() {
+        return createBuilder()
+                .registerTypeAdapter(WolfVariant.class, new WolfVariantJsonCodec())
+                .registerTypeAdapter(WolfBiomes.class, new WolfBiomesJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(WolfVariant.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain PaintingVariant
+     * painting variants}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createPaintingVariantsGson() {
+        return createBuilder()
+                .registerTypeAdapter(PaintingVariant.class, new PaintingVariantJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(PaintingVariant.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain ArmorTrimPattern armor
+     * trim patterns}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createTrimPatternsGson() {
+        return createBuilder()
+                .registerTypeAdapter(ArmorTrimPattern.class, new ArmorTrimPatternJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(ArmorTrimPattern.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain ArmorTrimMaterial armor
+     * trim materials}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createTrimMaterialsGson() {
+        return createBuilder()
+                .registerTypeAdapter(ArmorTrimMaterial.class, new ArmorTrimMaterialJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(ArmorTrimMaterial.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain BannerPattern banner
+     * patterns}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createBannerPatternsGson() {
+        return createBuilder()
+                .registerTypeAdapter(BannerPattern.class, new BannerPatternJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(BannerPattern.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain Block blocks}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createBlocksGson() {
+        return createBuilder()
+                .registerTypeAdapter(Block.class, new BlockJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Block.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain BlockState block
+     * states}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createBlockStatesGson() {
+        return createBuilder()
+                .registerTypeAdapter(BlockState.class, new BlockStateJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(BlockState.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes common model objects.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createPlainGson() {
+        return createBuilder().create();
+    }
+
+    private static @NonNull GsonBuilder createBuilder() {
+        return GsonComponentSerializer.gson().populator()
+                .apply(new GsonBuilder())
+                .setPrettyPrinting()
+                .registerTypeAdapter(Color.class, new ColorJsonCodec())
+                .registerTypeAdapter(Key.class, new KeyJsonCodec())
+                .registerTypeAdapter(BinaryTag.class, new BinaryTagJsonCodec())
+                .registerTypeAdapter(PackInfo.class, new PackInfoCodec())
+                .registerTypeAdapter(FeaturePack.class, new FeaturePackJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(FeaturePack.class));
     }
 }

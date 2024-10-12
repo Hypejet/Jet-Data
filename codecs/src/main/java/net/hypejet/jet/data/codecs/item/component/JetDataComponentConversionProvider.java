@@ -38,13 +38,13 @@ public final class JetDataComponentConversionProvider implements Provider {
             Conversion.convert(
                     JetDataComponentValue.class,
                     GsonDataComponentValue.class,
-                    (key, value) -> GsonDataComponentValue.gsonDataComponentValue(JetDataJson.gson()
+                    (key, value) -> GsonDataComponentValue.gsonDataComponentValue(JetDataJson.createPlainGson()
                             .toJsonTree(value.binaryTag(), BinaryTag.class))
             ),
             Conversion.convert(
                     GsonDataComponentValue.class,
                     JetDataComponentValue.class,
-                    (key, value) -> new JetDataComponentValue(JetDataJson.gson()
+                    (key, value) -> new JetDataComponentValue(JetDataJson.createPlainGson()
                             .fromJson(value.element(), BinaryTag.class))
             )
     );

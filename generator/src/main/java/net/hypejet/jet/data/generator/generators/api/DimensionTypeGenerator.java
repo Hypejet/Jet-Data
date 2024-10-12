@@ -1,18 +1,16 @@
 package net.hypejet.jet.data.generator.generators.api;
 
+import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
-import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
+import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
-import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionTypeDataRegistryEntry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.repository.KnownPack;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.valueproviders.BiasedToBottomInt;
@@ -58,28 +56,18 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
      * @since 1.0
      */
     public DimensionTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("dimension-types", "DimensionTypes", true);
+        super("dimension-types", "DimensionTypes", true, JetDataJson.createDimensionTypesGson());
         this.registryAccess = registryAccess;
     }
 
     @Override
-    public @NonNull List<DimensionTypeDataRegistryEntry> generate() {
-        List<DimensionTypeDataRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DataRegistryEntry<DimensionType>> generate() {
         Registry<net.minecraft.world.level.dimension.DimensionType> registry = this.registryAccess
                 .lookupOrThrow(Registries.DIMENSION_TYPE);
-
-        registry.forEach(dimensionType -> {
-            ResourceKey<net.minecraft.world.level.dimension.DimensionType> key = registry.getResourceKey(dimensionType)
-                    .orElseThrow();
-
+        return RegistryUtil.createEntries(registry, dimensionType -> {
             OptionalLong optionalFixedTime = dimensionType.fixedTime();
             Long fixedTime = optionalFixedTime.isPresent() ? optionalFixedTime.getAsLong() : null;
-
-            KnownPack knownPack = registry.registrationInfo(key)
-                    .flatMap(RegistrationInfo::knownPackInfo)
-                    .orElseThrow();
-
-            DimensionType convertedDimensionType = DimensionType.builder()
+            return DimensionType.builder()
                     .fixedTime(fixedTime)
                     .hasSkylight(dimensionType.hasSkyLight())
                     .hasCeiling(dimensionType.hasCeiling())
@@ -99,12 +87,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
                     .monsterSpawnLightLevel(integerProvider(dimensionType.monsterSpawnLightTest()))
                     .monsterSpawnBlockLightLimit(dimensionType.monsterSpawnBlockLightLimit())
                     .build();
-
-            entries.add(new DimensionTypeDataRegistryEntry(IdentifierAdapter.convert(key.location()),
-                    convertedDimensionType, PackAdapter.convert(knownPack)));
         });
-
-        return List.copyOf(entries);
     }
 
     private static @NonNull IntegerProvider integerProvider(@NonNull IntProvider provider) {

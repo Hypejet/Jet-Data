@@ -1,11 +1,12 @@
 package net.hypejet.jet.data.generator.generators.server;
 
+import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.PackAdapter;
-import net.hypejet.jet.data.model.server.pack.FeaturePack;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
-import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePackRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.repository.KnownPack;
@@ -39,13 +40,13 @@ public final class FeaturePackGenerator extends Generator<FeaturePack> {
      * @since 1.0
      */
     public FeaturePackGenerator(@NonNull PackRepository packRepository) {
-        super("feature-packs", "FeaturePacks", true);
+        super("feature-packs", "FeaturePacks", true, JetDataJson.createPlainGson());
         this.packRepository = packRepository;
     }
 
     @Override
-    public @NonNull List<FeaturePackRegistryEntry> generate() {
-        List<FeaturePackRegistryEntry> entries = new ArrayList<>();
+    public @NonNull List<DataRegistryEntry<FeaturePack>> generate() {
+        List<DataRegistryEntry<FeaturePack>> entries = new ArrayList<>();
 
         for (Pack pack : this.packRepository.getAvailablePacks()) {
             KnownPack knownPack = pack.location().knownPackInfo().orElseThrow();
@@ -57,7 +58,7 @@ public final class FeaturePackGenerator extends Generator<FeaturePack> {
             PackInfo packInfo = PackAdapter.convert(knownPack);
             FeaturePack featurePack = new FeaturePack(packInfo, Set.copyOf(requiredFeatures));
 
-            entries.add(new FeaturePackRegistryEntry(packInfo.key(), featurePack, null));
+            entries.add(new DataRegistryEntry<>(packInfo.key(), featurePack, null, null));
         }
 
         return List.copyOf(entries);
