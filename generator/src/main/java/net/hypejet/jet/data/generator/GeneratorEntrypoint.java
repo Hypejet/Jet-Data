@@ -17,9 +17,9 @@ import net.hypejet.jet.data.generator.generators.api.PaintingVariantGenerator;
 import net.hypejet.jet.data.generator.generators.api.WolfVariantGenerator;
 import net.hypejet.jet.data.generator.generators.server.BlockGenerator;
 import net.hypejet.jet.data.generator.generators.server.BlockStateGenerator;
-import net.hypejet.jet.data.generator.generators.server.DataPackGenerator;
+import net.hypejet.jet.data.generator.generators.server.FeaturePackGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
-import net.hypejet.jet.data.model.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.WorldVersion;
@@ -104,7 +104,7 @@ public final class GeneratorEntrypoint {
                 new DamageTypeGenerator(registryAccess), new WolfVariantGenerator(registryAccess),
                 new PaintingVariantGenerator(registryAccess), new ArmorTrimPatternGenerator(registryAccess),
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess));
-        Set<Generator<?>> serverGenerators = Set.of(new DataPackGenerator(packs), new BlockStateGenerator(),
+        Set<Generator<?>> serverGenerators = Set.of(new FeaturePackGenerator(packs), new BlockStateGenerator(),
                 new BlockGenerator());
 
         generate(apiGenerators, Set.of(), Path.of(args[0]), Path.of(args[1]), "api");

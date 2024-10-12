@@ -1,6 +1,6 @@
 package net.hypejet.jet.data.generator.adapter;
 
-import net.hypejet.jet.data.model.utils.NullabilityUtil;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagType;
 import net.kyori.adventure.nbt.BinaryTagTypes;

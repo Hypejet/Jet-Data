@@ -7,7 +7,7 @@ val generatorProject = project(":jet-data-generator")
 dependencies {
     compileOnly(libs.adventureApi)
     compileOnly(libs.checkerFrameworkQual)
-    compileOnly(project(":jet-data-model"))
+    compileOnly(project(":jet-data-model-api"))
 }
 
 publishing {

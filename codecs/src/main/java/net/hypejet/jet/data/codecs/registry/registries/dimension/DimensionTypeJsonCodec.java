@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.number.IntegerProvider;
-import net.hypejet.jet.data.model.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.data.model.api.number.IntegerProvider;
+import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;

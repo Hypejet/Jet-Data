@@ -6,14 +6,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.color.Color;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.modifier.GrassColorModifier;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.music.BiomeMusic;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.particle.BiomeParticleSettings;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeAdditionalSound;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeMoodSound;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.color.Color;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.modifier.GrassColorModifier;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.music.BiomeMusic;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.particle.BiomeParticleSettings;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeAdditionalSound;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
 
 import java.lang.reflect.Type;
 

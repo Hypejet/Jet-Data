@@ -1,12 +1,12 @@
 package net.hypejet.jet.data.generator.adapter;
 
-import net.hypejet.jet.data.model.pack.info.PackInfo;
+import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.kyori.adventure.key.Key;
 import net.minecraft.server.packs.repository.KnownPack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Represents something that converts Minecraft packs into Jet data packs.
+ * Represents something that converts Minecraft packs into Jet feature packs.
  *
  * @since 1.0
  * @author Codestech

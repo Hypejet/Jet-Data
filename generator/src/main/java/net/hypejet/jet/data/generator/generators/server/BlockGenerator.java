@@ -2,8 +2,8 @@ package net.hypejet.jet.data.generator.generators.server;
 
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
-import net.hypejet.jet.data.model.registry.registries.block.Block;
-import net.hypejet.jet.data.model.registry.registries.block.BlockRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.block.Block;
+import net.hypejet.jet.data.model.server.registry.registries.block.BlockRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

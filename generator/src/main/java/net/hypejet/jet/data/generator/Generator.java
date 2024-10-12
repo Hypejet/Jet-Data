@@ -1,6 +1,6 @@
 package net.hypejet.jet.data.generator;
 
-import net.hypejet.jet.data.model.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 

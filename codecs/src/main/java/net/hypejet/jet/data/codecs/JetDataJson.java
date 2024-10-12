@@ -8,8 +8,8 @@ import net.hypejet.jet.data.codecs.binary.BinaryTagJsonCodec;
 import net.hypejet.jet.data.codecs.color.ColorJsonCodec;
 import net.hypejet.jet.data.codecs.key.KeyJsonCodec;
 import net.hypejet.jet.data.codecs.mapper.MapperJsonCodec;
-import net.hypejet.jet.data.codecs.pack.DataPackJsonCodec;
-import net.hypejet.jet.data.codecs.pack.info.PackInfoCodec;
+import net.hypejet.jet.data.codecs.pack.FeaturePackJsonCodec;
+import net.hypejet.jet.data.codecs.pack.PackInfoCodec;
 import net.hypejet.jet.data.codecs.registry.RegistryEntryDataJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.armor.material.ArmorTrimMaterialJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.armor.pattern.ArmorTrimPatternJsonCodec;
@@ -34,48 +34,48 @@ import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJ
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
 import net.hypejet.jet.data.codecs.util.mapper.Mapper;
-import net.hypejet.jet.data.model.color.Color;
-import net.hypejet.jet.data.model.number.IntegerProvider;
-import net.hypejet.jet.data.model.pack.DataPack;
-import net.hypejet.jet.data.model.pack.info.PackInfo;
-import net.hypejet.jet.data.model.registry.DataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterial;
-import net.hypejet.jet.data.model.registry.registries.armor.material.ArmorTrimMaterialDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPattern;
-import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPatternDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.banner.BannerPattern;
-import net.hypejet.jet.data.model.registry.registries.banner.BannerPatternDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.biome.Biome;
-import net.hypejet.jet.data.model.registry.registries.biome.BiomeDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.modifier.GrassColorModifier;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.music.BiomeMusic;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.particle.BiomeParticleSettings;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeAdditionalSound;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeMoodSound;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeSoundEvent;
-import net.hypejet.jet.data.model.registry.registries.biome.temperature.BiomeTemperatureModifier;
-import net.hypejet.jet.data.model.registry.registries.block.Block;
-import net.hypejet.jet.data.model.registry.registries.block.BlockRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.block.state.BlockState;
-import net.hypejet.jet.data.model.registry.registries.block.state.BlockStateRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.chat.ChatType;
-import net.hypejet.jet.data.model.registry.registries.chat.ChatTypeDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.chat.decoration.ChatDecoration;
-import net.hypejet.jet.data.model.registry.registries.chat.decoration.ChatDecorationParameter;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageEffectType;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageScalingType;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageType;
-import net.hypejet.jet.data.model.registry.registries.damage.DamageTypeDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.damage.DeathMessageType;
-import net.hypejet.jet.data.model.registry.registries.datapack.DataPackDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.dimension.DimensionType;
-import net.hypejet.jet.data.model.registry.registries.dimension.DimensionTypeDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariant;
-import net.hypejet.jet.data.model.registry.registries.painting.PaintingVariantDataRegistryEntry;
-import net.hypejet.jet.data.model.registry.registries.wolf.WolfBiomes;
-import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariant;
-import net.hypejet.jet.data.model.registry.registries.wolf.WolfVariantDataRegistryEntry;
+import net.hypejet.jet.data.model.api.color.Color;
+import net.hypejet.jet.data.model.api.number.IntegerProvider;
+import net.hypejet.jet.data.model.server.pack.FeaturePack;
+import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterial;
+import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterialDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPattern;
+import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPatternDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPattern;
+import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPatternDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.biome.Biome;
+import net.hypejet.jet.data.model.api.registry.registries.biome.BiomeDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.modifier.GrassColorModifier;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.music.BiomeMusic;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.particle.BiomeParticleSettings;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeAdditionalSound;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.data.model.server.registry.registries.block.Block;
+import net.hypejet.jet.data.model.server.registry.registries.block.BlockRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockStateRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.chat.ChatType;
+import net.hypejet.jet.data.model.api.registry.registries.chat.ChatTypeDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecoration;
+import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecorationParameter;
+import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectType;
+import net.hypejet.jet.data.model.api.registry.registries.damage.DamageScalingType;
+import net.hypejet.jet.data.model.api.registry.registries.damage.DamageType;
+import net.hypejet.jet.data.model.api.registry.registries.damage.DamageTypeDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.damage.DeathMessageType;
+import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePackRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionTypeDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariant;
+import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariantDataRegistryEntry;
+import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
+import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
+import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariantDataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -186,12 +186,9 @@ public final class JetDataJson {
                     new RegistryEntryDataJsonCodec<>(BannerPattern.class, BannerPatternDataRegistryEntry::new))
             // Packs
             .registerTypeAdapter(PackInfo.class, new PackInfoCodec())
-            .registerTypeAdapter(DataPack.class, new DataPackJsonCodec())
-            .registerTypeAdapter(DataPackDataRegistryEntry.class,
-                    new RegistryEntryDataJsonCodec<>(
-                            DataPack.class,
-                            (key, value, knownPackInfo) -> new DataPackDataRegistryEntry(key, value)
-                    ))
+            .registerTypeAdapter(FeaturePack.class, new FeaturePackJsonCodec())
+            .registerTypeAdapter(FeaturePackRegistryEntry.class,
+                    new RegistryEntryDataJsonCodec<>(FeaturePack.class, FeaturePackRegistryEntry::new))
             // Blocks
             .registerTypeAdapter(Block.class, new BlockJsonCodec())
             .registerTypeAdapter(BlockRegistryEntry.class,

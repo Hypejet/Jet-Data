@@ -3,7 +3,7 @@ package net.hypejet.jet.data.generator.constant;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.TypeSpec;
-import net.hypejet.jet.data.model.utils.NullabilityUtil;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.lang.model.element.Modifier;

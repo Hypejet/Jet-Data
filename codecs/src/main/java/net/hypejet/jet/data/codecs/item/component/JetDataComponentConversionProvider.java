@@ -1,7 +1,7 @@
 package net.hypejet.jet.data.codecs.item.component;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
-import net.hypejet.jet.data.model.component.JetDataComponentValue;
+import net.hypejet.jet.data.model.api.component.JetDataComponentValue;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.event.DataComponentValueConverterRegistry.Conversion;

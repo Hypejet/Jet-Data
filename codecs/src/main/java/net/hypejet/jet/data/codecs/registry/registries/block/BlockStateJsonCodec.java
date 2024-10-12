@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;

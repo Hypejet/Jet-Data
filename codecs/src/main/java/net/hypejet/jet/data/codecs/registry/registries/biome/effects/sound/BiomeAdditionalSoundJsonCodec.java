@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeAdditionalSound;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeAdditionalSound;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
 
 import java.lang.reflect.Type;
 

@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.pack.info.PackInfo;
-import net.hypejet.jet.data.model.registry.DataRegistryEntry;
-import net.hypejet.jet.data.model.utils.NullabilityUtil;
+import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -90,7 +90,7 @@ public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<DataRegist
          *
          * @param key an identifier that the data registry entry should have
          * @param value a value that the data registry entry should have
-         * @param knownPackInfo an information of a data pack, which enables the data registry entry
+         * @param knownPackInfo an information of a feature pack, which enables the data registry entry
          * @return the data registry entry created
          * @since 1.0
          */

@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":jet-data-model"))
+    compileOnly(project(":jet-data-model-api"))
+    compileOnly(project(":jet-data-model-server"))
     compileOnly(libs.gson)
     compileOnly(libs.bundles.adventure)
     compileOnly(libs.checkerFrameworkQual)

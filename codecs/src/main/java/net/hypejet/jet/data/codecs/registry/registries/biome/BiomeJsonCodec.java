@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.registry.registries.biome.Biome;
-import net.hypejet.jet.data.model.registry.registries.biome.effects.BiomeEffectSettings;
-import net.hypejet.jet.data.model.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.data.model.api.registry.registries.biome.Biome;
+import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
+import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
 
 import java.lang.reflect.Type;
 

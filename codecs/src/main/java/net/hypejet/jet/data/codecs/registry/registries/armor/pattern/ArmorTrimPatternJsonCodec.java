@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.registry.registries.armor.pattern.ArmorTrimPattern;
+import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPattern;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 
