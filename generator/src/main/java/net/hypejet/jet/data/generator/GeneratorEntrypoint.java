@@ -84,7 +84,7 @@ public final class GeneratorEntrypoint {
                         new Constant("PROTOCOL_VERSION", int.class,
                                 CodeBlock.of(String.valueOf(versionInfo.getProtocolVersion())),
                                 CodeBlock.of("A numeric version of the Minecraft protocol."))),
-                ConstantContainer.JavaFileDestination.API
+                ConstantContainer.JavaFileDestination.SERVER
         ));
 
         PackRepository packs = new PackRepository(new ServerPacksSource(new DirectoryValidator(path -> false)));
