@@ -1,8 +1,9 @@
-package net.hypejet.jet.data.generator.generators.server;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.server.registry.registries.block.Block;
@@ -35,7 +36,9 @@ public final class BlockGenerator extends Generator<Block> {
      * @since 1.0
      */
     public BlockGenerator(@NonNull RegistryAccess registryAccess) {
-        super("blocks", "Blocks", true, JetDataJson.createBlocksGson());
+        super(new GeneratorName("Block", "Generator"),
+                new ResourceFileSettings("blocks", JetDataJson.createBlocksGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "Blocks"));
         this.registryAccess = registryAccess;
     }
 

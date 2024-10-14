@@ -1,7 +1,8 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectType;
@@ -34,7 +35,9 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
      * @since 1.0
      */
     public DamageTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("damage-types", "DamageTypes", true, JetDataJson.createDamageTypesGson());
+        super(new GeneratorName("Damage", "Type", "Generator"),
+                new ResourceFileSettings("damage-types", JetDataJson.createDamageTypesGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "DamageTypes"));
         this.registryAccess = registryAccess;
     }
 

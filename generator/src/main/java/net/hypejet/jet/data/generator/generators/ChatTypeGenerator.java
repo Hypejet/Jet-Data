@@ -1,8 +1,9 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.StyleAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.chat.ChatType;
@@ -36,7 +37,9 @@ public final class ChatTypeGenerator extends Generator<ChatType> {
      * @since 1.0
      */
     public ChatTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("chat-types", "ChatTypes", true, JetDataJson.createChatTypesGson());
+        super(new GeneratorName("Chat", "Type", "Generator"),
+                new ResourceFileSettings("chat-types", JetDataJson.createChatTypesGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "ChatTypes"));
         this.registryAccess = registryAccess;
     }
 

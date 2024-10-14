@@ -1,9 +1,10 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.ComponentAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterial;
@@ -31,7 +32,9 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
      * @since 1.0
      */
     public ArmorTrimMaterialGenerator(@NonNull RegistryAccess registryAccess) {
-        super("armor-trim-materials", "ArmorTrimMaterials", true, JetDataJson.createTrimMaterialsGson());
+        super(new GeneratorName("Armor", "Trim", "Material", "Generator"),
+                new ResourceFileSettings("armor-trim-materials", JetDataJson.createTrimMaterialsGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "ArmorTrimMaterials"));
         this.registryAccess = registryAccess;
     }
 

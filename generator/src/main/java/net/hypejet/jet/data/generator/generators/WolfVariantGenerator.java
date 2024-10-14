@@ -1,9 +1,10 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import com.mojang.datafixers.util.Either;
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
@@ -41,7 +42,9 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
      * @since 1.0
      */
     public WolfVariantGenerator(@NonNull RegistryAccess registryAccess) {
-        super("wolf-variants", "WolfVariants", true, JetDataJson.createWolfVariantsGson());
+        super(new GeneratorName("Wolf", "Variant", "Generator"),
+                new ResourceFileSettings("wolf-variants", JetDataJson.createWolfVariantsGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "WolfVariants"));
         this.registryAccess = registryAccess;
     }
 

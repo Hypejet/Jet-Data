@@ -1,10 +1,11 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import com.mojang.serialization.DataResult;
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.BinaryTagAdapter;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.color.Color;
@@ -89,7 +90,9 @@ public final class BiomeGenerator extends Generator<Biome> {
      * @since 1.0
      */
     public BiomeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("biomes", "Biomes", true, JetDataJson.createBiomesGson());
+        super(new GeneratorName("Biome", "Generator"),
+                new ResourceFileSettings("biomes", JetDataJson.createBiomesGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "Biomes"));
         this.registryAccess = registryAccess;
     }
 

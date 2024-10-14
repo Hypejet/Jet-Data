@@ -1,9 +1,10 @@
-package net.hypejet.jet.data.generator.generators.server;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.PackAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
@@ -40,7 +41,9 @@ public final class FeaturePackGenerator extends Generator<FeaturePack> {
      * @since 1.0
      */
     public FeaturePackGenerator(@NonNull PackRepository packRepository) {
-        super("feature-packs", "FeaturePacks", true, JetDataJson.createPlainGson());
+        super(new GeneratorName("Feature", "Pack", "Generator"),
+                new ResourceFileSettings("feature-packs", JetDataJson.createPlainGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "FeaturePacks"));
         this.packRepository = packRepository;
     }
 

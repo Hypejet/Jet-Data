@@ -1,8 +1,9 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.painting.PaintingVariant;
@@ -32,7 +33,9 @@ public final class PaintingVariantGenerator extends Generator<PaintingVariant> {
      * @since 1.0
      */
     public PaintingVariantGenerator(@NonNull RegistryAccess registryAccess) {
-        super("painting-variants", "PaintingVariants", true, JetDataJson.createPaintingVariantsGson());
+        super(new GeneratorName("Painting", "Variant", "Generator"),
+                new ResourceFileSettings("painting-variants", JetDataJson.createPaintingVariantsGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "PaintingVariants"));
         this.registryAccess = registryAccess;
     }
 

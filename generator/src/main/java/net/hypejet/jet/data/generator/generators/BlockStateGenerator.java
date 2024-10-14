@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.generator.generators.server;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
@@ -33,7 +33,9 @@ public final class BlockStateGenerator extends Generator<BlockState> {
      * @since 1.0
      */
     public BlockStateGenerator() {
-        super("block-states", "BlockStates", false, JetDataJson.createBlockStatesGson());
+        super(new GeneratorName("Block", "State", "Generator"),
+                new ResourceFileSettings("block-states", JetDataJson.createBlockStatesGson()),
+                null);
     }
 
     @Override

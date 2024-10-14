@@ -1,8 +1,9 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
@@ -56,7 +57,9 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
      * @since 1.0
      */
     public DimensionTypeGenerator(@NonNull RegistryAccess registryAccess) {
-        super("dimension-types", "DimensionTypes", true, JetDataJson.createDimensionTypesGson());
+        super(new GeneratorName("Dimension", "Type", "Generator"),
+                new ResourceFileSettings("dimension-types", JetDataJson.createDimensionTypesGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "DimensionTypes"));
         this.registryAccess = registryAccess;
     }
 

@@ -1,8 +1,9 @@
-package net.hypejet.jet.data.generator.generators.api;
+package net.hypejet.jet.data.generator.generators;
 
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
+import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPattern;
@@ -32,7 +33,9 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
      * @since 1.0
      */
     public BannerPatternGenerator(@NonNull RegistryAccess registryAccess) {
-        super("banner-patterns", "BannerPatterns", true, JetDataJson.createBannerPatternsGson());
+        super(new GeneratorName("Banner", "Pattern", "Generator"),
+                new ResourceFileSettings("banner-patterns", JetDataJson.createBannerPatternsGson()),
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "BannerPatterns"));
         this.registryAccess = registryAccess;
     }
 
