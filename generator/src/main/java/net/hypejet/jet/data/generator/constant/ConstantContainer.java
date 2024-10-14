@@ -3,6 +3,7 @@ package net.hypejet.jet.data.generator.constant;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -57,6 +58,9 @@ public record ConstantContainer(@NonNull String name, @NonNull CodeBlock javadoc
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addFields(List.copyOf(fieldSpecs))
                 .addJavadoc(this.javadoc)
+                .addMethod(MethodSpec.constructorBuilder()
+                        .addModifiers(Modifier.PRIVATE)
+                        .build())
                 .build();
 
         return JavaFile.builder(packageName, typeSpec)
