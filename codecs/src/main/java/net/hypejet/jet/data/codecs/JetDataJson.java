@@ -28,12 +28,14 @@ import net.hypejet.jet.data.codecs.registry.registries.damage.DamageTypeJsonCode
 import net.hypejet.jet.data.codecs.registry.registries.dimension.DimensionTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.IntegerProviderJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.WeightedListEntryJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.event.GameEventJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.item.ItemJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
 import net.hypejet.jet.data.codecs.util.mapper.Mapper;
 import net.hypejet.jet.data.model.api.color.Color;
+import net.hypejet.jet.data.model.api.event.GameEvent;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
@@ -290,6 +292,19 @@ public final class JetDataJson {
         return createBuilder()
                 .registerTypeAdapter(Item.class, new ItemJsonCodec())
                 .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Item.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain GameEvent game events}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createGameEventsGson() {
+        return createBuilder()
+                .registerTypeAdapter(GameEvent.class, new GameEventJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(GameEvent.class))
                 .create();
     }
 

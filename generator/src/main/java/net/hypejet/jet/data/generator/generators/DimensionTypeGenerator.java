@@ -28,6 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalLong;
 
+/**
+ * Represents a {@linkplain Generator generator} of {@linkplain DimensionType dimension types}.
+ *
+ * @since 1.0
+ * @author Codestech
+ * @see DimensionType
+ * @see Generator
+ */
 public final class DimensionTypeGenerator extends Generator<DimensionType> {
 
     private static final Field CLAMPED_SOURCE_FIELD;
