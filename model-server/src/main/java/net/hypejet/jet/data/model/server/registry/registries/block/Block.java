@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Represents a Minecraft block.
  *
- * @param requiredFeatureFlags a collection of feature flags that are required to enable the Block
+ * @param requiredFeatureFlags a collection of feature flags that are required to enable the block
  * @since 1.0
  * @author Codestech
  */
@@ -17,7 +17,7 @@ public record Block(@NonNull Collection<Key> requiredFeatureFlags) {
     /**
      * Constructs the {@linkplain Block block}.
      *
-     * @param requiredFeatureFlags a collection of feature flags that are required to enable the Block
+     * @param requiredFeatureFlags a collection of feature flags that are required to enable the block
      * @since 1.0
      */
     public Block {

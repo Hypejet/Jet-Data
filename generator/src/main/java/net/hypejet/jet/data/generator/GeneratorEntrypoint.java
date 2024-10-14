@@ -6,18 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.squareup.javapoet.CodeBlock;
 import net.hypejet.jet.data.generator.constant.Constant;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
-import net.hypejet.jet.data.generator.generators.ArmorTrimMaterialGenerator;
-import net.hypejet.jet.data.generator.generators.ArmorTrimPatternGenerator;
-import net.hypejet.jet.data.generator.generators.BannerPatternGenerator;
-import net.hypejet.jet.data.generator.generators.BiomeGenerator;
-import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
-import net.hypejet.jet.data.generator.generators.DamageTypeGenerator;
-import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
-import net.hypejet.jet.data.generator.generators.PaintingVariantGenerator;
-import net.hypejet.jet.data.generator.generators.WolfVariantGenerator;
-import net.hypejet.jet.data.generator.generators.BlockGenerator;
-import net.hypejet.jet.data.generator.generators.BlockStateGenerator;
-import net.hypejet.jet.data.generator.generators.FeaturePackGenerator;
+import net.hypejet.jet.data.generator.generators.*;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
@@ -106,7 +95,8 @@ public final class GeneratorEntrypoint {
                 new DamageTypeGenerator(registryAccess), new WolfVariantGenerator(registryAccess),
                 new PaintingVariantGenerator(registryAccess), new ArmorTrimPatternGenerator(registryAccess),
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess),
-                new FeaturePackGenerator(packs), new BlockStateGenerator(), new BlockGenerator(registryAccess));
+                new FeaturePackGenerator(packs), new BlockStateGenerator(), new BlockGenerator(registryAccess),
+                new ItemGenerator());
 
         Path resourceDirectoryPath = Path.of(args[0]);
         Path apiJavaDirectoryPath = Path.of(args[1]);

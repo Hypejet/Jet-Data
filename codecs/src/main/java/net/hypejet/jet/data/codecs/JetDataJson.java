@@ -28,6 +28,7 @@ import net.hypejet.jet.data.codecs.registry.registries.damage.DamageTypeJsonCode
 import net.hypejet.jet.data.codecs.registry.registries.dimension.DimensionTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.IntegerProviderJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.WeightedListEntryJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.item.ItemJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
@@ -61,6 +62,7 @@ import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
 import net.hypejet.jet.data.model.server.registry.registries.block.Block;
 import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.server.registry.registries.item.Item;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
@@ -275,6 +277,19 @@ public final class JetDataJson {
         return createBuilder()
                 .registerTypeAdapter(BlockState.class, new BlockStateJsonCodec())
                 .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(BlockState.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain Item items}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createItemsGson() {
+        return createBuilder()
+                .registerTypeAdapter(Item.class, new ItemJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Item.class))
                 .create();
     }
 
