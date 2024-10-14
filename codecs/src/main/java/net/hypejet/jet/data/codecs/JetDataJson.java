@@ -30,6 +30,7 @@ import net.hypejet.jet.data.codecs.registry.registries.dimension.number.IntegerP
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.WeightedListEntryJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.entity.EntityTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.event.GameEventJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.fluid.FluidJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.item.ItemJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
@@ -66,6 +67,7 @@ import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
 import net.hypejet.jet.data.model.server.registry.registries.block.Block;
 import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
+import net.hypejet.jet.data.model.server.registry.registries.fluid.Fluid;
 import net.hypejet.jet.data.model.server.registry.registries.item.Item;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
@@ -321,6 +323,19 @@ public final class JetDataJson {
         return createBuilder()
                 .registerTypeAdapter(EntityType.class, new EntityTypeJsonCodec())
                 .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(EntityType.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain Fluid fluids}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createFluidsGson() {
+        return createBuilder()
+                .registerTypeAdapter(Fluid.class, new FluidJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Fluid.class))
                 .create();
     }
 

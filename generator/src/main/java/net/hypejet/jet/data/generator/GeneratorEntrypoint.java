@@ -97,7 +97,7 @@ public final class GeneratorEntrypoint {
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess),
                 new FeaturePackGenerator(packs), new BlockGenerator(registryAccess), new ItemGenerator(registryAccess),
                 new GameEventGenerator(registryAccess), new EntityTypeGenerator(registryAccess),
-                new BlockStateGenerator());
+                new FluidGenerator(registryAccess), new BlockStateGenerator());
 
         Path resourceDirectoryPath = Path.of(args[0]);
         Path apiJavaDirectoryPath = Path.of(args[1]);
