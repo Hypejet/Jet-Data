@@ -28,6 +28,7 @@ import net.hypejet.jet.data.codecs.registry.registries.damage.DamageTypeJsonCode
 import net.hypejet.jet.data.codecs.registry.registries.dimension.DimensionTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.IntegerProviderJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.dimension.number.WeightedListEntryJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.entity.EntityTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.event.GameEventJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.item.ItemJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.painting.PaintingVariantJsonCodec;
@@ -35,6 +36,7 @@ import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfBiomesJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.wolf.WolfVariantJsonCodec;
 import net.hypejet.jet.data.codecs.util.mapper.Mapper;
 import net.hypejet.jet.data.model.api.color.Color;
+import net.hypejet.jet.data.model.api.entity.EntityType;
 import net.hypejet.jet.data.model.api.event.GameEvent;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
@@ -305,6 +307,20 @@ public final class JetDataJson {
         return createBuilder()
                 .registerTypeAdapter(GameEvent.class, new GameEventJsonCodec())
                 .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(GameEvent.class))
+                .create();
+    }
+
+    /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes {@linkplain EntityType entity
+     * types}.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createEntityTypeGson() {
+        return createBuilder()
+                .registerTypeAdapter(EntityType.class, new EntityTypeJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(EntityType.class))
                 .create();
     }
 
