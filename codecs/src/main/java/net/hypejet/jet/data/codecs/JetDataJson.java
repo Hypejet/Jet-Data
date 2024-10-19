@@ -340,6 +340,18 @@ public final class JetDataJson {
     }
 
     /**
+     * Creates a {@linkplain Gson gson} instance, which deserializes and serializes Minecraft packet identifies.
+     *
+     * @return the gson instance
+     * @since 1.0
+     */
+    public static @NonNull Gson createPacketGson() {
+        return createBuilder()
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Integer.class))
+                .create();
+    }
+
+    /**
      * Creates a {@linkplain Gson gson} instance, which deserializes and serializes common model objects.
      *
      * @return the gson instance
