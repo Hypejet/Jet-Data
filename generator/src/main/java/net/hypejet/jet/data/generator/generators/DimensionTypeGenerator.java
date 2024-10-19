@@ -9,6 +9,7 @@ import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -68,7 +69,7 @@ public final class DimensionTypeGenerator extends Generator<DimensionType> {
         super(new GeneratorName("Dimension", "Type", "Generator"),
                 new ResourceFileSettings("dimension-types", JetDataJson.createDimensionTypesGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "DimensionTypes"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

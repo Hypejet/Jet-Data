@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.model.api.number;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collection;
@@ -58,7 +59,19 @@ public sealed interface IntegerProvider {
      * @author Codstech
      * @see IntegerProvider
      */
-    record Clamped(int minimum, int maximum, @NonNull IntegerProvider source) implements IntegerProvider {}
+    record Clamped(int minimum, int maximum, @NonNull IntegerProvider source) implements IntegerProvider {
+        /**
+         * Constructs the {@linkplain Clamped clamped integer provider}.
+         *
+         * @param minimum the minimum integer, inclusive
+         * @param maximum the maximum integer, inclusive
+         * @param source the other integer provider
+         * @since 1.0
+         */
+        public Clamped {
+            NullabilityUtil.requireNonNull(source, "source");
+        }
+    }
 
     /**
      * Represents an {@linkplain IntegerProvider integer provider}, which provides an integer randomly generated
@@ -91,7 +104,7 @@ public sealed interface IntegerProvider {
          * @since 1.0
          */
         public WeightedList {
-            entries = List.copyOf(entries);
+            entries = List.copyOf(NullabilityUtil.requireNonNull(entries, "entries"));
         }
 
         /**
@@ -102,6 +115,18 @@ public sealed interface IntegerProvider {
          * @since 1.0
          * @author Codestech
          */
-        public record Entry(@NonNull IntegerProvider source, int weight) {}
+        public record Entry(@NonNull IntegerProvider source, int weight) {
+            /**
+             * Constructs the {@linkplain Entry entry}.
+             *
+             * @param source an integer provider, which provides an integer when the entry was selected
+             * @param weight a weight of this entry, higher weight means that the entry has higher chance to
+             *               be selected
+             * @since 1.0
+             */
+            public Entry {
+                NullabilityUtil.requireNonNull(source, "source");
+            }
+        }
     }
 }

@@ -41,6 +41,7 @@ public record ConstantContainer(@NonNull String name, @NonNull CodeBlock javadoc
         NullabilityUtil.requireNonNull(name, "name");
         NullabilityUtil.requireNonNull(javadoc, "javadoc");
         constants = List.copyOf(NullabilityUtil.requireNonNull(constants, "constants"));
+        NullabilityUtil.requireNonNull(destination, "destination");
     }
 
     /**
@@ -51,6 +52,8 @@ public record ConstantContainer(@NonNull String name, @NonNull CodeBlock javadoc
      * @since 1.0
      */
     public @NonNull JavaFile toJavaFile(@NonNull String packageName) {
+        NullabilityUtil.requireNonNull(packageName, "package name");
+
         List<FieldSpec> fieldSpecs = new ArrayList<>();
         this.constants.forEach(constant -> fieldSpecs.add(constant.toFieldSpec()));
 

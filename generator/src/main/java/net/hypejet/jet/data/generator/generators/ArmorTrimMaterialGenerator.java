@@ -8,6 +8,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterial;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -35,7 +36,7 @@ public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMateria
         super(new GeneratorName("Armor", "Trim", "Material", "Generator"),
                 new ResourceFileSettings("armor-trim-materials", JetDataJson.createTrimMaterialsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "ArmorTrimMaterials"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

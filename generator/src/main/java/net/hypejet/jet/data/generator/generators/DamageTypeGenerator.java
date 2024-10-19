@@ -9,6 +9,7 @@ import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectTyp
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DeathMessageType;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -38,7 +39,7 @@ public final class DamageTypeGenerator extends Generator<DamageType> {
         super(new GeneratorName("Damage", "Type", "Generator"),
                 new ResourceFileSettings("damage-types", JetDataJson.createDamageTypesGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "DamageTypes"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

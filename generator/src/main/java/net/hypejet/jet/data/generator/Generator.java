@@ -3,6 +3,7 @@ package net.hypejet.jet.data.generator;
 import com.google.gson.Gson;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -36,7 +37,7 @@ public abstract class Generator<V> {
      */
     public Generator(@NonNull GeneratorName generatorName, @Nullable ResourceFileSettings resourceFileSettings,
                      @Nullable JavaFileSettings javaFileSettings) {
-        this.generatorName = generatorName;
+        this.generatorName = NullabilityUtil.requireNonNull(generatorName, "generator name");
         this.javaFileSettings = javaFileSettings;
         this.resourceFileSettings = resourceFileSettings;
     }

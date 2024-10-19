@@ -9,6 +9,7 @@ import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -45,7 +46,7 @@ public final class WolfVariantGenerator extends Generator<WolfVariant> {
         super(new GeneratorName("Wolf", "Variant", "Generator"),
                 new ResourceFileSettings("wolf-variants", JetDataJson.createWolfVariantsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "WolfVariants"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

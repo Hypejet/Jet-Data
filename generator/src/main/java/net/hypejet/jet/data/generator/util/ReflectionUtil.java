@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.generator.util;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.AccessibleObject;
@@ -27,6 +28,7 @@ public final class ReflectionUtil {
      */
     public static @NonNull Object invoke(@NonNull Method method, @NonNull Object object,
                                          @NonNull Object @NonNull ... args) {
+        NullabilityUtil.requireNonNull(args, "args");
         return access(method, object, (m, o) -> m.invoke(o, args));
     }
 
@@ -56,6 +58,9 @@ public final class ReflectionUtil {
      */
     public static <A extends AccessibleObject, O, R> @NonNull R access(@NonNull A accessible, @NonNull O object,
                                                                        @NonNull Accessor<A, O, R> accessor) {
+        NullabilityUtil.requireNonNull(object, "object");
+        NullabilityUtil.requireNonNull(accessor, "accessor");
+
         boolean wasAccessible = accessible.canAccess(object);
         if (!wasAccessible) accessible.setAccessible(true);
 

@@ -7,6 +7,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.entity.EntityType;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -40,7 +41,7 @@ public final class EntityTypeGenerator extends Generator<EntityType> {
         super(new GeneratorName("Entity", "Type", "Generator"),
                 new ResourceFileSettings("entity-types", JetDataJson.createEntityTypeGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "EntityTypes"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

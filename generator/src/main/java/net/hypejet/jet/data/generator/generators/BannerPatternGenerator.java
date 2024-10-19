@@ -7,6 +7,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.banner.BannerPattern;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -36,7 +37,7 @@ public final class BannerPatternGenerator extends Generator<BannerPattern> {
         super(new GeneratorName("Banner", "Pattern", "Generator"),
                 new ResourceFileSettings("banner-patterns", JetDataJson.createBannerPatternsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "BannerPatterns"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

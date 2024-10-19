@@ -19,6 +19,7 @@ import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.Bi
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
 import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -93,7 +94,7 @@ public final class BiomeGenerator extends Generator<Biome> {
         super(new GeneratorName("Biome", "Generator"),
                 new ResourceFileSettings("biomes", JetDataJson.createBiomesGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "Biomes"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

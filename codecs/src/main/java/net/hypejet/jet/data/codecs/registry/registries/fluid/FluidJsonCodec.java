@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.fluid.Fluid;
 
 import java.lang.reflect.Type;
@@ -23,6 +24,10 @@ public final class FluidJsonCodec implements JsonCodec<Fluid> {
 
     @Override
     public Fluid deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return INSTANCE;
@@ -30,6 +35,9 @@ public final class FluidJsonCodec implements JsonCodec<Fluid> {
 
     @Override
     public JsonElement serialize(Fluid src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
         return new JsonObject();
     }
 }

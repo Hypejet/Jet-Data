@@ -73,6 +73,8 @@ public final class StyleAdapter {
      */
     public static @NonNull Style convert(net.minecraft.network.chat.@NonNull Style style,
                                          @NonNull RegistryAccess registryAccess) {
+        NullabilityUtil.requireNonNull(style, "style");
+        NullabilityUtil.requireNonNull(registryAccess, "registry access");
         return Style.style()
                 .font(IdentifierAdapter.convert(style.getFont()))
                 .color(NullabilityUtil.applyIfNotNull(style.getColor(), StyleAdapter::convert))

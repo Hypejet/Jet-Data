@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
@@ -26,6 +27,10 @@ public final class PackInfoCodec implements JsonCodec<PackInfo> {
 
     @Override
     public PackInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
         return new PackInfo(JsonUtil.read(KEY, Key.class, object, context),
@@ -34,9 +39,14 @@ public final class PackInfoCodec implements JsonCodec<PackInfo> {
 
     @Override
     public JsonElement serialize(PackInfo src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.write(KEY, src.key(), Key.class, object, context);
         JsonUtil.write(VERSION, src.version(), object, context);
+
         return object;
     }
 }

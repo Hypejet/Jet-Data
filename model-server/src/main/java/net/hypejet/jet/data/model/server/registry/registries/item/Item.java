@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.model.server.registry.registries.item;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -21,6 +22,7 @@ public record Item(@NonNull Collection<Key> requiredFeatureFlags) {
      * @since 1.0
      */
     public Item {
+        NullabilityUtil.requireNonNull(requiredFeatureFlags, "required feature flags");
         requiredFeatureFlags = Set.copyOf(requiredFeatureFlags);
     }
 }

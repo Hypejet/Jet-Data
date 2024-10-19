@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.item.Item;
 import net.kyori.adventure.key.Key;
 
@@ -28,6 +29,10 @@ public final class ItemJsonCodec implements JsonCodec<Item> {
 
     @Override
     public Item deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
@@ -41,13 +46,17 @@ public final class ItemJsonCodec implements JsonCodec<Item> {
 
     @Override
     public JsonElement serialize(Item src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         JsonArray jsonRequiredFeatureFlags = new JsonArray();
+
         for (Key key : src.requiredFeatureFlags())
             jsonRequiredFeatureFlags.add(context.serialize(key));
-        object.add(REQUIRED_FEATURE_FLAGS_FIELD, jsonRequiredFeatureFlags);
 
+        object.add(REQUIRED_FEATURE_FLAGS_FIELD, jsonRequiredFeatureFlags);
         return object;
     }
 }

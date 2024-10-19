@@ -8,6 +8,7 @@ import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
@@ -52,6 +53,10 @@ public final class DimensionTypeJsonCodec implements JsonCodec<DimensionType> {
 
     @Override
     public DimensionType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return DimensionType.builder()
@@ -80,6 +85,10 @@ public final class DimensionTypeJsonCodec implements JsonCodec<DimensionType> {
 
     @Override
     public JsonElement serialize(DimensionType src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.writeOptional(FIXED_TIME, src.fixedTime(), object, context);
         object.addProperty(HAS_SKYLIGHT, src.hasSkylight());
@@ -100,6 +109,7 @@ public final class DimensionTypeJsonCodec implements JsonCodec<DimensionType> {
         JsonUtil.write(MONSTER_SPAWN_LIGHT_LEVEL, src.monsterSpawnLightLevel(), IntegerProvider.class, object,
                 context);
         JsonUtil.write(MONSTER_SPAWN_BLOCK_LIGHT_LEVEL, src.monsterSpawnBlockLightLimit(), object, context);
+
         return object;
     }
 }

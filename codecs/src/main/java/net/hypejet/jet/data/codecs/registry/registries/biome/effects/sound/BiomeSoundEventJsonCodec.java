@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
@@ -28,6 +29,10 @@ public final class BiomeSoundEventJsonCodec implements JsonCodec<BiomeSoundEvent
 
     @Override
     public BiomeSoundEvent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (json instanceof JsonPrimitive jsonPrimitive)
             return new BiomeSoundEvent(context.deserialize(jsonPrimitive, Key.class), null);
         if (!(json instanceof JsonObject jsonObject))

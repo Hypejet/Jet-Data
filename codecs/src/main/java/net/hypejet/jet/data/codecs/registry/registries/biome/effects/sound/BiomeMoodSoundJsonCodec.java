@@ -8,6 +8,7 @@ import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -29,6 +30,10 @@ public final class BiomeMoodSoundJsonCodec implements JsonCodec<BiomeMoodSound> 
 
     @Override
     public BiomeMoodSound deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return new BiomeMoodSound(JsonUtil.read(EVENT, BiomeSoundEvent.class, object, context),

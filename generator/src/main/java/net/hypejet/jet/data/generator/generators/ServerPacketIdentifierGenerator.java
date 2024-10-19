@@ -27,7 +27,8 @@ public final class ServerPacketIdentifierGenerator extends Generator<Integer> {
     public ServerPacketIdentifierGenerator() {
         super(new GeneratorName("Server", "Packet", "Identifier"),
                 new ResourceFileSettings("server-packet-identifiers", JetDataJson.createPacketGson()),
-                new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "ServerPacketIdentifiers"));
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER,
+                        "ServerPacketIdentifiers"));
     }
 
     @Override

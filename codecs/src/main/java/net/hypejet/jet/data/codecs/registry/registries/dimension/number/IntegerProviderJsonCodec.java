@@ -9,6 +9,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,6 +40,10 @@ public final class IntegerProviderJsonCodec implements JsonCodec<IntegerProvider
 
     @Override
     public IntegerProvider deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (json instanceof JsonPrimitive primitive)
             return new IntegerProvider.ConstantInteger(primitive.getAsInt());
 
@@ -75,6 +80,10 @@ public final class IntegerProviderJsonCodec implements JsonCodec<IntegerProvider
 
     @Override
     public JsonElement serialize(IntegerProvider src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (src instanceof IntegerProvider.ConstantInteger provider)
             return new JsonPrimitive(provider.value());
 

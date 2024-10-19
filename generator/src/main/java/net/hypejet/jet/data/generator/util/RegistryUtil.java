@@ -4,6 +4,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistrationInfo;
@@ -41,9 +42,13 @@ public final class RegistryUtil {
      * @throws IllegalArgumentException if the registry does not contain a value from holder specified
      */
     public static <T> @NonNull Key keyOfHolder(@NonNull Holder<T> holder, @NonNull Registry<T> registry) {
+        NullabilityUtil.requireNonNull(holder, "holder");
+        NullabilityUtil.requireNonNull(registry, "registry");
+
         ResourceLocation biomeLocation = registry.getKey(holder.value());
         if (biomeLocation == null)
             throw new IllegalArgumentException("Could not find a resource location of a value from holder specified");
+
         return IdentifierAdapter.convert(biomeLocation);
     }
 
@@ -60,6 +65,9 @@ public final class RegistryUtil {
      */
     public static <R, V> @NonNull List<DataRegistryEntry<V>> createEntries(@NonNull Registry<R> registry,
                                                                            @NonNull Function<R, V> converter) {
+        NullabilityUtil.requireNonNull(registry, "registry");
+        NullabilityUtil.requireNonNull(converter, "converter");
+
         List<DataRegistryEntry<V>> entries = new ArrayList<>();
         for (R entry : registry) {
             ResourceKey<R> key = registry.getResourceKey(entry).orElseThrow();

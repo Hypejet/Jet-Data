@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.block.state.BlockState;
 
 import java.lang.reflect.Type;
@@ -27,6 +28,10 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
     @Override
     public BlockState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
@@ -40,8 +45,11 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
     @Override
     public JsonElement serialize(BlockState src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         JsonObject propertiesObject = new JsonObject();
         src.properties().forEach(propertiesObject::addProperty);
         object.add(PROPERTIES_FIELD, propertiesObject);

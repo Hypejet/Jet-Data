@@ -8,6 +8,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPattern;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -39,7 +40,7 @@ public final class ArmorTrimPatternGenerator extends Generator<ArmorTrimPattern>
         super(new GeneratorName("Armor", "Trim", "Pattern", "Generator"),
                 new ResourceFileSettings("armor-trim-patterns", JetDataJson.createTrimPatternsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "ArmorTrimPatterns"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

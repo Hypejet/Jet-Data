@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -27,6 +28,10 @@ public final class WeightedListEntryJsonCodec implements JsonCodec<IntegerProvid
     @Override
     public IntegerProvider.WeightedList.Entry deserialize(JsonElement json, Type typeOfT,
                                                           JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return new IntegerProvider.WeightedList.Entry(JsonUtil.read(SOURCE, IntegerProvider.class, object, context),
@@ -36,9 +41,14 @@ public final class WeightedListEntryJsonCodec implements JsonCodec<IntegerProvid
     @Override
     public JsonElement serialize(IntegerProvider.WeightedList.Entry src, Type typeOfSrc,
                                  JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.write(SOURCE, src.source(), object, context);
         JsonUtil.write(WEIGHT, src.weight(), object, context);
+
         return object;
     }
 }

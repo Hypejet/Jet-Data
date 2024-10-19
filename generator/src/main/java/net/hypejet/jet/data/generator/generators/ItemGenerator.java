@@ -6,6 +6,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.item.Item;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.RegistryAccess;
@@ -40,7 +41,7 @@ public final class ItemGenerator extends Generator<Item> {
         super(new GeneratorName("Item", "Generator"),
                 new ResourceFileSettings("items", JetDataJson.createItemsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "Items"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

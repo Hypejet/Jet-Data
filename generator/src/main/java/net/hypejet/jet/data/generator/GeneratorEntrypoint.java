@@ -9,6 +9,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.generators.*;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
 import net.minecraft.WorldVersion;
@@ -66,6 +67,9 @@ public final class GeneratorEntrypoint {
      * @since 1.0
      */
     public static void main(String[] args) {
+        NullabilityUtil.requireNonNull(args, "args");
+        if (args.length < 3) throw new IllegalArgumentException("Less than 3 arguments have been provided");
+
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
 

@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.generator.adapter;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -24,6 +25,7 @@ public final class IdentifierAdapter {
      * @since 1.0
      */
     public static @NonNull Key convert(@NonNull ResourceLocation location) {
+        NullabilityUtil.requireNonNull(location, "location");
         return Key.key(location.getNamespace(), location.getPath());
     }
 }

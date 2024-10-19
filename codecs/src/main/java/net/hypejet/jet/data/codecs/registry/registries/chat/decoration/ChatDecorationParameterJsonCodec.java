@@ -6,6 +6,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecorationParameter;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -26,6 +27,10 @@ public final class ChatDecorationParameterJsonCodec implements JsonCodec<ChatDec
 
     @Override
     public ChatDecorationParameter deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         String value = json.getAsString();
         return switch (value) {
             case SENDER -> ChatDecorationParameter.SENDER;

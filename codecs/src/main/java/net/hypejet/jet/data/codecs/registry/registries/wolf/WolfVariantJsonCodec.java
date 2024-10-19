@@ -8,6 +8,7 @@ import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
 import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
@@ -30,6 +31,10 @@ public final class WolfVariantJsonCodec implements JsonCodec<WolfVariant> {
 
     @Override
     public WolfVariant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
         return new WolfVariant(JsonUtil.read(WILD_TEXTURE, Key.class, object, context),
@@ -40,11 +45,16 @@ public final class WolfVariantJsonCodec implements JsonCodec<WolfVariant> {
 
     @Override
     public JsonElement serialize(WolfVariant src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.write(WILD_TEXTURE, src.wildTexture(), Key.class, object, context);
         JsonUtil.write(TAME_TEXTURE, src.tameTexture(), Key.class, object, context);
         JsonUtil.write(ANGRY_TEXTURE, src.angryTexture(), Key.class, object, context);
         JsonUtil.write(BIOMES, src.biomes(), WolfBiomes.class, object, context);
+
         return object;
     }
 }

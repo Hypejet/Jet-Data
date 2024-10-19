@@ -82,6 +82,9 @@ public final class ComponentAdapter {
      */
     public static @NonNull Component convert(net.minecraft.network.chat.@NonNull Component component,
                                              @NonNull RegistryAccess registryAccess) {
+        NullabilityUtil.requireNonNull(component, "component");
+        NullabilityUtil.requireNonNull(registryAccess, "registry access");
+
         ComponentContents contents = component.getContents();
         Style style = StyleAdapter.convert(component.getStyle(), registryAccess);
 

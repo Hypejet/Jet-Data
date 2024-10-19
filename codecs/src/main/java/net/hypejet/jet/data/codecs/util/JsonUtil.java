@@ -81,6 +81,7 @@ public final class JsonUtil {
      */
     public static <T> void write(@NonNull String name, @NonNull T object, @NonNull JsonObject jsonObject,
                                  @NonNull JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(object, "object");
         write(name, object, object.getClass(), jsonObject, context);
     }
 

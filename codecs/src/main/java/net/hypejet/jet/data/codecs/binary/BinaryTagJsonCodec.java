@@ -8,6 +8,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.ByteArrayBinaryTag;
@@ -47,6 +48,10 @@ public final class BinaryTagJsonCodec implements JsonCodec<BinaryTag> {
 
     @Override
     public BinaryTag deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)  {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
 
@@ -85,6 +90,10 @@ public final class BinaryTagJsonCodec implements JsonCodec<BinaryTag> {
 
     @Override
     public JsonElement serialize(BinaryTag src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonElement data = switch (src) {
             case EndBinaryTag ignored -> null;
             case ByteBinaryTag tag -> new JsonPrimitive(tag.value());

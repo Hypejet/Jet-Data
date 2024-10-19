@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.particle.BiomeParticleSettings;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 
@@ -29,6 +30,10 @@ public final class BiomeParticleSettingsJsonCodec implements JsonCodec<BiomePart
 
     @Override
     public BiomeParticleSettings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element is not a json object");
         return new BiomeParticleSettings(JsonUtil.read(KEY, Key.class, object, context),
@@ -38,8 +43,11 @@ public final class BiomeParticleSettingsJsonCodec implements JsonCodec<BiomePart
 
     @Override
     public JsonElement serialize(BiomeParticleSettings src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         JsonUtil.write(KEY, src.key(), Key.class, object, context);
         JsonUtil.writeOptional(DATA, src.data(), BinaryTag.class, object, context);
         object.addProperty(PROBABILITY, src.probability());

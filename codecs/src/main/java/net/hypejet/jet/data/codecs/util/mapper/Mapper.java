@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.codecs.util.mapper;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -24,8 +25,8 @@ public final class Mapper<R, W> {
 
     private Mapper(@NonNull Class<R> firstClass, @NonNull Class<W> secondClass,
                    @NonNull Map<R, W> firstToSecondMap) {
-        this.firstClass = firstClass;
-        this.secondClass = secondClass;
+        this.firstClass = NullabilityUtil.requireNonNull(firstClass, "first class");
+        this.secondClass = NullabilityUtil.requireNonNull(secondClass, "second class");
         this.firstToSecondMap = Map.copyOf(firstToSecondMap);
 
         Map<W, R> secondToFirstMap = new HashMap<>();
@@ -41,6 +42,7 @@ public final class Mapper<R, W> {
      * @since 1.0
      */
     public @Nullable R read(@NonNull W object) {
+        NullabilityUtil.requireNonNull(object, "object");
         return this.secondToFirstMap.get(checkAssignable(this.secondClass, object));
     }
 
@@ -52,6 +54,7 @@ public final class Mapper<R, W> {
      * @since 1.0
      */
     public @Nullable W write(@NonNull R object) {
+        NullabilityUtil.requireNonNull(object, "object");
         return this.firstToSecondMap.get(checkAssignable(this.firstClass, object));
     }
 
@@ -86,12 +89,18 @@ public final class Mapper<R, W> {
      * @since 1.0
      */
     public static <R, W> @NonNull Builder<R, W> builder(@NonNull Class<R> firstClass, @NonNull Class<W> secondClass) {
+        NullabilityUtil.requireNonNull(firstClass, "first class");
+        NullabilityUtil.requireNonNull(secondClass, "second class");
         return new Builder<>(firstClass, secondClass);
     }
 
     private static <T> @NonNull T checkAssignable(@NonNull Class<T> clazz, @NonNull T object) {
+        NullabilityUtil.requireNonNull(clazz, "class");
+        NullabilityUtil.requireNonNull(object, "object");
+
         if (!clazz.isAssignableFrom(object.getClass()))
             throw new IllegalArgumentException("The value specified is not assignable from the class required");
+
         return object;
     }
 

@@ -10,6 +10,7 @@ import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectTyp
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageScalingType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DamageType;
 import net.hypejet.jet.data.model.api.registry.registries.damage.DeathMessageType;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -32,6 +33,10 @@ public final class DamageTypeJsonCodec implements JsonCodec<DamageType> {
 
     @Override
     public DamageType deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return new DamageType(JsonUtil.read(MESSAGE_ID, String.class, object, context),
@@ -43,12 +48,17 @@ public final class DamageTypeJsonCodec implements JsonCodec<DamageType> {
 
     @Override
     public JsonElement serialize(DamageType src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         object.addProperty(MESSAGE_ID, src.messageId());
         JsonUtil.write(DAMAGE_SCALING_TYPE, src.damageScalingType(), object, context);
         object.addProperty(EXHAUSTION, src.exhaustion());
         JsonUtil.writeOptional(DAMAGE_EFFECT_TYPE, src.damageEffectType(), object, context);
         JsonUtil.writeOptional(DEATH_MESSAGE_TYPE, src.deathMessageType(), object, context);
+
         return object;
     }
 }

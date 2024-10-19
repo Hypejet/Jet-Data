@@ -8,6 +8,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 
@@ -31,6 +32,10 @@ public final class FeaturePackJsonCodec implements JsonCodec<FeaturePack> {
 
     @Override
     public FeaturePack deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
 
@@ -45,6 +50,10 @@ public final class FeaturePackJsonCodec implements JsonCodec<FeaturePack> {
 
     @Override
     public JsonElement serialize(FeaturePack src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.write(PACK_INFO, src.info(), object, context);
 

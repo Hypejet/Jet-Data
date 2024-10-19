@@ -9,6 +9,7 @@ import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecorationParameter;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.text.format.Style;
 
 import java.lang.reflect.Type;
@@ -32,6 +33,10 @@ public final class ChatDecorationJsonCodec implements JsonCodec<ChatDecoration> 
 
     @Override
     public ChatDecoration deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
 
@@ -47,8 +52,11 @@ public final class ChatDecorationJsonCodec implements JsonCodec<ChatDecoration> 
 
     @Override
     public JsonElement serialize(ChatDecoration src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         JsonUtil.write(TRANSLATION_KEY, src.translationKey(), object, context);
         JsonUtil.writeOptional(STYLE, src.style(), Style.class, object, context);
 

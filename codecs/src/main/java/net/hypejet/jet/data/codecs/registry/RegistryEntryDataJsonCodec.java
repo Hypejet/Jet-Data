@@ -49,6 +49,10 @@ public final class RegistryEntryDataJsonCodec<V> implements JsonCodec<DataRegist
 
     @Override
     public DataRegistryEntry<V> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 

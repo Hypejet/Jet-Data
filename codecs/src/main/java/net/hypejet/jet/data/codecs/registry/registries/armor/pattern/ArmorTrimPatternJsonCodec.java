@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.armor.pattern.ArmorTrimPattern;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 
@@ -30,6 +31,10 @@ public final class ArmorTrimPatternJsonCodec implements JsonCodec<ArmorTrimPatte
 
     @Override
     public ArmorTrimPattern deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
         return new ArmorTrimPattern(JsonUtil.read(ASSET, Key.class, object, context),
@@ -40,11 +45,16 @@ public final class ArmorTrimPatternJsonCodec implements JsonCodec<ArmorTrimPatte
 
     @Override
     public JsonElement serialize(ArmorTrimPattern src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
         JsonUtil.write(ASSET, src.asset(), Key.class, object, context);
         JsonUtil.write(TEMPLATE_ITEM, src.templateItem(), Key.class, object, context);
         JsonUtil.write(DESCRIPTION, src.description(), Component.class, object, context);
         object.addProperty(DECAL, src.decal());
+
         return object;
     }
 }

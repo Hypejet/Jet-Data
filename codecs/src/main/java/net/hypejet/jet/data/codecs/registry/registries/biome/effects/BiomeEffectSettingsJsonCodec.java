@@ -14,6 +14,7 @@ import net.hypejet.jet.data.model.api.registry.registries.biome.effects.particle
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeAdditionalSound;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeMoodSound;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.sound.BiomeSoundEvent;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -47,6 +48,10 @@ public final class BiomeEffectSettingsJsonCodec implements JsonCodec<BiomeEffect
 
     @Override
     public BiomeEffectSettings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element is not a json objet");
         return new BiomeEffectSettings(JsonUtil.read(FOG_COLOR, Color.class, object, context),
@@ -65,8 +70,11 @@ public final class BiomeEffectSettingsJsonCodec implements JsonCodec<BiomeEffect
 
     @Override
     public JsonElement serialize(BiomeEffectSettings src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         JsonUtil.write(FOG_COLOR, src.fogColor(), object, context);
         JsonUtil.write(WATER_COLOR, src.waterColor(), object, context);
         JsonUtil.write(WATER_FOG_COLOR, src.waterFogColor(), object, context);

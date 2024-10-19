@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.model.api.color;
 
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.util.RGBLike;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.Range;
@@ -29,6 +30,7 @@ public record Color(int value) implements RGBLike {
      * @since 1.0
      */
     public static @NonNull Color color(@NonNull RGBLike other) {
+        NullabilityUtil.requireNonNull(other, "other RGB-like");
         if (other instanceof Color color) return color;
         return color((short) other.red(), (short) other.green(), (short) other.blue());
     }

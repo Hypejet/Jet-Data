@@ -6,6 +6,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.event.GameEvent;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -34,7 +35,7 @@ public final class GameEventGenerator extends Generator<GameEvent> {
         super(new GeneratorName("Game", "Event", "Generator"),
                 new ResourceFileSettings("game-events", JetDataJson.createGameEventsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "GameEvents"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

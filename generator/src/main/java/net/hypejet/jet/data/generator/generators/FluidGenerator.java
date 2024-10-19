@@ -5,6 +5,7 @@ import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.fluid.Fluid;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -34,7 +35,7 @@ public final class FluidGenerator extends Generator<Fluid> {
         super(new GeneratorName("Fluid", "Generator"),
                 new ResourceFileSettings("fluids", JetDataJson.createFluidsGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "Fluids"));
-        this.registryAccess = registryAccess;
+        this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
     @Override

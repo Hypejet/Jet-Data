@@ -7,6 +7,7 @@ import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
 import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;
 import net.minecraft.resources.ResourceLocation;
@@ -44,7 +45,7 @@ public final class FeaturePackGenerator extends Generator<FeaturePack> {
         super(new GeneratorName("Feature", "Pack", "Generator"),
                 new ResourceFileSettings("feature-packs", JetDataJson.createPlainGson()),
                 new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "FeaturePacks"));
-        this.packRepository = packRepository;
+        this.packRepository = NullabilityUtil.requireNonNull(packRepository, "pack repository");
     }
 
     @Override

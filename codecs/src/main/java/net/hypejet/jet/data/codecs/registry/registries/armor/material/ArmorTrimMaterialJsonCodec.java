@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.armor.material.ArmorTrimMaterial;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 
@@ -33,6 +34,10 @@ public final class ArmorTrimMaterialJsonCodec implements JsonCodec<ArmorTrimMate
 
     @Override
     public ArmorTrimMaterial deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified must be a json object");
 
@@ -57,6 +62,10 @@ public final class ArmorTrimMaterialJsonCodec implements JsonCodec<ArmorTrimMate
 
     @Override
     public JsonElement serialize(ArmorTrimMaterial src, Type typeOfSrc, JsonSerializationContext context) {
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
+
         JsonObject object = new JsonObject();
 
         JsonUtil.write(ASSET, src.asset(), Key.class, object, context);

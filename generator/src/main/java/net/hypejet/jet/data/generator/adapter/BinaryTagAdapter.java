@@ -75,6 +75,7 @@ public final class BinaryTagAdapter {
      * @since 1.0
      */
     public static @NonNull BinaryTag convert(@NonNull Tag tag) {
+        NullabilityUtil.requireNonNull(tag, "tag");
         return switch (tag) {
             case EndTag ignored -> EndBinaryTag.endBinaryTag();
             case ByteTag byteTag -> ByteBinaryTag.byteBinaryTag(byteTag.getAsByte());
@@ -96,6 +97,8 @@ public final class BinaryTagAdapter {
     }
 
     private static @NonNull BinaryTag convertListTag(@NonNull ListTag tag) {
+        NullabilityUtil.requireNonNull(tag, "tag");
+
         List<BinaryTag> tags = new ArrayList<>();
         BinaryTagType<?> type = tagType(tag.getType());
 
@@ -111,18 +114,24 @@ public final class BinaryTagAdapter {
     }
 
     private static @NonNull BinaryTag convertCompoundTag(@NonNull CompoundTag tag) {
+        NullabilityUtil.requireNonNull(tag, "tag");
         Map<String, BinaryTag> values = new HashMap<>();
+
         for (String key : tag.getAllKeys()) {
             Tag value = NullabilityUtil.requireNonNull(tag.get(key), "value");
             values.put(key, convert(value));
         }
+
         return CompoundBinaryTag.from(values);
     }
 
     private static @NonNull BinaryTagType<?> tagType(@NonNull TagType<?> type) {
+        NullabilityUtil.requireNonNull(type, "type");
         BinaryTagType<?> convertedType = TYPE_MAPPINGS.get(type);
+
         if (convertedType == null)
             throw new IllegalArgumentException(String.format("Could not find a mapping for tag type of: %s", type));
+
         return convertedType;
     }
 }

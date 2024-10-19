@@ -9,6 +9,7 @@ import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.registry.registries.biome.Biome;
 import net.hypejet.jet.data.model.api.registry.registries.biome.effects.BiomeEffectSettings;
 import net.hypejet.jet.data.model.api.registry.registries.biome.temperature.BiomeTemperatureModifier;
+import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;
 
@@ -30,6 +31,10 @@ public final class BiomeJsonCodec implements JsonCodec<Biome> {
 
     @Override
     public Biome deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+        NullabilityUtil.requireNonNull(json, "json");
+        NullabilityUtil.requireNonNull(typeOfT, "type");
+        NullabilityUtil.requireNonNull(context, "context");
+
         if (!(json instanceof JsonObject object))
             throw new IllegalArgumentException("The json element specified is not a json object");
         return Biome.builder()
@@ -44,8 +49,11 @@ public final class BiomeJsonCodec implements JsonCodec<Biome> {
 
     @Override
     public JsonElement serialize(Biome src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
+        NullabilityUtil.requireNonNull(src, "source");
+        NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
+        NullabilityUtil.requireNonNull(context, "context");
 
+        JsonObject object = new JsonObject();
         object.addProperty(HAS_PRECIPITATION, src.hasPrecipitation());
         object.addProperty(TEMPERATURE , src.temperature());
         JsonUtil.writeOptional(TEMPERATURE_MODIFIER, src.temperatureModifier(), object, context);
