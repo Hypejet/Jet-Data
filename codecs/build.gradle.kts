@@ -14,5 +14,11 @@ dependencies {
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
+        pom.licenses {
+            license {
+                name = "AGPL 3.0"
+                url = "https://choosealicense.com/licenses/agpl-3.0/"
+            }
+        }
     }
 }
