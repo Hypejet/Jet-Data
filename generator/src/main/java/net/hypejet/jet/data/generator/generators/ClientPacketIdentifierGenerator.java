@@ -4,7 +4,7 @@ import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.minecraft.network.protocol.game.GameProtocols;
 import org.checkerframework.checker.nullness.qual.NonNull;
 

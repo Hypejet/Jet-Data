@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.api.registry.registries.chat.ChatType;
-import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecoration;
+import net.hypejet.jet.data.model.api.registries.chat.ChatType;
+import net.hypejet.jet.data.model.api.registries.chat.decoration.ChatDecoration;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;

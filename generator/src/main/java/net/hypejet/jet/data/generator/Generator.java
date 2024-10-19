@@ -2,7 +2,7 @@ package net.hypejet.jet.data.generator;
 
 import com.google.gson.Gson;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

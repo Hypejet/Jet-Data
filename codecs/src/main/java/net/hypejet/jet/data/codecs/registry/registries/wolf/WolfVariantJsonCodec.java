@@ -6,8 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfBiomes;
-import net.hypejet.jet.data.model.api.registry.registries.wolf.WolfVariant;
+import net.hypejet.jet.data.model.api.registries.wolf.WolfBiomes;
+import net.hypejet.jet.data.model.api.registries.wolf.WolfVariant;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 

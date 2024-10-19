@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
-import net.hypejet.jet.data.model.api.registry.registries.dimension.DimensionType;
+import net.hypejet.jet.data.model.api.registries.dimension.DimensionType;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 

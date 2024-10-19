@@ -6,7 +6,7 @@ import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.hypejet.jet.data.model.server.registry.registries.pack.FeaturePack;
 import net.kyori.adventure.key.Key;

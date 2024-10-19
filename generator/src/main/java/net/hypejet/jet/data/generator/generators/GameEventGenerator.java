@@ -5,7 +5,7 @@ import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.event.GameEvent;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;

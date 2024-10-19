@@ -6,10 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
 import net.hypejet.jet.data.codecs.util.JsonUtil;
-import net.hypejet.jet.data.model.api.registry.registries.damage.DamageEffectType;
-import net.hypejet.jet.data.model.api.registry.registries.damage.DamageScalingType;
-import net.hypejet.jet.data.model.api.registry.registries.damage.DamageType;
-import net.hypejet.jet.data.model.api.registry.registries.damage.DeathMessageType;
+import net.hypejet.jet.data.model.api.registries.damage.DamageEffectType;
+import net.hypejet.jet.data.model.api.registries.damage.DamageScalingType;
+import net.hypejet.jet.data.model.api.registries.damage.DamageType;
+import net.hypejet.jet.data.model.api.registries.damage.DeathMessageType;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;

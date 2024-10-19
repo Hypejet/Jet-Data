@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
-import net.hypejet.jet.data.model.api.registry.registries.chat.decoration.ChatDecorationParameter;
+import net.hypejet.jet.data.model.api.registries.chat.decoration.ChatDecorationParameter;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 
 import java.lang.reflect.Type;

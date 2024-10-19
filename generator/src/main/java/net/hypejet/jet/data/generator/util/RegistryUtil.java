@@ -3,7 +3,7 @@ package net.hypejet.jet.data.generator.util;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
 import net.hypejet.jet.data.generator.adapter.PackAdapter;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Holder;

@@ -24,7 +24,7 @@ import net.hypejet.jet.data.generator.generators.PaintingVariantGenerator;
 import net.hypejet.jet.data.generator.generators.ServerPacketIdentifierGenerator;
 import net.hypejet.jet.data.generator.generators.WolfVariantGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
-import net.hypejet.jet.data.model.api.registry.DataRegistryEntry;
+import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import net.minecraft.SharedConstants;
