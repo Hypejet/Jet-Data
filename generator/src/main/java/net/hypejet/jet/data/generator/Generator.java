@@ -22,8 +22,8 @@ public abstract class Generator<V> {
 
     private final GeneratorName generatorName;
 
-    private final JavaFileSettings javaFileSettings;
     private final ResourceFileSettings resourceFileSettings;
+    private final JavaFileSettings javaFileSettings;
 
     /**
      * Constructs the {@linkplain Generator generator}.
@@ -38,8 +38,8 @@ public abstract class Generator<V> {
     public Generator(@NonNull GeneratorName generatorName, @Nullable ResourceFileSettings resourceFileSettings,
                      @Nullable JavaFileSettings javaFileSettings) {
         this.generatorName = NullabilityUtil.requireNonNull(generatorName, "generator name");
-        this.javaFileSettings = javaFileSettings;
         this.resourceFileSettings = resourceFileSettings;
+        this.javaFileSettings = javaFileSettings;
     }
 
     /**

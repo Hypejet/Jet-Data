@@ -22,6 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a {@linkplain Generator generator} which generates {@linkplain ArmorTrimMaterial armor trim materials}.
+ *
+ * @since 1.0
+ * @author Codestech
+ * @see ArmorTrimMaterial
+ * @see Generator
+ */
 public final class ArmorTrimMaterialGenerator extends Generator<ArmorTrimMaterial> {
 
     private final RegistryAccess registryAccess;

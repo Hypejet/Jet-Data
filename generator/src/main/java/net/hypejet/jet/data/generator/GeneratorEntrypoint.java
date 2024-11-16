@@ -12,7 +12,6 @@ import net.hypejet.jet.data.generator.generators.BiomeGenerator;
 import net.hypejet.jet.data.generator.generators.BlockGenerator;
 import net.hypejet.jet.data.generator.generators.BlockStateGenerator;
 import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
-import net.hypejet.jet.data.generator.generators.ClientPacketIdentifierGenerator;
 import net.hypejet.jet.data.generator.generators.DamageTypeGenerator;
 import net.hypejet.jet.data.generator.generators.DimensionTypeGenerator;
 import net.hypejet.jet.data.generator.generators.EntityTypeGenerator;
@@ -20,8 +19,8 @@ import net.hypejet.jet.data.generator.generators.FeaturePackGenerator;
 import net.hypejet.jet.data.generator.generators.FluidGenerator;
 import net.hypejet.jet.data.generator.generators.GameEventGenerator;
 import net.hypejet.jet.data.generator.generators.ItemGenerator;
+import net.hypejet.jet.data.generator.generators.PacketIdentifierGenerator;
 import net.hypejet.jet.data.generator.generators.PaintingVariantGenerator;
-import net.hypejet.jet.data.generator.generators.ServerPacketIdentifierGenerator;
 import net.hypejet.jet.data.generator.generators.WolfVariantGenerator;
 import net.hypejet.jet.data.generator.util.CodeBlocks;
 import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
@@ -32,6 +31,11 @@ import net.minecraft.WorldVersion;
 import net.minecraft.core.LayeredRegistryAccess;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.protocol.configuration.ConfigurationProtocols;
+import net.minecraft.network.protocol.game.GameProtocols;
+import net.minecraft.network.protocol.handshake.HandshakeProtocols;
+import net.minecraft.network.protocol.login.LoginProtocols;
+import net.minecraft.network.protocol.status.StatusProtocols;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.MinecraftServer;
@@ -128,8 +132,35 @@ public final class GeneratorEntrypoint {
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess),
                 new FeaturePackGenerator(packs), new BlockGenerator(registryAccess), new ItemGenerator(registryAccess),
                 new GameEventGenerator(registryAccess), new EntityTypeGenerator(registryAccess),
-                new FluidGenerator(registryAccess), new BlockStateGenerator(), new ServerPacketIdentifierGenerator(),
-                new ClientPacketIdentifierGenerator());
+                new FluidGenerator(registryAccess), new BlockStateGenerator(),
+                // --- Packets ---
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Server", "Play", "Packet", "Generator"),
+                        "server-play-packets", "ServerPlayPackets", GameProtocols.CLIENTBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Client", "Play", "Packet", "Generator"),
+                        "client-play-packets", "ClientPlayPackets", GameProtocols.SERVERBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(
+                        new Generator.GeneratorName("Server", "Configuration", "Packet", "Generator"),
+                        "server-configuration-packets", "ServerConfigurationPackets",
+                        ConfigurationProtocols.CLIENTBOUND_TEMPLATE
+                ),
+                new PacketIdentifierGenerator(
+                        new Generator.GeneratorName("Client", "Configuration", "Packet", "Generator"),
+                        "client-configuration-packets", "ClientConfigurationPackets",
+                        ConfigurationProtocols.SERVERBOUND_TEMPLATE
+                ),
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Server", "Login", "Packet", "Generator"),
+                        "server-login-packets", "ServerLoginPackets", LoginProtocols.CLIENTBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Client", "Login", "Packet", "Generator"),
+                        "client-login-packets", "ClientLoginPackets", LoginProtocols.SERVERBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Server", "Status", "Packet", "Generator"),
+                        "server-status-packets", "ServerStatusPackets", StatusProtocols.CLIENTBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(new Generator.GeneratorName("Client", "Status", "Packet", "Generator"),
+                        "client-status-packets", "ClientStatusPackets", StatusProtocols.SERVERBOUND_TEMPLATE),
+                new PacketIdentifierGenerator(
+                        new Generator.GeneratorName("Client", "Handshake", "Packet", "Generator"),
+                        "client-handshake-packets", "ClientHandshakePackets", HandshakeProtocols.SERVERBOUND_TEMPLATE
+                )
+        );
 
         Path resourceDirectoryPath = Path.of(args[0]);
         Path apiJavaDirectoryPath = Path.of(args[1]);
