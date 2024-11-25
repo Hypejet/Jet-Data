@@ -4,13 +4,13 @@ import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
- * Represents a XYZ coordinate.
+ * Represents an XYZ coordinate.
  *
  * @param <C> a type of the coordinate
  * @since 1.0
  * @author Codestech
  */
-public sealed interface Coordinate<C extends Coordinate<C>> permits BlockPosition, Position, Vector {
+public interface Coordinate<C extends Coordinate<C>> {
     /**
      * Gets an {@code X} value.
      *
