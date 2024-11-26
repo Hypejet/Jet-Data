@@ -1,6 +1,7 @@
 package net.hypejet.jet.data.codecs.util.mapper;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.internal.Primitives;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -99,6 +100,7 @@ public final class Mapper<R, W> {
         NullabilityUtil.requireNonNull(clazz, "class");
         NullabilityUtil.requireNonNull(object, "object");
 
+        clazz = Primitives.wrap(clazz);
         if (!clazz.isAssignableFrom(object.getClass()))
             throw new IllegalArgumentException("The value specified is not assignable from the class required");
 
