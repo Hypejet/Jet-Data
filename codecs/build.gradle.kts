@@ -6,6 +6,7 @@ dependencies {
     compileOnly(project(":jet-data-model-api"))
     compileOnly(project(":jet-data-model-server"))
     compileOnly(libs.gson)
+    compileOnly(libs.guava)
     compileOnly(libs.bundles.adventure)
     compileOnly(libs.checkerFrameworkQual)
     compileOnly(libs.bundles.adventureSerializers)

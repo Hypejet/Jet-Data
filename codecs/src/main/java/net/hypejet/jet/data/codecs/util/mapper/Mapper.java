@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.codecs.util.mapper;
 
+import com.google.common.collect.ImmutableMap;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -27,11 +28,11 @@ public final class Mapper<R, W> {
                    @NonNull Map<R, W> firstToSecondMap) {
         this.firstClass = NullabilityUtil.requireNonNull(firstClass, "first class");
         this.secondClass = NullabilityUtil.requireNonNull(secondClass, "second class");
-        this.firstToSecondMap = Map.copyOf(firstToSecondMap);
+        this.firstToSecondMap = ImmutableMap.copyOf(firstToSecondMap);
 
         Map<W, R> secondToFirstMap = new HashMap<>();
         this.firstToSecondMap.forEach((first, second) -> secondToFirstMap.put(second, first));
-        this.secondToFirstMap = Map.copyOf(secondToFirstMap);
+        this.secondToFirstMap = ImmutableMap.copyOf(secondToFirstMap);
     }
 
     /**
