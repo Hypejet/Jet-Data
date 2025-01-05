@@ -11,14 +11,16 @@ import java.util.Set;
  * Represents a Minecraft block.
  *
  * @param requiredFeatureFlags a collection of feature flags that are required to enable the block
+ * @param defaultBlockStateId an identifier of a default block state that should be associated with the block
  * @since 1.0
  * @author Codestech
  */
-public record Block(@NonNull Collection<Key> requiredFeatureFlags) {
+public record Block(@NonNull Collection<Key> requiredFeatureFlags, int defaultBlockStateId) {
     /**
      * Constructs the {@linkplain Block block}.
      *
      * @param requiredFeatureFlags a collection of feature flags that are required to enable the block
+     * @param defaultBlockStateId an identifier of a default block state that should be associated with the block
      * @since 1.0
      */
     public Block {

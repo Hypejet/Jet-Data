@@ -26,6 +26,7 @@ import java.util.Set;
 public final class BlockJsonCodec implements JsonCodec<Block> {
 
     private static final String REQUIRED_FEATURE_FLAGS_FIELD = "required-feature-flags";
+    private static final String DEFAULT_BLOCK_STATE_ID = "default-block-state-id";
 
     @Override
     public Block deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -41,7 +42,7 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
 
         for (JsonElement element : jsonFeatureFlags)
             requiredFeatureFlags.add(context.deserialize(element, Key.class));
-        return new Block(requiredFeatureFlags);
+        return new Block(requiredFeatureFlags, JsonUtil.read(DEFAULT_BLOCK_STATE_ID, int.class, object, context));
     }
 
     @Override
@@ -57,6 +58,7 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
             jsonRequiredFeatureFlags.add(context.serialize(key));
 
         object.add(REQUIRED_FEATURE_FLAGS_FIELD, jsonRequiredFeatureFlags);
+        object.addProperty(DEFAULT_BLOCK_STATE_ID, src.defaultBlockStateId());
         return object;
     }
 }

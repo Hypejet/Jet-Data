@@ -49,7 +49,9 @@ public final class BlockGenerator extends Generator<Block> {
             Set<Key> requiredFeatureFlags = new HashSet<>();
             for (ResourceLocation name : FeatureFlags.REGISTRY.toNames(block.requiredFeatures()))
                 requiredFeatureFlags.add(IdentifierAdapter.convert(name));
-            return new Block(Set.copyOf(requiredFeatureFlags));
+
+            int defaultBlockStateId = net.minecraft.world.level.block.Block.getId(block.defaultBlockState());
+            return new Block(Set.copyOf(requiredFeatureFlags), defaultBlockStateId);
         });
     }
 }
