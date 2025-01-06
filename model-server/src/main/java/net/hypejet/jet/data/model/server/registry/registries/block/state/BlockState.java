@@ -10,15 +10,17 @@ import java.util.Map;
  * Represents a state of a Minecraft block.
  *
  * @param properties a properties of the state
+ * @param isAir whether the state should be recognised as an air
  * @since 1.0
  * @author Codestech
  * @see Keyed
  */
-public record BlockState(@NonNull Map<String, String> properties) {
+public record BlockState(@NonNull Map<String, String> properties, boolean isAir) {
     /**
      * Constructs the {@linkplain BlockState block state}.
      *
      * @param properties a properties of the state
+     * @param isAir whether the state should be recognised as an air
      * @since 1.0
      */
     public BlockState {

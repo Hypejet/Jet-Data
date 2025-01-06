@@ -25,6 +25,7 @@ import java.util.Map;
 public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
     private static final String PROPERTIES_FIELD = "properties";
+    private static final String IS_AIR_FIELD = "is-air";
 
     @Override
     public BlockState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -40,7 +41,7 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
         for (Map.Entry<String, JsonElement> entry : propertiesObject.entrySet())
             properties.put(entry.getKey(), entry.getValue().getAsString());
-        return new BlockState(properties);
+        return new BlockState(properties, JsonUtil.read(IS_AIR_FIELD, boolean.class, object, context));
     }
 
     @Override
@@ -52,7 +53,9 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
         JsonObject object = new JsonObject();
         JsonObject propertiesObject = new JsonObject();
         src.properties().forEach(propertiesObject::addProperty);
+
         object.add(PROPERTIES_FIELD, propertiesObject);
+        object.addProperty(IS_AIR_FIELD, src.isAir());
 
         return object;
     }
