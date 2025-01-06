@@ -49,7 +49,9 @@ public final class BlockStateGenerator extends Generator<BlockState> {
                 Map<String, String> properties = new HashMap<>();
                 for (Map.Entry<Property<?>, Comparable<?>> entry : state.getValues().entrySet())
                     properties.put(entry.getKey().getName(), entry.getValue().toString());
-                entries.add(Block.getId(state), new DataRegistryEntry<>(key, new BlockState(properties), null, null));
+
+                BlockState blockState = new BlockState(properties, state.isAir());
+                entries.add(Block.getId(state), new DataRegistryEntry<>(key, blockState, null, null));
             });
         }
 
