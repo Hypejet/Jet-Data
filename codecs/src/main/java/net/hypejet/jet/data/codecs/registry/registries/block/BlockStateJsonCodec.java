@@ -26,6 +26,7 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
     private static final String PROPERTIES_FIELD = "properties";
     private static final String IS_AIR_FIELD = "is-air";
+    private static final String HAS_FLUID_STATE = "has-fluid-state";
 
     @Override
     public BlockState deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -41,7 +42,10 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
         for (Map.Entry<String, JsonElement> entry : propertiesObject.entrySet())
             properties.put(entry.getKey(), entry.getValue().getAsString());
-        return new BlockState(properties, JsonUtil.read(IS_AIR_FIELD, boolean.class, object, context));
+
+        return new BlockState(properties,
+                JsonUtil.read(IS_AIR_FIELD, boolean.class, object, context),
+                JsonUtil.read(HAS_FLUID_STATE, boolean.class, object, context));
     }
 
     @Override
@@ -56,6 +60,7 @@ public final class BlockStateJsonCodec implements JsonCodec<BlockState> {
 
         object.add(PROPERTIES_FIELD, propertiesObject);
         object.addProperty(IS_AIR_FIELD, src.isAir());
+        object.addProperty(HAS_FLUID_STATE, src.hasFluidState());
 
         return object;
     }

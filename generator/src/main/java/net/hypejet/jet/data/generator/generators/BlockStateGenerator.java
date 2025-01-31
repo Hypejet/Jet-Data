@@ -50,8 +50,11 @@ public final class BlockStateGenerator extends Generator<BlockState> {
                 for (Map.Entry<Property<?>, Comparable<?>> entry : state.getValues().entrySet())
                     properties.put(entry.getKey().getName(), entry.getValue().toString());
 
-                BlockState blockState = new BlockState(properties, state.isAir());
-                entries.add(Block.getId(state), new DataRegistryEntry<>(key, blockState, null, null));
+                BlockState blockState = new BlockState(properties, state.isAir(), !state.getFluidState().isEmpty());
+                entries.add(
+                        Block.getId(state),
+                        new DataRegistryEntry<>(key, blockState, null, null)
+                );
             });
         }
 
