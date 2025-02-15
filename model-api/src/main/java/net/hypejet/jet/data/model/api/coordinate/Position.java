@@ -52,7 +52,7 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
      */
     @Override
     public @NonNull Position withX(double x) {
-        return new Position(x, this.y, this.z, this.yaw, this.pitch);
+        return this.withCoordinate(x, this.y, this.z);
     }
 
     /**
@@ -60,7 +60,7 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
      */
     @Override
     public @NonNull Position withY(double y) {
-        return new Position(this.x, y, this.z, this.yaw, this.pitch);
+        return this.withCoordinate(this.x, y, this.z);
     }
 
     /**
@@ -68,7 +68,7 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
      */
     @Override
     public @NonNull Position withZ(double z) {
-        return new Position(this.x, this.z, z, this.yaw, this.pitch);
+        return this.withCoordinate(this.x, this.y, z);
     }
 
     /**
@@ -103,5 +103,18 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
      */
     public @NonNull Position withView(float yaw, float pitch) {
         return new Position(this.x, this.y, this.z, yaw, pitch);
+    }
+
+    /**
+     * Gets a copy of this position with values specified.
+     *
+     * @param x an {@code X} value that the position should have
+     * @param y an {@code Y} value that the position should have
+     * @param z an {@code Z} value that the position should have
+     * @return the copy
+     * @since 1.0
+     */
+    public @NonNull Position withCoordinate(double x, double y, double z) {
+        return new Position(x, y, z, this.yaw, this.pitch);
     }
 }
