@@ -106,6 +106,18 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
     }
 
     /**
+     * Gets a copy of this position with {@code X}, {@code Y} and {@code Z} values
+     * of {@linkplain Coordinate a coordinate specified} specified.
+     *
+     * @param coordinate the coordinate
+     * @return the copy
+     * @since 1.0
+     */
+    public @NonNull Position withCoordinate(@NonNull Coordinate<?> coordinate) {
+        return this.withCoordinate(coordinate.x(), coordinate.y(), coordinate.z());
+    }
+
+    /**
      * Gets a copy of this position with values specified.
      *
      * @param x an {@code X} value that the position should have
