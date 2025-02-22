@@ -52,6 +52,14 @@ public record Vector(double x, double y, double z) implements Coordinate<Vector>
      * {@inheritDoc}
      */
     @Override
+    public @NonNull Vector withValues(double x, double y, double z) {
+        return new Vector(x, y, z);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NonNull Vector withX(double x) {
         return vector(x, this.y, this.z);
     }

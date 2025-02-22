@@ -80,31 +80,15 @@ public interface Coordinate<C extends Coordinate<C>> {
     @NonNull C subtract(double x, double y, double z);
 
     /**
-     * Gets a copy of the coordinate with an {@code X} value specified.
+     * Creates a copy of the coordinate with {@code X}, {@code Y} and {@code Z} values specified.
      *
      * @param x the {@code X} value
-     * @return the copy
-     * @since 1.0
-     */
-    @NonNull C withX(double x);
-
-    /**
-     * Gets a copy of the coordinate with an {@code Y} value specified.
-     *
      * @param y the {@code Y} value
-     * @return the copy
-     * @since 1.0
-     */
-    @NonNull C withY(double y);
-
-    /**
-     * Gets a copy of the coordinate with an {@code Z} value specified.
-     *
      * @param z the {@code Z} value
      * @return the copy
      * @since 1.0
      */
-    @NonNull C withZ(double z);
+    @NonNull C withValues(double x, double y, double z);
 
     /**
      * Gets a floored {@code X} value.
@@ -134,6 +118,73 @@ public interface Coordinate<C extends Coordinate<C>> {
      */
     default int blockZ() {
         return (int) Math.floor(this.z());
+    }
+
+    /**
+     * Calculates a squared length of this coordinate from origin of the coordinate system via
+     * {@link #lengthSquared()} and roots it.
+     *
+     * @return the square root of the squared length
+     * @since 1.0
+     */
+    default double length() {
+        return Math.sqrt(this.lengthSquared());
+    }
+
+    /**
+     * Calculates a squared length of this coordinate from origin of the coordinate system.
+     *
+     * @return the squared length
+     * @since 1.0
+     */
+    default double lengthSquared() {
+        return this.x() * this.x() + this.y() * this.y() + this.z() * this.z();
+    }
+
+    /**
+     * Creates a copy of this coordinate with {@code X}, {@code Y} and {@code Z} values
+     * of {@linkplain Coordinate a coordinate} specified.
+     *
+     * @param coordinate the coordinate to get the values from
+     * @return the copy
+     * @since 1.0
+     */
+    default @NonNull C withValues(@NonNull Coordinate<?> coordinate) {
+        NullabilityUtil.requireNonNull(coordinate, "coordinate");
+        return this.withValues(coordinate.x(), coordinate.y(), coordinate.z());
+    }
+
+    /**
+     * Gets a copy of the coordinate with an {@code X} value specified.
+     *
+     * @param x the {@code X} value
+     * @return the copy
+     * @since 1.0
+     */
+    default @NonNull C withX(double x) {
+        return this.withValues(x, this.y(), this.z());
+    }
+
+    /**
+     * Gets a copy of the coordinate with an {@code Y} value specified.
+     *
+     * @param y the {@code Y} value
+     * @return the copy
+     * @since 1.0
+     */
+    default @NonNull C withY(double y) {
+        return this.withValues(this.x(), y, this.z());
+    }
+
+    /**
+     * Gets a copy of the coordinate with an {@code Z} value specified.
+     *
+     * @param z the {@code Z} value
+     * @return the copy
+     * @since 1.0
+     */
+    default @NonNull C withZ(double z) {
+        return this.withValues(this.x(), this.y(), z);
     }
 
     /**
@@ -229,23 +280,41 @@ public interface Coordinate<C extends Coordinate<C>> {
     }
 
     /**
-     * Calculates a squared length of this coordinate from origin of the coordinate system via
-     * {@link #lengthSquared()} and roots it.
+     * Creates a copy of the coordinate, which is rotated around an {@code X} axis.
      *
-     * @return the square root of the squared length
+     * @param radians an angle of the rotation, in radians
+     * @return the copy
      * @since 1.0
      */
-    default double length() {
-        return Math.sqrt(this.lengthSquared());
+    default @NonNull C rotateX(double radians) {
+        double sin = Math.sin(radians);
+        double cos = Math.cos(radians);
+        return this.withValues(this.x(), this.y() * cos + this.z() * sin, this.z() * cos - this.y() * sin);
     }
 
     /**
-     * Calculates a squared length of this coordinate from origin of the coordinate system.
+     * Creates a copy of the coordinate, which is rotated around an {@code Y} axis.
      *
-     * @return the squared length
+     * @param radians an angle of the rotation, in radians
+     * @return the copy
      * @since 1.0
      */
-    default double lengthSquared() {
-        return this.x() * this.x() + this.y() * this.y() + this.z() * this.z();
+    default @NonNull C rotateY(double radians) {
+        double sin = Math.sin(radians);
+        double cos = Math.cos(radians);
+        return this.withValues(this.x() * cos + this.z() * sin, this.y(), this.z() * cos - this.x() * sin);
+    }
+
+    /**
+     * Creates a copy of the coordinate, which is rotated around an {@code Z} axis.
+     *
+     * @param radians an angle of the rotation, in radians
+     * @return the copy
+     * @since 1.0
+     */
+    default @NonNull C rotateZ(double radians) {
+        double sin = Math.sin(radians);
+        double cos = Math.cos(radians);
+        return this.withValues(this.x() * cos + this.y() * sin, this.y() * cos - this.x() * sin, this.z());
     }
 }
