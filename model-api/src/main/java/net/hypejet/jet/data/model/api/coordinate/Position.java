@@ -8,13 +8,28 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @param x an {@code X} value of the coordinate
  * @param y an {@code Y} value of the coordinate
  * @param z an {@code Z} value of the coordinate
- * @param yaw a yaw value of the view
- * @param pitch a pitch value of the view
+ * @param yaw an angle of a yaw of the view, in degrees
+ * @param pitch an angle of a pitch of the view, in degrees
  * @since 1.0
  * @author Codestech
  * @see Coordinate
  */
 public record Position(double x, double y, double z, float yaw, float pitch) implements Coordinate<Position> {
+    /**
+     * Constructs the {@linkplain Position position}.
+     *
+     * @param x an {@code X} value of the coordinate
+     * @param y an {@code Y} value of the coordinate
+     * @param z an {@code Z} value of the coordinate
+     * @param yaw an angle of a yaw of the view
+     * @param pitch an angle of a pitch of the view
+     * @since 1.0
+     */
+    public Position {
+        yaw = wrapDegrees(yaw);
+        pitch = Math.clamp(wrapDegrees(pitch), -90f, 90f);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -87,5 +102,14 @@ public record Position(double x, double y, double z, float yaw, float pitch) imp
      */
     public @NonNull Position withView(float yaw, float pitch) {
         return new Position(this.x, this.y, this.z, yaw, pitch);
+    }
+
+    private static float wrapDegrees(float value) {
+        value %= 360f;
+
+        if (value >= 180) value -= 360;
+        else value += 360;
+
+        return value;
     }
 }
