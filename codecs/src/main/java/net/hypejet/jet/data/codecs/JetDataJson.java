@@ -19,6 +19,7 @@ import net.hypejet.jet.data.codecs.registry.registries.biome.effects.particle.Bi
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeAdditionalSoundJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeMoodSoundJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.biome.effects.sound.BiomeSoundEventJsonCodec;
+import net.hypejet.jet.data.codecs.registry.registries.block.BlockEntityTypeJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.block.BlockJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.block.BlockStateJsonCodec;
 import net.hypejet.jet.data.codecs.registry.registries.chat.ChatTypeJsonCodec;
@@ -41,6 +42,7 @@ import net.hypejet.jet.data.model.api.entity.EntityType;
 import net.hypejet.jet.data.model.api.event.GameEvent;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
+import net.hypejet.jet.data.model.server.registry.registries.block.entity.BlockEntityType;
 import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registries.armor.material.ArmorTrimMaterial;
 import net.hypejet.jet.data.model.api.registries.armor.pattern.ArmorTrimPattern;
@@ -348,6 +350,20 @@ public final class JetDataJson {
     public static @NonNull Gson createPacketGson() {
         return createBuilder()
                 .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(Integer.class))
+                .create();
+    }
+
+    /**
+     * Creates {@linkplain Gson a gson} instance, which deserializes and serializes
+     * {@linkplain BlockEntityType block entity types}.
+     *
+     * @return the gson
+     * @since 1.0
+     */
+    public static @NonNull Gson createBlockEntityTypeGson() {
+        return createBuilder()
+                .registerTypeAdapter(BlockEntityType.class, new BlockEntityTypeJsonCodec())
+                .registerTypeAdapter(DataRegistryEntry.class, new RegistryEntryDataJsonCodec<>(BlockEntityType.class))
                 .create();
     }
 

@@ -9,6 +9,7 @@ import net.hypejet.jet.data.generator.generators.ArmorTrimMaterialGenerator;
 import net.hypejet.jet.data.generator.generators.ArmorTrimPatternGenerator;
 import net.hypejet.jet.data.generator.generators.BannerPatternGenerator;
 import net.hypejet.jet.data.generator.generators.BiomeGenerator;
+import net.hypejet.jet.data.generator.generators.BlockEntityTypeGenerator;
 import net.hypejet.jet.data.generator.generators.BlockGenerator;
 import net.hypejet.jet.data.generator.generators.BlockStateGenerator;
 import net.hypejet.jet.data.generator.generators.ChatTypeGenerator;
@@ -132,7 +133,8 @@ public final class GeneratorEntrypoint {
                 new ArmorTrimMaterialGenerator(registryAccess), new BannerPatternGenerator(registryAccess),
                 new FeaturePackGenerator(packs), new BlockGenerator(registryAccess), new ItemGenerator(registryAccess),
                 new GameEventGenerator(registryAccess), new EntityTypeGenerator(registryAccess),
-                new FluidGenerator(registryAccess), new BlockStateGenerator(),
+                new FluidGenerator(registryAccess), new BlockEntityTypeGenerator(registryAccess),
+                new BlockStateGenerator(),
                 // --- Packets ---
                 new PacketIdentifierGenerator(new Generator.GeneratorName("Server", "Play", "Packet", "Generator"),
                         "server-play-packets", "ServerPlayPackets", GameProtocols.CLIENTBOUND_TEMPLATE),
