@@ -7,7 +7,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
-import net.hypejet.jet.data.model.server.registry.registries.block.entity.BlockEntityType;
+import net.hypejet.jet.data.model.api.block.entity.BlockEntityType;
 import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Registry;

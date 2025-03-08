@@ -5,7 +5,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import net.hypejet.jet.data.codecs.JsonCodec;
-import net.hypejet.jet.data.model.server.registry.registries.block.entity.BlockEntityType;
+import net.hypejet.jet.data.model.api.block.entity.BlockEntityType;
 import net.kyori.adventure.key.Key;
 
 import java.lang.reflect.Type;
