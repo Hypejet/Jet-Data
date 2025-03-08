@@ -53,7 +53,7 @@ public final class BlockEntityTypeGenerator extends Generator<BlockEntityType> {
     public BlockEntityTypeGenerator(@NonNull RegistryAccess registryAccess) {
         super(new GeneratorName("Block", "Entity", "Type", "Generator"),
                 new ResourceFileSettings("block-entity-types", JetDataJson.createBlockEntityTypeGson()),
-                new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "BlockEntityTypes"));
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "BlockEntityTypes"));
         this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
