@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.codecs.registry.registries.block;
 
+import com.google.common.primitives.ImmutableIntArray;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -27,6 +28,7 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
 
     private static final String REQUIRED_FEATURE_FLAGS_FIELD = "required-feature-flags";
     private static final String DEFAULT_BLOCK_STATE_ID = "default-block-state-id";
+    private static final String POSSIBLE_STATE_IDENTIFIERS = "possible-block-state-identifiers";
 
     @Override
     public Block deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -38,11 +40,23 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
             throw new IllegalArgumentException("The json element specified must be a json object");
 
         JsonArray jsonFeatureFlags = JsonUtil.read(REQUIRED_FEATURE_FLAGS_FIELD, JsonArray.class, object, context);
-        Set<Key> requiredFeatureFlags = new HashSet<>();
+        JsonArray jsonPossibleStates = JsonUtil.read(POSSIBLE_STATE_IDENTIFIERS, JsonArray.class, object, context);
 
+        Set<Key> requiredFeatureFlags = new HashSet<>();
         for (JsonElement element : jsonFeatureFlags)
             requiredFeatureFlags.add(context.deserialize(element, Key.class));
-        return new Block(requiredFeatureFlags, JsonUtil.read(DEFAULT_BLOCK_STATE_ID, int.class, object, context));
+
+        int[] possibleStateIdentifiers = new int[jsonPossibleStates.size()];
+        for (int index = 0; index < possibleStateIdentifiers.length; index++) {
+            JsonElement element = jsonPossibleStates.get(index);
+            possibleStateIdentifiers[index] = element.getAsInt();
+        }
+
+        return new Block(
+                requiredFeatureFlags,
+                JsonUtil.read(DEFAULT_BLOCK_STATE_ID, int.class, object, context),
+                ImmutableIntArray.copyOf(possibleStateIdentifiers)
+        );
     }
 
     @Override
@@ -51,14 +65,18 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
         NullabilityUtil.requireNonNull(typeOfSrc, "type of source");
         NullabilityUtil.requireNonNull(context, "context");
 
-        JsonObject object = new JsonObject();
         JsonArray jsonRequiredFeatureFlags = new JsonArray();
-
         for (Key key : src.requiredFeatureFlags())
             jsonRequiredFeatureFlags.add(context.serialize(key));
 
+        JsonArray jsonPossibleStates = new JsonArray();
+        src.possibleBlockStateIdentifiers().forEach(jsonPossibleStates::add);
+
+        JsonObject object = new JsonObject();
         object.add(REQUIRED_FEATURE_FLAGS_FIELD, jsonRequiredFeatureFlags);
         object.addProperty(DEFAULT_BLOCK_STATE_ID, src.defaultBlockStateId());
+        object.add(POSSIBLE_STATE_IDENTIFIERS, jsonPossibleStates);
+
         return object;
     }
 }

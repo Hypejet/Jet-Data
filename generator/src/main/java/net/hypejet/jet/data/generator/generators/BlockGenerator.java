@@ -1,5 +1,7 @@
 package net.hypejet.jet.data.generator.generators;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.primitives.ImmutableIntArray;
 import net.hypejet.jet.data.codecs.JetDataJson;
 import net.hypejet.jet.data.generator.Generator;
 import net.hypejet.jet.data.generator.adapter.IdentifierAdapter;
@@ -13,6 +15,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.block.state.BlockState;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.HashSet;
@@ -51,7 +54,19 @@ public final class BlockGenerator extends Generator<Block> {
                 requiredFeatureFlags.add(IdentifierAdapter.convert(name));
 
             int defaultBlockStateId = net.minecraft.world.level.block.Block.getId(block.defaultBlockState());
-            return new Block(Set.copyOf(requiredFeatureFlags), defaultBlockStateId);
+
+            ImmutableList<BlockState> possibleBlockStates = block.getStateDefinition().getPossibleStates();
+            int[] possibleStateIdentifiers = new int[possibleBlockStates.size()];
+
+            for (int index = 0; index < possibleStateIdentifiers.length; index++) {
+                BlockState blockState = possibleBlockStates.get(index);
+                possibleStateIdentifiers[index] = net.minecraft.world.level.block.Block.getId(blockState);
+            }
+
+            return new Block(
+                    Set.copyOf(requiredFeatureFlags), defaultBlockStateId,
+                    ImmutableIntArray.copyOf(possibleStateIdentifiers)
+            );
         });
     }
 }

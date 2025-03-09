@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(project(":jet-data-model-api"))
+    compileOnly(libs.guava)
     compileOnly(libs.bundles.adventure)
     compileOnly(libs.checkerFrameworkQual)
 }

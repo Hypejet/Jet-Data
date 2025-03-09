@@ -1,5 +1,6 @@
 package net.hypejet.jet.data.model.server.registry.registries.block;
 
+import com.google.common.primitives.ImmutableIntArray;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -12,10 +13,12 @@ import java.util.Set;
  *
  * @param requiredFeatureFlags a collection of feature flags that are required to enable the block
  * @param defaultBlockStateId an identifier of a default block state that should be associated with the block
+ * @param possibleBlockStateIdentifiers an array of identifiers of block states that should be associated with the block
  * @since 1.0
  * @author Codestech
  */
-public record Block(@NonNull Collection<Key> requiredFeatureFlags, int defaultBlockStateId) {
+public record Block(@NonNull Collection<Key> requiredFeatureFlags, int defaultBlockStateId,
+                    @NonNull ImmutableIntArray possibleBlockStateIdentifiers) {
     /**
      * Constructs the {@linkplain Block block}.
      *
@@ -25,6 +28,7 @@ public record Block(@NonNull Collection<Key> requiredFeatureFlags, int defaultBl
      */
     public Block {
         NullabilityUtil.requireNonNull(requiredFeatureFlags, "required feature flags");
+        NullabilityUtil.requireNonNull(possibleBlockStateIdentifiers, "possible block state identifiers");
         requiredFeatureFlags = Set.copyOf(requiredFeatureFlags);
     }
 }
