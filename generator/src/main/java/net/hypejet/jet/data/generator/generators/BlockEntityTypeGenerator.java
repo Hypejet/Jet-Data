@@ -7,7 +7,7 @@ import net.hypejet.jet.data.generator.constant.ConstantContainer;
 import net.hypejet.jet.data.generator.util.ReflectionUtil;
 import net.hypejet.jet.data.generator.util.RegistryUtil;
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
-import net.hypejet.jet.data.model.api.block.entity.BlockEntityType;
+import net.hypejet.jet.data.model.server.registry.registries.block.entity.BlockEntityType;
 import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.Registry;
@@ -53,7 +53,7 @@ public final class BlockEntityTypeGenerator extends Generator<BlockEntityType> {
     public BlockEntityTypeGenerator(@NonNull RegistryAccess registryAccess) {
         super(new GeneratorName("Block", "Entity", "Type", "Generator"),
                 new ResourceFileSettings("block-entity-types", JetDataJson.createBlockEntityTypeGson()),
-                new JavaFileSettings(ConstantContainer.JavaFileDestination.API, "BlockEntityTypes"));
+                new JavaFileSettings(ConstantContainer.JavaFileDestination.SERVER, "BlockEntityTypes"));
         this.registryAccess = NullabilityUtil.requireNonNull(registryAccess, "registry access");
     }
 
@@ -62,23 +62,37 @@ public final class BlockEntityTypeGenerator extends Generator<BlockEntityType> {
         Registry<Block> blockRegistry = this.registryAccess.lookupOrThrow(Registries.BLOCK);
         return RegistryUtil.createEntries(
                 this.registryAccess.lookupOrThrow(Registries.BLOCK_ENTITY_TYPE),
-                blockEntityType -> {
-                    Set<?> validBlocks = (Set<?>) ReflectionUtil.access(VALID_BLOCKS_FIELD, blockEntityType);
-                    Set<Key> validBlockKeys = new HashSet<>();
-
-                    for (Object validBlock : validBlocks) {
-                        if (!(validBlock instanceof Block block))
-                            throw new IllegalArgumentException("The element is not a valid block");
-
-                        ResourceLocation location = blockRegistry.getKey(block);
-                        if (location == null)
-                            throw new IllegalArgumentException("Could not find a key of the block");
-
-                        validBlockKeys.add(IdentifierAdapter.convert(location));
-                    }
-
-                    return new BlockEntityType(validBlockKeys);
-                }
+                blockEntityType -> new BlockEntityType(validBlockKeys(blockEntityType, blockRegistry))
         );
+    }
+
+    /**
+     * Gets {@linkplain Set a set} of {@linkplain Key keys} of {@linkplain Block blocks} that
+     * {@linkplain BlockEntityType a block entity type} specified supports.
+     *
+     * @param blockEntityType the block entity type
+     * @param blockRegistry a block registry containing all valid blocks
+     * @return the set
+     * @since 1.0
+     */
+    public static @NonNull Set<Key> validBlockKeys(
+            net.minecraft.world.level.block.entity.@NonNull BlockEntityType<?> blockEntityType,
+            @NonNull Registry<Block> blockRegistry
+    ) {
+        Set<?> validBlocks = (Set<?>) ReflectionUtil.access(VALID_BLOCKS_FIELD, blockEntityType);
+        Set<Key> validBlockKeys = new HashSet<>();
+
+        for (Object validBlock : validBlocks) {
+            if (!(validBlock instanceof Block block))
+                throw new IllegalArgumentException("The element is not a valid block");
+
+            ResourceLocation location = blockRegistry.getKey(block);
+            if (location == null)
+                throw new IllegalArgumentException("Could not find a key of the block");
+
+            validBlockKeys.add(IdentifierAdapter.convert(location));
+        }
+
+        return Set.copyOf(validBlockKeys);
     }
 }

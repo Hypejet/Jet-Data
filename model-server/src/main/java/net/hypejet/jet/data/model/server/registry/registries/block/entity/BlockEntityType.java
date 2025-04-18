@@ -1,4 +1,4 @@
-package net.hypejet.jet.data.model.api.block.entity;
+package net.hypejet.jet.data.model.server.registry.registries.block.entity;
 
 import net.hypejet.jet.data.model.api.utils.NullabilityUtil;
 import net.kyori.adventure.key.Key;

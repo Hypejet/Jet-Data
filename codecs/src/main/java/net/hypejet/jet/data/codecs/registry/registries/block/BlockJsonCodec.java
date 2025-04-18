@@ -29,6 +29,7 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
     private static final String REQUIRED_FEATURE_FLAGS_FIELD = "required-feature-flags";
     private static final String DEFAULT_BLOCK_STATE_ID = "default-block-state-id";
     private static final String POSSIBLE_STATE_IDENTIFIERS = "possible-block-state-identifiers";
+    private static final String BLOCK_ENTITY_TYPE_KEY = "block-entity-type-key";
 
     @Override
     public Block deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
@@ -55,7 +56,8 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
         return new Block(
                 requiredFeatureFlags,
                 JsonUtil.read(DEFAULT_BLOCK_STATE_ID, int.class, object, context),
-                ImmutableIntArray.copyOf(possibleStateIdentifiers)
+                ImmutableIntArray.copyOf(possibleStateIdentifiers),
+                JsonUtil.readOptional(BLOCK_ENTITY_TYPE_KEY, Key.class, object, context)
         );
     }
 
@@ -77,6 +79,7 @@ public final class BlockJsonCodec implements JsonCodec<Block> {
         object.addProperty(DEFAULT_BLOCK_STATE_ID, src.defaultBlockStateId());
         object.add(POSSIBLE_STATE_IDENTIFIERS, jsonPossibleStates);
 
+        JsonUtil.writeOptional(BLOCK_ENTITY_TYPE_KEY, src.blockEntityTypeKey(), Key.class, object, context);
         return object;
     }
 }

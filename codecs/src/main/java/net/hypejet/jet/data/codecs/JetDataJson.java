@@ -42,7 +42,7 @@ import net.hypejet.jet.data.model.api.entity.EntityType;
 import net.hypejet.jet.data.model.api.event.GameEvent;
 import net.hypejet.jet.data.model.api.number.IntegerProvider;
 import net.hypejet.jet.data.model.api.pack.PackInfo;
-import net.hypejet.jet.data.model.api.block.entity.BlockEntityType;
+import net.hypejet.jet.data.model.server.registry.registries.block.entity.BlockEntityType;
 import net.hypejet.jet.data.model.server.registry.registries.registry.DataRegistryEntry;
 import net.hypejet.jet.data.model.api.registries.armor.material.ArmorTrimMaterial;
 import net.hypejet.jet.data.model.api.registries.armor.pattern.ArmorTrimPattern;
