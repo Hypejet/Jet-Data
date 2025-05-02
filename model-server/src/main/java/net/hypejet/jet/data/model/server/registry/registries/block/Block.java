@@ -6,7 +6,6 @@ import net.kyori.adventure.key.Key;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -21,7 +20,7 @@ import java.util.Set;
  * @since 1.0
  * @author Codestech
  */
-public record Block(@NonNull Collection<Key> requiredFeatureFlags, int defaultBlockStateId,
+public record Block(@NonNull Set<Key> requiredFeatureFlags, int defaultBlockStateId,
                     @NonNull ImmutableIntArray possibleBlockStateIdentifiers, @Nullable Key blockEntityTypeKey) {
     /**
      * Constructs the {@linkplain Block block}.
